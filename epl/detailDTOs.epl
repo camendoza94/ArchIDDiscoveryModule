@@ -1,0 +1,60 @@
+pattern CorrectFields
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DetailDTO"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations -> select (f | (f.type.type.isTypeOf(ClassDeclaration) and not f.type.type.name.endsWith("DTO")) 
+		or (f.type.type.isTypeOf(ParameterizedType) and not (f.type.type.type.type.name = "List" or f.type.type.typeArguments.at(0).type.name.endsWith("DTO")))) {
+	onmatch {
+		var message : String;
+ 		message = "CorrectFields " + class.name + " field: " + field.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R7: Fields on DetailDTOs must be of type DTO or List.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern CreateDTOFromEntity
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DetailDTO"),
+	no constructor: ConstructorDeclaration
+		from: class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
+			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity") and c.body.statements.size > 0
+			and c.body.statements.at(0).isTypeOf(SuperConstructorInvocation) and c.body.statements.at(1).isTypeOf(IfStatement) and c.body.statements.at(1).expression.rightOperand.isTypeOf(NullLiteral)
+			and c.body.statements.at(1).expression.operator = InfixExpressionKind#NOT_EQUALS) {	
+	onmatch {
+		var message : String;
+ 		message = "CreateDTOFromEntity " + class.name; 
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R8: Check constructor from Entity implementation in DetailDTO.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern toEntity
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DetailDTO"),
+	no method: MethodDeclaration
+		from:  class.bodyDeclarations -> select (m | m.name = "toEntity" and m.parameters.size = 0 and m.body.statements.size > 1 and m.body.statements.at(0).isTypeOf(VariableDeclarationStatement)
+			and m.body.statements.at(0).fragments.at(0).initializer.method.name ="toEntity") {
+	onmatch {
+	var message : String;
+ 		message = "toEntity " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R9: Check toEntity implementation in DetailDTO.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+@cached
+operation FieldDeclaration getName() {
+	return self.fragments.at(0).name.firstToUpperCase();
+}

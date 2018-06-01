@@ -1,0 +1,161 @@
+pattern PathAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Path") {	
+	onmatch {
+		var message : String;
+ 		message = "PathAnnotation " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R10: Add missing Path annotation on Resource.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern ConsumesAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Consumes") {	
+	onmatch {
+		var message : String;
+ 		message = "ConsumesAnnotation " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R11: Add missing Consumes annotation on Resource.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern ProducesAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Produces") {	
+	onmatch {
+		var message : String;
+ 		message = "ProducesAnnotation " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R12: Add missing Produces annotation on Resource.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern LogicInjection
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations
+		guard: field.type.type.name.endsWith("Logic"),
+	no injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Inject") {
+	onmatch {
+		var message : String;
+ 		message = "LogicInjection " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R13: Add missing logic injection on Resource.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern Exceptions
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	method: MethodDeclaration
+		from: class.bodyDeclarations,
+	annotation: Annotation
+		from: method.annotations -> select (a | a.type.type.name = "Path"),
+	no statement: IfStatement 
+		from: method.body.statements -> select (s | s.isTypeOf(IfStatement) and s.thenStatement.statements.at(0).isTypeOf(ThrowStatement)
+			and s.thenStatement.statements.at(0).expression.type.type.name = "WebApplicationException"
+			and s.expression.rightOperand.isTypeOf(NullLiteral)) {
+	onmatch {
+		var message : String;
+ 		message = "Exceptions " + class.name + " " + method.name + " " + annotation.type.type.name;
+		message.println();
+		//var comment = new LineComment;
+		//comment.content = "// TODO R16: Add check of existence and exception throwing.";
+		//comment.enclosedByParent = false;
+		//comment.prefixOfParent = true;
+		//class.comments.add(comment);
+		var s = new IfStatement;
+		var e = new InfixExpression;
+		var b = new Block;
+		var ro = new NullLiteral;
+		e.rightOperand = ro;
+		var lo = new SingleVariableAccess;
+		lo.variable = method.body.statements.at(0).fragments.at(0);
+		e.leftOperand = lo;
+		e.operator = InfixExpressionKind#EQUALS;
+		s.expression = e;
+		var t = new ThrowStatement;
+		var ex = new ClassInstanceCreation;
+		var classDec = ClassDeclaration.all -> select (c | c.name = "WebApplicationException").at(0);
+		var met = classDec.bodyDeclarations -> select(m | m.parameters.size = 2).at(0);
+		ex.method = met;
+		var sl = new StringLiteral;
+		sl.escapedValue = "Record does not exist";
+		ex.arguments.add(sl);
+		var nl = new NumberLiteral;
+		nl.tokenValue = "404";
+		ex.arguments.add(nl);
+		var ta = new TypeAccess;
+		ta.type = classDec;
+		ex.type = ta;
+		t.expression = ex;
+		b.statements.add(t);
+		s.thenStatement = b;
+		var copy = method.body.statements.at(0);
+		var copy2 = method.body.statements.at(1);
+		method.body.statements.clear();
+		method.body.statements.add(copy);
+		method.body.statements.add(s);
+		method.body.statements.add(copy2);
+	}
+}
+
+
+pattern LogicCallGET1
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	method: MethodDeclaration
+		from: class.bodyDeclarations,
+	annotation: Annotation
+		from: method.annotations -> select (a | a.type.type.name = "Path"),
+	annotation2: Annotation
+		from: method.annotations -> select (a | a.type.type.name = "GET"),
+	statement: VariableDeclarationStatement 
+		from: method.body.statements -> select (s | s.isTypeOf(VariableDeclarationStatement)
+			and s.fragments.at(0).initializer.method.abstractTypeDeclaration.name.endsWith("Logic")) {
+	onmatch {
+		var message : String;
+ 		message = "LogicCall " + class.name + " " + annotation.type.type.name;
+		message.println();
+		//var comment = new LineComment;
+		//comment.content = "// TODO R17: Add check of existence and exception throwing.";
+		//comment.enclosedByParent = false;
+		//comment.prefixOfParent = true;
+		//class.comments.add(comment);
+	}
+}
+/*@cached
+operation String countUppercase() {
+	var start : String = 'c';
+	var ch = new Native("java.lang.Character")("'c'");
+	var upperCase = 0;
+	for (c : String in self) {
+    	if (ch.isUpperCase(c)) upperCase++;
+	}
+	return upperCase;
+}*/

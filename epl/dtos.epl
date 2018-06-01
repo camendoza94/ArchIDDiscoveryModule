@@ -1,0 +1,162 @@
+pattern ImplementsSerializable
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO"),
+	no superInterfaces: TypeAccess
+		from: class.superInterfaces -> select (i | i.type.name = "Serializable") {	
+	onmatch {
+		var message : String;
+ 		message = "ImplementsSerializable " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R1: Implement Serializable in this DTO.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);		
+	}
+}
+
+pattern EmptyConstructor
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO"),
+	no constructor: ConstructorDeclaration
+		from: class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
+			and c.parameters.size = 0 and (c.body.statements.size = 0 or (c.body.statements.size > 0 and c.body.statements.at(0).isTypeOf(SuperConstructorInvocation)))) {	
+	onmatch {
+		var message : String;
+	 		message = "EmptyConstructor " + class.name;
+			message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R2: Add empty constructor for serializing.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern SerializableFields
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations -> select (c | c.type.type.isKindOf(PrimitiveType)) {	
+	onmatch {
+		var message : String;
+ 		message = "SerializableFields " + class.name + " " + field.getName();
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R3: Remove or edit no-serializable field " + field.getName() + ".";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+	
+pattern GettersAndSetters
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	no setter: MethodDeclaration
+		from:  class.bodyDeclarations -> select (m | m.name = "set" + field.getName())
+		optional: true,
+	no getter: MethodDeclaration
+		from: class.bodyDeclarations -> select (m | m.name = "get" + field.getName() or m.name = "is" + field.getName())
+		optional: setter.isDefined() {
+	onmatch {
+		var message : String;
+ 		message = "GettersAndSetters " + class.name + " " + field.getName();
+		message.println();
+		var comment = new LineComment;
+		if (getter.isUndefined()) {
+			comment.content = "// TODO R4: Add missing getter for " + field.getName() + ".";	
+			comment.enclosedByParent = false;
+			comment.prefixOfParent = true;
+			class.comments.add(comment);
+		} 
+		if (setter.isUndefined()) {
+			comment.content = "// TODO R4: Add missing setter for " + field.getName() + ".";
+			comment.enclosedByParent = false;
+			comment.prefixOfParent = true;
+			class.comments.add(comment);
+		}
+	}
+}
+
+pre {
+	var entityMap = ClassDeclaration.all -> select (c | c.name.endsWith("Entity")).mapBy(c|c.name.substring(0, c.name.indexOf("Entity")));
+}
+
+pattern CreateDTOFromEntity
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO") and class.name.indexOf("Detail") = -1,
+	no constructor: ConstructorDeclaration
+		from: class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
+			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity") and c.body.statements.size > 0 
+			and c.body.statements.at(0).isTypeOf(IfStatement) and c.body.statements.at(0).expression.rightOperand.isTypeOf(NullLiteral)
+			and c.body.statements.at(0).expression.operator = InfixExpressionKind#NOT_EQUALS
+			and entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations.at(0) 
+			-> select (f | f.isTypeOf(FieldDeclaration) and not (f.type.type.name.endsWith("Entity") or f.type.type.name.endsWith(">"))).size == c.body.statements.at(0).thenStatement.statements.size -2) {	
+	onmatch {
+		var message : String;
+ 		message = "CreateDTOFromEntity " + class.name; 
+		message.println();
+		//entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations.at(0)-> select (f | f.isTypeOf(FieldDeclaration)).size.println();
+		 //		and not (f.type.type.name.endsWith("Entity") or f.type.type.name.endsWith(">"))).size.println();
+		//var comment = new LineComment;
+		//comment.content = "// TODO R5: Check constructor from Entity implementation in DTO.";
+		//comment.enclosedByParent = false;
+		//comment.prefixOfParent = true;
+		//class.comments.add(comment);
+		//var entity : ClassDeclaration;
+		//for (c in ClassDeclaration.all()) {
+		//	if(c.name == class.name.substring(0, class.name.indexOf("DTO")) + "Entity") {
+		//		c.name.println();
+		//	}	
+		//}
+		var method : ConstructorDeclaration =  class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
+			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity")).at(0);
+		if(method.isDefined()) {
+			method.name.println();
+			if(not method.body.statements.at(0).isTypeOf(IfStatement)){
+				var s = new IfStatement;
+				var b = new Block;
+				var copy = method.body.statements.clone();
+				for (m in copy) {
+					b.statements.add(m);
+				}
+				s.thenStatement = b;
+				var i = new InfixExpression;
+				i.operator = InfixExpressionKind#NOT_EQUALS;
+				i.rightOperand = new NullLiteral;
+				var sva = new SingleVariableAccess;
+				sva.variable = method.parameters.at(0);
+				i.leftOperand = sva;
+				s.expression = 	i;
+				method.body.statements.clear();
+				method.body.statements.add(s);
+			}
+		}
+	}
+}
+
+pattern toEntity
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO") and class.name.indexOf("Detail") = -1,
+	no method: MethodDeclaration
+		from:  class.bodyDeclarations -> select (m | m.name = "toEntity" and m.parameters.size = 0 and m.body.statements.size > 1
+			and m.body.statements.at(0).isTypeOf(VariableDeclarationStatement) and m.body.statements.at(0).fragments.at(0).initializer.type.type.name.endsWith("Entity")) {
+	onmatch {
+		var message : String;
+ 		message = "toEntity " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R6: Check toEntity implementation in DTO.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+@cached
+operation FieldDeclaration getName() {
+	return self.fragments.at(0).name.firstToUpperCase();
+}

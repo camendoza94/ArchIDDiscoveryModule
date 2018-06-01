@@ -1,0 +1,36 @@
+pattern StatelessAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Logic"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Stateless") {	
+	onmatch {
+		var message : String;
+ 		message = "StatelessAnnotation " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R14: Add missing Stateless annotation on Logic.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
+
+pattern PersistenceInjection
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Logic"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations
+		guard: field.type.type.name.endsWith("Persistence"),
+	no injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Inject") {
+	onmatch {
+		var message : String;
+ 		message = "PersistenceInjection " + class.name;
+		message.println();
+		var comment = new LineComment;
+		comment.content = "// TODO R15: Add missing persistence injection on Logic.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+	}
+}
