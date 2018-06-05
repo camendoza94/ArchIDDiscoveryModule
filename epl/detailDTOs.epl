@@ -21,7 +21,7 @@ pattern CreateDTOFromEntity
 		guard: class.proxy = false and class.name.endsWith("DetailDTO"),
 	no constructor: ConstructorDeclaration
 		from: class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
-			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity") and c.body.statements.size > 0
+			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity") and c.body.statements.size > 1
 			and c.body.statements.at(0).isTypeOf(SuperConstructorInvocation) and c.body.statements.at(1).isTypeOf(IfStatement) and c.body.statements.at(1).expression.rightOperand.isTypeOf(NullLiteral)
 			and c.body.statements.at(1).expression.operator = InfixExpressionKind#NOT_EQUALS) {	
 	onmatch {

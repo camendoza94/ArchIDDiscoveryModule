@@ -99,20 +99,12 @@ pattern CreateDTOFromEntity
 		var message : String;
  		message = "CreateDTOFromEntity " + class.name; 
 		message.println();
-		//entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations.at(0)-> select (f | f.isTypeOf(FieldDeclaration)).size.println();
-		 //		and not (f.type.type.name.endsWith("Entity") or f.type.type.name.endsWith(">"))).size.println();
-		//var comment = new LineComment;
-		//comment.content = "// TODO R5: Check constructor from Entity implementation in DTO.";
-		//comment.enclosedByParent = false;
-		//comment.prefixOfParent = true;
-		//class.comments.add(comment);
-		//var entity : ClassDeclaration;
-		//for (c in ClassDeclaration.all()) {
-		//	if(c.name == class.name.substring(0, class.name.indexOf("DTO")) + "Entity") {
-		//		c.name.println();
-		//	}	
-		//}
-		var method : ConstructorDeclaration =  class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
+		var comment = new LineComment;
+		comment.content = "// TODO R5: Check constructor from Entity implementation in DTO.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+		/*var method : ConstructorDeclaration =  class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
 			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity")).at(0);
 		if(method.isDefined()) {
 			method.name.println();
@@ -134,7 +126,7 @@ pattern CreateDTOFromEntity
 				method.body.statements.clear();
 				method.body.statements.add(s);
 			}
-		}
+		}*/
 	}
 }
 

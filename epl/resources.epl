@@ -77,19 +77,21 @@ pattern Exceptions
 	annotation: Annotation
 		from: method.annotations -> select (a | a.type.type.name = "Path"),
 	no statement: IfStatement 
-		from: method.body.statements -> select (s | s.isTypeOf(IfStatement) and s.thenStatement.statements.at(0).isTypeOf(ThrowStatement)
-			and s.thenStatement.statements.at(0).expression.type.type.name = "WebApplicationException"
+		from: method.body.statements -> select (s | s.isTypeOf(IfStatement) and ((s.thenStatement.isTypeOf(ThrowStatement)
+			and s.thenStatement.expression.type.type.name = "WebApplicationException")
+			or (s.thenStatement.isTypeOf(Block) and s.thenStatement.statements.at(0).isTypeOf(ThrowStatement)
+			and s.thenStatement.statements.at(0).expression.type.type.name = "WebApplicationException"))
 			and s.expression.rightOperand.isTypeOf(NullLiteral)) {
 	onmatch {
 		var message : String;
  		message = "Exceptions " + class.name + " " + method.name + " " + annotation.type.type.name;
 		message.println();
-		//var comment = new LineComment;
-		//comment.content = "// TODO R16: Add check of existence and exception throwing.";
-		//comment.enclosedByParent = false;
-		//comment.prefixOfParent = true;
-		//class.comments.add(comment);
-		var s = new IfStatement;
+		var comment = new LineComment;
+		comment.content = "// TODO R16: Add check of existence and exception throwing.";
+		comment.enclosedByParent = false;
+		comment.prefixOfParent = true;
+		class.comments.add(comment);
+		/*var s = new IfStatement;
 		var e = new InfixExpression;
 		var b = new Block;
 		var ro = new NullLiteral;
@@ -121,7 +123,7 @@ pattern Exceptions
 		method.body.statements.clear();
 		method.body.statements.add(copy);
 		method.body.statements.add(s);
-		method.body.statements.add(copy2);
+		method.body.statements.add(copy2);*/
 	}
 }
 
