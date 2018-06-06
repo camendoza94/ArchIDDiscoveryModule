@@ -3,24 +3,44 @@
 <plugin>
  	<extension point="org.eclipse.ui.menus">
 	    <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-	      <command commandId="archtoring.commands.Model"
-	        label="Extract model" style="push" mnemonic="M">
-	      </command>
-	      <command commandId="archtoring.commands.Patterns"
-	        label="Run Search" style="push" mnemonic="S">
-	      </command>
-	      <command commandId="archtoring.commands.Generation"
-	        label="Convert to Source" style="push" mnemonic="G">
-	        <visibleWhen>
-	                <with variable="activeMenuSelection">
-	                    <iterate ifEmpty="false">
-	                        <adapt type="org.eclipse.core.resources.IResource">
-	                                <test property="org.eclipse.core.resources.name" value="*.xmi" />
-	                        </adapt>
-	                    </iterate>
-	                </with>
-	         </visibleWhen>
-	      </command>
+       <menu
+             label="Archtoring"
+             mnemonic="A"
+             tooltip="Refactoring steps">
+          <command
+                commandId="archtoring.commands.Model"
+                label="Extract model"
+                mnemonic="M"
+                style="push">
+          </command>
+          <command
+                commandId="archtoring.commands.Patterns"
+                label="Run Search"
+                mnemonic="S"
+                style="push">
+          </command>
+          <command
+                commandId="archtoring.commands.Generation"
+                label="Convert to Source"
+                mnemonic="G"
+                style="push">
+             <visibleWhen>
+                <with
+                      variable="activeMenuSelection">
+                   <iterate
+                         ifEmpty="false">
+                      <adapt
+                            type="org.eclipse.core.resources.IResource">
+                         <test
+                               property="org.eclipse.core.resources.name"
+                               value="*.xmi">
+                         </test>
+                      </adapt>
+                   </iterate>
+                </with>
+             </visibleWhen>
+          </command>
+       </menu>
 	    </menuContribution>
   	</extension>
   	<extension point="org.eclipse.ui.commands">
