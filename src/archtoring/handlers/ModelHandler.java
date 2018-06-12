@@ -17,7 +17,6 @@ import org.eclipse.gmt.modisco.java.ClassFile;
 import org.eclipse.gmt.modisco.java.Model;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.modisco.infra.discovery.core.AbstractModelDiscoverer;
 import org.eclipse.modisco.infra.discovery.core.exception.DiscoveryException;
 import org.eclipse.modisco.java.discoverer.DiscoverJavaModelFromJavaProject;
 import org.eclipse.emf.ecore.xmi.XMLResource;

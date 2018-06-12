@@ -18,6 +18,7 @@
                 label="Run Search"
                 mnemonic="S"
                 style="push">
+
           </command>
           <command
                 commandId="archtoring.commands.Generation"
@@ -50,7 +51,7 @@
 			name="Model">
 	  	</command>
 	  	<command
-			defaultHandler="archtoring.handlers.ModelHandler"
+			defaultHandler="archtoring.handlers.EPLHandler"
 			id="archtoring.commands.Patterns"
 			name="Search">
 	  	</command>

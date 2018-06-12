@@ -1,0 +1,11 @@
+[%
+TemplateFactory.setOutputRoot("./output");
+
+var implementation : Template = TemplateFactory.load("html.egl");
+
+for (r in Rule.all) {
+
+	implementation.populate("rule", r);
+	implementation.generate(r.title + ".html");
+}
+%]

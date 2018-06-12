@@ -1,5 +1,9 @@
 package archtoring.handlers;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,6 +45,7 @@ public class EPLHandler extends AbstractHandler {
 					file = (IFile) ((IAdaptable) element).getAdapter(IFile.class);
 				if (file != null) {
 					try {
+						System.out.println("Creating launch config");
 						ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 						ILaunchConfigurationType type = manager.getLaunchConfigurationType(
 								"org.epsilon.epl.eclipse.dt.launching.EplLaunchConfigurationDelegate");
@@ -49,8 +54,17 @@ public class EPLHandler extends AbstractHandler {
 						for (ILaunchConfiguration iLaunchConfiguration : lcs) {
 							if (iLaunchConfiguration.getName().equals("EPL")) {
 								for (String eplFile : FILES) {
+									System.out.println("FOUND FILE");
 									ILaunchConfigurationWorkingCopy t = iLaunchConfiguration.getWorkingCopy();
 									t.setAttribute("source", eplFile);
+									List<String> models = t.getAttribute("models", new ArrayList<String>());
+									System.out.println(models);
+									try (PrintStream out = new PrintStream(new FileOutputStream("./models.txt"))) {
+									    out.print(models);
+									} catch (FileNotFoundException e) {
+										System.out.println("File not found");
+										e.printStackTrace();
+									}
 									ILaunchConfiguration config = t.doSave();
 									if (config != null) {
 										config.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
