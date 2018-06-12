@@ -1,0 +1,15 @@
+[%out.setContentType("Java");%]
+package rules;
+
+import org.sonar.check.Rule;
+import org.sonar.plugins.java.api.tree.SyntaxTrivia;
+
+@Rule(key = "R[%=id%]RefactoringRule")
+public class R[%=id%]RefactoringRule extends RefactoringRule {
+
+    @Override
+    public void visitTrivia(SyntaxTrivia syntaxTrivia) {
+        setId([%=id%]);
+        super.visitTrivia(syntaxTrivia);
+    }
+}

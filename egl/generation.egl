@@ -3,12 +3,24 @@ TemplateFactory.setOutputRoot("./output");
 
 var html : Template = TemplateFactory.load("html.egl");
 var json : Template = TemplateFactory.load("json.egl");
+var rules : Template = TemplateFactory.load("ruleClasses.egl");
+var list : Template = TemplateFactory.load("rulesList.egl");
+var superClass : Template = TemplateFactory.load("ruleSuperClass.egl");
+var id = 1;
 
 for (r in Rule.all) {
 	html.populate("rule", r);
-	html.generate(r.title + ".html");
+	html.generate("R" + id + "RefactoringRule_java.html");
 	
 	json.populate("rule", r);
-	json.generate(r.title + ".json");
+	json.generate("R" + id + "RefactoringRule_java.json");
+	
+	rules.populate("rule", r);
+	rules.populate("id", id);
+	rules.generate("R" + id + "RefactoringRule.java");
+	id++;
 }
+
+list.generate("RulesList.java");
+superClass.generate("RefactoringRule.java");
 %]
