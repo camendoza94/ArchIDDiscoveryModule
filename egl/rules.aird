@@ -256,7 +256,7 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EAttribute']"/>
       </ownedElements>
-      <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_BHLdAG5sEeiJu5REs3o7Rw" name="debt : EDoubleObject" tooltipText="">
+      <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_BHLdAG5sEeiJu5REs3o7Rw" name="debt : EIntegerObject" tooltipText="">
         <target xmi:type="ecore:EAttribute" href="rules.ecore#//Rule/debt"/>
         <semanticElements xmi:type="ecore:EAttribute" href="rules.ecore#//Rule/debt"/>
         <ownedStyle xmi:type="diagram:BundledImage" xmi:id="_TAnjwG5sEeiJu5REs3o7Rw" labelAlignment="LEFT">

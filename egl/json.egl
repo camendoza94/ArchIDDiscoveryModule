@@ -1,0 +1,13 @@
+{
+  "title": "[%=rule.title%]",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "[%=rule.debt%]min"
+  },
+  "tags": [
+    "[%=rule.structuralElement.name%]"
+  ],
+  "defaultSeverity": "[%=rule.severity%]"
+}

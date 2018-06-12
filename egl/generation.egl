@@ -1,11 +1,14 @@
 [%
 TemplateFactory.setOutputRoot("./output");
 
-var implementation : Template = TemplateFactory.load("html.egl");
+var html : Template = TemplateFactory.load("html.egl");
+var json : Template = TemplateFactory.load("json.egl");
 
 for (r in Rule.all) {
-
-	implementation.populate("rule", r);
-	implementation.generate(r.title + ".html");
+	html.populate("rule", r);
+	html.generate(r.title + ".html");
+	
+	json.populate("rule", r);
+	json.generate(r.title + ".json");
 }
 %]
