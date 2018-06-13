@@ -17,10 +17,8 @@ public final class RulesList {
 
     static List<Class<? extends JavaCheck>> getJavaChecks() {
         return ImmutableList.<Class<? extends JavaCheck>>builder()
-        [%var id = 1;%]
         [%for(rule in Rule.all) {%]
-                .add(R[%=id%]RefactoringRule.class)
-             [%id++;%]
+                .add(R[%=rule.id%]RefactoringRule.class)
         [%}%]
                 .build();
     }

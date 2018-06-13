@@ -2,11 +2,17 @@
 <?eclipse version="3.4"?>
 <plugin>
  	<extension point="org.eclipse.ui.menus">
-	    <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+	   <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
        <menu
              label="Archtoring"
              mnemonic="A"
              tooltip="Refactoring steps">
+           <command
+	       		commandId="archtoring.commands.Rules"
+	            label="Import rules from CSV"
+	            mnemonic="R"
+	            style="push">
+           </command>
           <command
                 commandId="archtoring.commands.Model"
                 label="Extract model"
@@ -42,7 +48,7 @@
              </visibleWhen>
           </command>
        </menu>
-	    </menuContribution>
+	   </menuContribution>
   	</extension>
   	<extension point="org.eclipse.ui.commands">
 		<command
@@ -59,6 +65,11 @@
 			defaultHandler="archtoring.handlers.GenerationHandler"
 			id="archtoring.commands.Generation"
 			name="Transform">
+	  	</command>
+	  	<command
+			defaultHandler="archtoring.handlers.RulesHandler"
+			id="archtoring.commands.Rules"
+			name="Rules">
 	  	</command>
 	</extension>
 </plugin>

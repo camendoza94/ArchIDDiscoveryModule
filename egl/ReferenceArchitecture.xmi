@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Rules="https://www.uniandes.edu.co/archtoring">
-  <rules title="TestRule" action="test_action" debt="2" severity="test_severity" description="test_descripction" nonCompliantExample="test_example" compliantSolution="test_solution" structuralElement="//@structuralElements.0">
-    <patterns searchExpression="test_search" transformBlock="test_transform"/>
+  <rules title="TestRule" action="test_action" debt="2" severity="test_severity" description="test_descripction" nonCompliantExample="test_example" compliantSolution="test_solution" structuralElement="//@structuralElements.0" id="1">
+    <patterns searchExpression="test_search" transformBlock="test_transform" id="1"/>
   </rules>
-  <structuralElements name="TestElement"/>
+  <structuralElements name="TestElement" id="1"/>
 </Rules:ReferenceArchitecture>

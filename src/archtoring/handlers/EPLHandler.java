@@ -22,15 +22,10 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-/**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * 
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
 public class EPLHandler extends AbstractHandler {
-	
-	private static final String[] FILES = {"/Archtoring/epl/dtos.epl", "/Archtoring/epl/detailDtos.epl", "/Archtoring/epl/logic.epl", "/Archtoring/epl/resources.epl"};
+
+	private static final String[] FILES = { "/Archtoring/epl/dtos.epl", "/Archtoring/epl/detailDtos.epl",
+			"/Archtoring/epl/logic.epl", "/Archtoring/epl/resources.epl" };
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -60,7 +55,7 @@ public class EPLHandler extends AbstractHandler {
 									List<String> models = t.getAttribute("models", new ArrayList<String>());
 									System.out.println(models);
 									try (PrintStream out = new PrintStream(new FileOutputStream("./models.txt"))) {
-									    out.print(models);
+										out.print(models);
 									} catch (FileNotFoundException e) {
 										System.out.println("File not found");
 										e.printStackTrace();

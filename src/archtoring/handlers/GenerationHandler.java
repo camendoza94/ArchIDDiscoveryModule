@@ -16,11 +16,6 @@ import org.eclipse.gmt.modisco.java.generation.files.GenerateJavaExtended;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-/**
- * Our sample handler extends AbstractHandler, an IHandler base class.
- * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
 public class GenerationHandler extends AbstractHandler {
 
 	@Override
@@ -39,7 +34,7 @@ public class GenerationHandler extends AbstractHandler {
 					try {
 						System.out.println(file.getFullPath());
 						javaGenerator = new GenerateJavaExtended(URI.createFileURI(file.getFullPath().toString()),
-							    new File("C:/Users/Asistente/Desktop/PruebaModelo"), new ArrayList<Object>());
+								new File("C:/Users/Asistente/Desktop/PruebaModelo"), new ArrayList<Object>());
 
 						javaGenerator.doGenerate(null);
 					} catch (IOException e) {

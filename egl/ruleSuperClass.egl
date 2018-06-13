@@ -28,10 +28,8 @@ public class RefactoringRule extends IssuableSubscriptionVisitor {
     private int Id;
     private static final ImmutableMap<Integer, String> TITLES =
             new ImmutableMap.Builder<Integer, String>()
-        [%var id = 1;%]
        	[%for(rule in Rule.all) {%]
-                .add(R[%=id%]RefactoringRule.class)
-             [%id++;%]
+                .add(R[%=rule.id%]RefactoringRule.class)
         [%}%]
                 .build();
 
