@@ -3,6 +3,7 @@ package archtoring.handlers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +13,17 @@ import java.util.Scanner;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -37,6 +46,8 @@ import org.osgi.framework.Bundle;
 import archtoring.utils.CSVUtils;
 
 public class RulesHandler extends AbstractHandler {
+
+	private static final String ARCHTORING_RULES_MODEL_XMI = "/archtoring/RulesModel.xmi";
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -62,13 +73,48 @@ public class RulesHandler extends AbstractHandler {
 						else {
 							System.out.println("You chose " + dialog.getFilterPath() + "\\" + filename);
 							createModel(project, dialog.getFilterPath() + "\\" + filename);
-							// TODO ? Run EGL templates
+							runEGLTemplate(project);
 						}
 					}
 				}
 			}
 		}
 		return null;
+	}
+
+	private void runEGLTemplate(IJavaProject project) {
+		try {
+			ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
+			ILaunchConfigurationType type = manager
+					.getLaunchConfigurationType("org.epsilon.egl.eclipse.dt.launching.EglLaunchConfigurationDelegate");
+			ILaunchConfiguration[] lcs = manager.getLaunchConfigurations(type);
+			System.out.println(lcs.length);
+			for (ILaunchConfiguration iLaunchConfiguration : lcs) {
+				if (iLaunchConfiguration.getName().equals("generation")) {
+					System.out.println("Found launch config");
+					ILaunchConfigurationWorkingCopy t = iLaunchConfiguration.getWorkingCopy();
+					URL fileURL = FileLocator.find(Platform.getBundle("co.edu.uniandes.archtoring"), new Path("egl/generation.egl"), null);
+					t.setAttribute("source", fileURL.getFile());
+					List<String> models = t.getAttribute("models", new ArrayList<String>());
+					String entry = models.get(0);
+					System.out.println(entry);
+					int fileStart = entry.indexOf("modelFile=");
+					int fileEnd = entry.indexOf("expand=", fileStart);
+					String substringFile = entry.substring(fileStart + "modelFile=".length(), fileEnd);
+					String newEntry = entry.replace(substringFile, URI.createURI(project.getResource().getFullPath() + ARCHTORING_RULES_MODEL_XMI) + "\n");
+					System.out.println("NEW: " + newEntry);
+					models.clear();
+					models.add(newEntry);
+					t.setAttribute("models", models);
+					ILaunchConfiguration config = t.doSave();
+					if (config != null) {
+						config.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
+					}
+				}
+			}
+		} catch (CoreException e) {
+			//TODO Handle exception
+		}
 	}
 
 	private void createModel(IJavaProject project, String filename) {
@@ -96,8 +142,8 @@ public class RulesHandler extends AbstractHandler {
 			ResourceSet resourseSet = new ResourceSetImpl();
 			resourseSet.getPackageRegistry().put(metapackage.getNsURI(), metapackage);
 			resourseSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-			Resource resource = resourseSet.createResource(
-					URI.createURI(project.getResource().getLocationURI() + "/archtoring/RulesModel.xmi"));
+			Resource resource = resourseSet
+					.createResource(URI.createURI(project.getResource().getLocationURI() + ARCHTORING_RULES_MODEL_XMI));
 
 			Scanner scanner = new Scanner(new File(filename));
 			if (scanner.hasNextLine())
