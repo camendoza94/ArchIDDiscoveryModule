@@ -1,15 +1,17 @@
 package archtoring.handlers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
@@ -31,6 +33,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.framework.Bundle;
+
+import archtoring.utils.CSVUtils;
 
 public class RulesHandler extends AbstractHandler {
 
@@ -55,47 +59,75 @@ public class RulesHandler extends AbstractHandler {
 						String filename = dialog.getFileName();
 						if (filename == "")
 							System.out.println("You didn't select any file.");
-						else
+						else {
 							System.out.println("You chose " + dialog.getFilterPath() + "\\" + filename);
-						// TODO Extract data from CSV
-						// TODO Use data to create model
-						EcoreResourceFactoryImpl rs = new EcoreResourceFactoryImpl();
-						Bundle bundle = Platform.getBundle("co.edu.uniandes.archtoring");
-						URL fileURL = bundle.getEntry("egl/rules.ecore");
-
-						try {
-							Resource res = rs.createResource(URI.createFileURI(FileLocator.resolve(fileURL).getFile()));
-							res.load(null);
-							EPackage metapackage = (EPackage) res.getContents().get(0);
-							EFactory employeeFactoryInstance = metapackage.getEFactoryInstance();
-							EClass ruleClass = (EClass) metapackage.getEClassifier("Rule");
-							EObject ruleObject = employeeFactoryInstance.create(ruleClass);
-							EAttribute ruleTitle = ruleClass.getEAllAttributes().get(0);
-							EAttribute ruleAction = ruleClass.getEAllAttributes().get(1);
-							EAttribute ruleDebt = ruleClass.getEAllAttributes().get(2);
-							ruleObject.eSet(ruleTitle, "TITLE_PLUGIN");
-							ruleObject.eSet(ruleAction, "ACTION_PLUGIN");
-							ruleObject.eSet(ruleDebt, 2);
-							System.out.println(ruleObject.eGet(ruleTitle));
-							ResourceSet resourseSet = new ResourceSetImpl();
-							resourseSet.getPackageRegistry().put(metapackage.getNsURI(), metapackage);
-							resourseSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*",
-									new XMIResourceFactoryImpl());
-							Resource resource = resourseSet.createResource(URI.createURI(project.getResource().getLocationURI() + "/archtoring/RulesModel.xmi"));
-							resource.getContents().add(ruleObject);
-							Map<String, Boolean> options = new HashMap<String, Boolean>();
-							options.put(XMIResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
-							resource.save(options);
-						} catch (IOException e) {
-							// TODO: handle exception
-							e.printStackTrace();
+							createModel(project, dialog.getFilterPath() + "\\" + filename);
+							// TODO ? Run EGL templates
 						}
-						// TODO ? Run EGL templates
 					}
 				}
 			}
 		}
 		return null;
+	}
+
+	private void createModel(IJavaProject project, String filename) {
+		EcoreResourceFactoryImpl rs = new EcoreResourceFactoryImpl();
+		Bundle bundle = Platform.getBundle("co.edu.uniandes.archtoring");
+		URL fileURL = bundle.getEntry("egl/rules.ecore");
+
+		try {
+			// Obtain meta-model
+			Resource res = rs.createResource(URI.createFileURI(FileLocator.resolve(fileURL).getFile()));
+			res.load(null);
+			EPackage metapackage = (EPackage) res.getContents().get(0);
+			EFactory employeeFactoryInstance = metapackage.getEFactoryInstance();
+			EClass ruleClass = (EClass) metapackage.getEClassifier("Rule");
+			EAttribute ruleTitle = ruleClass.getEAllAttributes().get(0);
+			EAttribute ruleAction = ruleClass.getEAllAttributes().get(1);
+			EAttribute ruleDebt = ruleClass.getEAllAttributes().get(2);
+			EAttribute ruleSeverity = ruleClass.getEAllAttributes().get(3);
+			EAttribute ruleDescription = ruleClass.getEAllAttributes().get(4);
+			EAttribute ruleNonCompliantExample = ruleClass.getEAllAttributes().get(5);
+			EAttribute ruleCompliantSolution = ruleClass.getEAllAttributes().get(6);
+			EAttribute ruleID = ruleClass.getEAllAttributes().get(7);
+
+			// Create model
+			ResourceSet resourseSet = new ResourceSetImpl();
+			resourseSet.getPackageRegistry().put(metapackage.getNsURI(), metapackage);
+			resourseSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+			Resource resource = resourseSet.createResource(
+					URI.createURI(project.getResource().getLocationURI() + "/archtoring/RulesModel.xmi"));
+
+			Scanner scanner = new Scanner(new File(filename));
+			if (scanner.hasNextLine())
+				scanner.nextLine(); // Skip headers
+			else {
+				// TODO Show message empty CSV
+			}
+			while (scanner.hasNext()) {
+				// Create Rule object
+				List<String> line = CSVUtils.parseLine(scanner.nextLine());
+				EObject ruleObject = employeeFactoryInstance.create(ruleClass);
+				ruleObject.eSet(ruleID, Integer.parseInt(line.get(0)));
+				ruleObject.eSet(ruleTitle, line.get(1));
+				ruleObject.eSet(ruleAction, line.get(2));
+				ruleObject.eSet(ruleDebt, Integer.parseInt(line.get(3)));
+				ruleObject.eSet(ruleSeverity, line.get(4));
+				ruleObject.eSet(ruleDescription, line.get(5));
+				ruleObject.eSet(ruleNonCompliantExample, line.get(6));
+				ruleObject.eSet(ruleCompliantSolution, line.get(7));
+				// Add new Rule to model
+				resource.getContents().add(ruleObject);
+			}
+			scanner.close();
+			Map<String, Boolean> options = new HashMap<String, Boolean>();
+			options.put(XMIResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+			resource.save(options);
+		} catch (IOException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 	}
 
 }
