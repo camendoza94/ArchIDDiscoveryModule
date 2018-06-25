@@ -88,21 +88,17 @@ public class RulesHandler extends AbstractHandler {
 			ILaunchConfigurationType type = manager
 					.getLaunchConfigurationType("org.epsilon.egl.eclipse.dt.launching.EglLaunchConfigurationDelegate");
 			ILaunchConfiguration[] lcs = manager.getLaunchConfigurations(type);
-			System.out.println(lcs.length);
 			for (ILaunchConfiguration iLaunchConfiguration : lcs) {
 				if (iLaunchConfiguration.getName().equals("generation")) {
-					System.out.println("Found launch config");
 					ILaunchConfigurationWorkingCopy t = iLaunchConfiguration.getWorkingCopy();
 					URL fileURL = FileLocator.find(Platform.getBundle("co.edu.uniandes.archtoring"), new Path("egl/generation.egl"), null);
 					t.setAttribute("source", fileURL.getFile());
 					List<String> models = t.getAttribute("models", new ArrayList<String>());
 					String entry = models.get(0);
-					System.out.println(entry);
 					int fileStart = entry.indexOf("modelFile=");
 					int fileEnd = entry.indexOf("expand=", fileStart);
 					String substringFile = entry.substring(fileStart + "modelFile=".length(), fileEnd);
 					String newEntry = entry.replace(substringFile, URI.createURI(project.getResource().getFullPath() + ARCHTORING_RULES_MODEL_XMI) + "\n");
-					System.out.println("NEW: " + newEntry);
 					models.clear();
 					models.add(newEntry);
 					t.setAttribute("models", models);
