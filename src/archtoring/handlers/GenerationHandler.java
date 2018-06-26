@@ -2,6 +2,7 @@ package archtoring.handlers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,15 +14,14 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.gmt.modisco.java.generation.files.GenerateJavaExtended;
 import org.eclipse.ui.handlers.HandlerUtil;
+
+import archtoring.utils.EolStandalone;
+import archtoring.utils.EpsilonStandalone;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -46,28 +46,13 @@ public class GenerationHandler extends AbstractHandler {
 						DirectoryDialog dialog = new DirectoryDialog(shell);
 						dialog.setText("Select folder to save source");
 						if (dialog.open() != null) {
-							ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-							ILaunchConfigurationType type = manager
-									.getLaunchConfigurationType("org.epsilon.eol.eclipse.dt.launching.EolLaunchConfigurationDelegate");
-							ILaunchConfiguration[] lcs = manager.getLaunchConfigurations(type);
-							for (ILaunchConfiguration iLaunchConfiguration : lcs) {
-								if (iLaunchConfiguration.getName().equals("comments")) {
-									ILaunchConfigurationWorkingCopy t = iLaunchConfiguration.getWorkingCopy();
-									List<String> models = t.getAttribute("models", new ArrayList<String>());
-									String entry = models.get(0);
-									int fileStart = entry.indexOf("modelFile=");
-									int fileEnd = entry.indexOf("expand=", fileStart);
-									String substringFile = entry.substring(fileStart + "modelFile=".length(), fileEnd);
-									String newEntry = entry.replace(substringFile, URI.createURI(file.getFullPath().toString()) + "\n");
-									models.clear();
-									models.add(newEntry);
-									t.setAttribute("models", models);
-									ILaunchConfiguration config = t.doSave();
-									if (config != null) {
-										config.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
-									}
-								}
-							}
+							EolStandalone eol = new EolStandalone();
+							eol.setSource("epl/comments.eol");
+							List<IModel> models = new ArrayList<IModel>();
+							models.add(EpsilonStandalone.createEmfModelByURI("Model", file.getFullPath().toString(),
+									EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
+							eol.setModels(models);
+							eol.execute(true);
 							javaGenerator = new GenerateJavaExtended(URI.createFileURI(file.getFullPath().toString()),
 									new File(dialog.getFilterPath()), new ArrayList<Object>());
 							javaGenerator.doGenerate(null);
@@ -75,6 +60,12 @@ public class GenerationHandler extends AbstractHandler {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (CoreException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (URISyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}

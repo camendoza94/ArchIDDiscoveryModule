@@ -72,4 +72,18 @@
 			name="Rules">
 	  	</command>
 	</extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="/Archtoring.categoryWizard"
+            class="archtoring.wizard.RulesWizard"
+            id="Archtoring.rulesWizard"
+            name="Generate new SonarQube Refactoring plugin project"
+            project="true">
+      </wizard>
+      <category
+            id="Archtoring.categoryWizard"
+            name="Archtoring">
+      </category>
+   </extension>
 </plugin>
