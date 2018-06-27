@@ -34,7 +34,8 @@ import org.osgi.framework.Bundle;
 
 public abstract class EpsilonStandalone {
 	public static final String MODISCO_JAVA_METAMODEL_URI = "http://www.eclipse.org/MoDisco/Java/0.2.incubation/java";
-	
+	public static final String RULES_METAMODEL_URI = "https://www.uniandes.edu.co/archtoring";
+
 	String source;
 	List<IModel> models;
 
@@ -44,11 +45,14 @@ public abstract class EpsilonStandalone {
 	protected Object result;
 
 	public abstract IEolExecutableModule createModule();
-	
 
-	public abstract void setSource(String source);
+	public void setSource(String source) {
+		this.source = source;
+	}
 
-	public abstract void setModels(List<IModel> models);
+	public void setModels(List<IModel> models) {
+		this.models = models;
+	}
 
 	public String getSource() {
 		return source;
@@ -67,7 +71,7 @@ public abstract class EpsilonStandalone {
 	public void execute(boolean sourceBundled) throws URISyntaxException, Exception {
 
 		module = createModule();
-		if(sourceBundled)
+		if (sourceBundled)
 			module.parse(getFileURI(getSource()));
 		else
 			module.parse(URI.create(getSource()));
@@ -109,7 +113,7 @@ public abstract class EpsilonStandalone {
 		StringProperties properties = new StringProperties();
 		properties.put(EmfModel.PROPERTY_NAME, name);
 		properties.put(EmfModel.PROPERTY_FILE_BASED_METAMODEL_URI, getFileURI(metamodel).toString());
-		properties.put(EmfModel.PROPERTY_MODEL_URI, getFileURI(model).toString());
+		properties.put(EmfModel.PROPERTY_MODEL_URI, model);
 		properties.put(EmfModel.PROPERTY_READONLOAD, readOnLoad + "");
 		properties.put(EmfModel.PROPERTY_STOREONDISPOSAL, storeOnDisposal + "");
 		emfModel.load(properties, (IRelativePathResolver) null);
@@ -130,10 +134,11 @@ public abstract class EpsilonStandalone {
 	}
 
 	public static URI getFileURI(String fileName) throws URISyntaxException, IOException {
-		
+
 		Bundle bundle = Platform.getBundle("co.edu.uniandes.archtoring");
 		URL fileURL = bundle.getEntry(fileName);
-		org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createFileURI(FileLocator.resolve(fileURL).getFile());
+		org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI
+				.createFileURI(FileLocator.resolve(fileURL).getFile());
 		return URI.create(uri.toString());
 	}
 }

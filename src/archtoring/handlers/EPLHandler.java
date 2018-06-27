@@ -9,7 +9,6 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.models.IModel;
@@ -48,8 +47,6 @@ public class EPLHandler extends AbstractHandler {
 							eol.setModels(models);
 							eol.execute(false);
 						}
-					} catch (CoreException ex) {
-						System.out.println("Error while searching LaunchConfig");
 					} catch (EolModelLoadingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

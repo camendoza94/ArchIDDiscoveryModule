@@ -2,6 +2,7 @@ package archtoring.handlers;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,17 +14,9 @@ import java.util.Scanner;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchConfigurationType;
-import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -36,6 +29,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
+import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.FileDialog;
@@ -44,6 +39,9 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.osgi.framework.Bundle;
 
 import archtoring.utils.CSVUtils;
+import archtoring.utils.EglStandalone;
+import archtoring.utils.EolStandalone;
+import archtoring.utils.EpsilonStandalone;
 
 public class RulesHandler extends AbstractHandler {
 
@@ -84,32 +82,25 @@ public class RulesHandler extends AbstractHandler {
 
 	private void runEGLTemplate(IJavaProject project) {
 		try {
-			ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-			ILaunchConfigurationType type = manager
-					.getLaunchConfigurationType("org.epsilon.egl.eclipse.dt.launching.EglLaunchConfigurationDelegate");
-			ILaunchConfiguration[] lcs = manager.getLaunchConfigurations(type);
-			for (ILaunchConfiguration iLaunchConfiguration : lcs) {
-				if (iLaunchConfiguration.getName().equals("generation")) {
-					ILaunchConfigurationWorkingCopy t = iLaunchConfiguration.getWorkingCopy();
-					URL fileURL = FileLocator.find(Platform.getBundle("co.edu.uniandes.archtoring"), new Path("egl/generation.egl"), null);
-					t.setAttribute("source", fileURL.getFile());
-					List<String> models = t.getAttribute("models", new ArrayList<String>());
-					String entry = models.get(0);
-					int fileStart = entry.indexOf("modelFile=");
-					int fileEnd = entry.indexOf("expand=", fileStart);
-					String substringFile = entry.substring(fileStart + "modelFile=".length(), fileEnd);
-					String newEntry = entry.replace(substringFile, URI.createURI(project.getResource().getFullPath() + ARCHTORING_RULES_MODEL_XMI) + "\n");
-					models.clear();
-					models.add(newEntry);
-					t.setAttribute("models", models);
-					ILaunchConfiguration config = t.doSave();
-					if (config != null) {
-						config.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
-					}
-				}
-			}
-		} catch (CoreException e) {
-			//TODO Handle exception
+			EglStandalone eol = new EglStandalone();
+			eol.setSource("egl/generation.egl");
+			List<IModel> models = new ArrayList<IModel>();
+			models.add(EpsilonStandalone.createEmfModel("Model", project.getResource().getFullPath() + ARCHTORING_RULES_MODEL_XMI,
+					"egl/rules.ecore", true, true));
+			eol.setModels(models);
+			eol.execute(true);
+		} catch (EolModelLoadingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

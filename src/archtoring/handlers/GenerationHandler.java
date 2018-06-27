@@ -12,7 +12,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.eol.models.IModel;
@@ -58,9 +57,6 @@ public class GenerationHandler extends AbstractHandler {
 							javaGenerator.doGenerate(null);
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (CoreException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (URISyntaxException e) {
 						// TODO Auto-generated catch block
