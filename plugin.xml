@@ -86,4 +86,14 @@
             name="Archtoring">
       </category>
    </extension>
+   <extension
+         id="archtoring.sonarqubePlugin"
+         name="SonarQube Plugin"
+         point="org.eclipse.core.resources.natures">
+         <runtime>
+            <run
+                  class="archtoring.wizard.SonarQubeProjectNature">
+            </run>
+         </runtime>
+   </extension>
 </plugin>
