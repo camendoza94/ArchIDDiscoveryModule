@@ -40,7 +40,6 @@ import org.osgi.framework.Bundle;
 
 import archtoring.utils.CSVUtils;
 import archtoring.utils.EglStandalone;
-import archtoring.utils.EolStandalone;
 import archtoring.utils.EpsilonStandalone;
 
 public class RulesHandler extends AbstractHandler {
@@ -88,6 +87,7 @@ public class RulesHandler extends AbstractHandler {
 			models.add(EpsilonStandalone.createEmfModel("Model", project.getResource().getFullPath() + ARCHTORING_RULES_MODEL_XMI,
 					"egl/rules.ecore", true, true));
 			eol.setModels(models);
+			eol.setLocation(project.getResource().getLocation().toString() + "/plugin");
 			eol.execute(true);
 		} catch (EolModelLoadingException e) {
 			// TODO Auto-generated catch block

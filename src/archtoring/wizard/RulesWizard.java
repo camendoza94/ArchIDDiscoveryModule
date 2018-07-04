@@ -1,11 +1,15 @@
 package archtoring.wizard;
 
+import java.net.URI;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class RulesWizard extends Wizard implements INewWizard {
+
+	private UMLWizardPage pageOne;
 
 	public RulesWizard() {
 		 super();
@@ -18,14 +22,18 @@ public class RulesWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
+		String name = pageOne.getProjectName();
+		//URI location = pageOne.getLocationURI();
+		SonarQubeProject.createProject(name);
 		return true;
 	}
-	
+
 	@Override
 	public void addPages() {
 		// TODO Auto-generated method stub
 		super.addPages();
-		addPage(new UMLWizardPage());
+		pageOne = new UMLWizardPage();
+		addPage(pageOne);
 	}
 
 }

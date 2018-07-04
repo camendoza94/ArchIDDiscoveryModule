@@ -1,22 +1,29 @@
 package archtoring.wizard;
 
+import java.io.File;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 public class UMLWizardPage extends WizardPage implements Listener {
-    private Text text1;
+	
+    private Text projectName;
     private Composite container;
-	private Button priceButton;
+	private Button selectFileButton;
+
+	private java.net.URI locationURI;
+
+	private Text projectURI;
 
     public UMLWizardPage() {
         super("Import UML model");
@@ -31,30 +38,32 @@ public class UMLWizardPage extends WizardPage implements Listener {
         container.setLayout(layout);
         layout.numColumns = 2;
         Label label1 = new Label(container, SWT.NONE);
-        label1.setText("Put a value here.");
+        label1.setText("Project name");
 
-        text1 = new Text(container, SWT.BORDER | SWT.SINGLE);
-        text1.setText("");
-        text1.addKeyListener(new KeyListener() {
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (!text1.getText().isEmpty()) {
-                    setPageComplete(true);
-
-                }
-            }
-
-        });
+        projectName = new Text(container, SWT.BORDER | SWT.SINGLE);
+        projectName.setText("");
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        text1.setLayoutData(gd);
+        projectName.setLayoutData(gd);
+        projectName.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				if(!projectName.getText().isEmpty()) {
+					setErrorMessage(null);
+					setPageComplete(true);
+				}
+				else
+					setErrorMessage("You must input a name for the project!");
+			}
+		});
+        
+        projectURI = new Text(container, SWT.BORDER | SWT.SINGLE);
+        projectURI.setText("");
+        projectURI.setLayoutData(gd);
 
-        priceButton = new Button(container, SWT.PUSH);
-        priceButton.addListener(SWT.Selection, this);
+        selectFileButton = new Button(container, SWT.PUSH);
+        selectFileButton.setText("Browse");
+        selectFileButton.addListener(SWT.Selection, this);
         
         // required to avoid an error in the system
         setControl(container);
@@ -62,14 +71,24 @@ public class UMLWizardPage extends WizardPage implements Listener {
 
     }
 
-    public String getText1() {
-        return text1.getText();
+    public String getProjectName() {
+        return projectName.getText();
+    }
+    
+    public java.net.URI getLocationURI() {
+    	return locationURI;
     }
 
 	@Override
 	public void handleEvent(Event event) {
-		if(event.widget == priceButton) {
-			
+		if(event.widget == selectFileButton) {
+			DirectoryDialog dialog = new DirectoryDialog(UMLWizardPage.this.container.getShell(), SWT.OPEN);
+			dialog.setText("Select Directory to Create Project");
+			if (dialog.open() != null) {
+				locationURI = new File(dialog.getFilterPath()).toURI();
+				projectURI.setText(locationURI.getPath());
+				setPageComplete(true);
+			}
 		}
 	}
 }

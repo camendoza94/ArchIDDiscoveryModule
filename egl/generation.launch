@@ -11,7 +11,9 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <stringAttribute key="outputFilePath" value=""/>
-<listAttribute key="parameters"/>
+<listAttribute key="parameters">
+<listEntry value="#Wed Jul 04 18:00:12 COT 2018&#13;&#10;name=projectUri&#13;&#10;type=String&#13;&#10;value=./output"/>
+</listAttribute>
 <booleanAttribute key="produceTrace" value="false"/>
 <booleanAttribute key="profile_model_loading" value="false"/>
 <booleanAttribute key="profiling_enabled" value="false"/>
