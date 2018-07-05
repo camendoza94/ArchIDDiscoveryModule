@@ -1,6 +1,7 @@
 package archtoring.wizard;
 
 import java.io.File;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -9,8 +10,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -82,12 +83,20 @@ public class UMLWizardPage extends WizardPage implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 		if(event.widget == selectFileButton) {
-			DirectoryDialog dialog = new DirectoryDialog(UMLWizardPage.this.container.getShell(), SWT.OPEN);
-			dialog.setText("Select Directory to Create Project");
+			FileDialog dialog = new FileDialog(UMLWizardPage.this.container.getShell(), SWT.OPEN);
+			dialog.setText("Select Model File");
+			String[] extensions = { "*.uml" };
+			dialog.setFilterExtensions(extensions);
 			if (dialog.open() != null) {
-				locationURI = new File(dialog.getFilterPath()).toURI();
-				projectURI.setText(locationURI.getPath());
-				setPageComplete(true);
+				String filename = dialog.getFileName();
+				if (filename == "")
+					System.out.println("You didn't select any file.");
+				else {
+					System.out.println("You chose " + dialog.getFilterPath() + "\\" + filename);
+					locationURI = new File(dialog.getFilterPath() + "\\" + filename).toURI();
+					projectURI.setText(locationURI.getPath());
+					setPageComplete(true);
+				}
 			}
 		}
 	}

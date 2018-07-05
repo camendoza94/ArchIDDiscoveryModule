@@ -23,8 +23,8 @@ public class RulesWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 		String name = pageOne.getProjectName();
-		//URI location = pageOne.getLocationURI();
-		SonarQubeProject.createProject(name);
+		URI location = pageOne.getLocationURI();
+		SonarQubeProject.createProject(name, location);
 		return true;
 	}
 

@@ -19,6 +19,11 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.util.WrappedException;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.uml2.uml.UMLPackage;
 import org.osgi.framework.Bundle;
 
 import archtoring.wizard.SonarQubeProjectNature;;
@@ -31,11 +36,12 @@ public class SonarQubeProject {
      * - create the folder structure
      *
      * @param projectName
+     * @param location 
      * @param location
      * @param natureId
      * @return
      */
-    public static IProject createProject(String projectName) {
+    public static IProject createProject(String projectName, URI location) {
         Assert.isNotNull(projectName);
         Assert.isTrue(projectName.trim().length()> 0);
  
@@ -43,6 +49,7 @@ public class SonarQubeProject {
         try {
             addNature(project);
             addToProjectStructure(project);
+            readUMLModel(location);
         } catch (CoreException e) {
             e.printStackTrace();
             project = null;
@@ -51,7 +58,24 @@ public class SonarQubeProject {
         return project;
     }
  
-    /**
+	protected static org.eclipse.uml2.uml.Package readUMLModel(URI uri) {
+		org.eclipse.uml2.uml.Package package_ = null;
+		try {
+			// Load the requested resource
+			Resource resource = new ResourceSetImpl().getResource(org.eclipse.emf.common.util.URI.createURI(uri.toString()), true);
+
+			// Get the first (should be only) package from it
+			package_ = (org.eclipse.uml2.uml.Package) EcoreUtil.getObjectByType(resource.getContents(),
+					UMLPackage.Literals.PACKAGE);
+			System.out.println(package_.getName());
+		} catch (WrappedException we) {
+			System.exit(1);
+		}
+
+		return package_;
+	}
+
+	/**
      * Just do the basics: create a basic project.
      *
      * @param location
