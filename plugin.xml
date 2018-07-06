@@ -96,4 +96,10 @@
             </run>
          </runtime>
    </extension>
+   <extension point="org.eclipse.sirius.componentization">
+    <component class="archtoring.sirius.Activator"
+               id="rules.refactoring.sirus"
+	       name="project">
+    </component>
+  </extension>
 </plugin>

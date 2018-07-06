@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/tree/description/1.0.0" name="rules" version="11.1.1.201610211630">
+  <ownedViewpoints name="refactoring.rules" modelFileExtension="rules">
+    <ownedRepresentations xsi:type="description_1:TreeDescription" name="tree" titleExpression="Rules Model" initialisation="true" domainClass="Rules.ReferenceArchitecture">
+      <metamodel href="egl/rules.ecore#/"/>
+      <subItemMappings name="elementRef" domainClass="ElementRef" semanticCandidatesExpression="feature:eAllContents">
+        <defaultStyle labelExpression="feature:umlElement">
+          <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+          <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+        </defaultStyle>
+      </subItemMappings>
+    </ownedRepresentations>
+  </ownedViewpoints>
+</description:Group>

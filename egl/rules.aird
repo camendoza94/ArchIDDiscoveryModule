@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style">
-  <viewpoint:DAnalysis xmi:id="_pWaGIH_oEeiojo4qBxXWVg" selectedViews="_pmE50H_oEeiojo4qBxXWVg _pmqvsH_oEeiojo4qBxXWVg _pm0gsH_oEeiojo4qBxXWVg _pnHboH_oEeiojo4qBxXWVg" version="11.1.0.201608251200">
+  <viewpoint:DAnalysis xmi:id="_pWaGIH_oEeiojo4qBxXWVg" selectedViews="_pmE50H_oEeiojo4qBxXWVg _pmqvsH_oEeiojo4qBxXWVg _pm0gsH_oEeiojo4qBxXWVg _pnHboH_oEeiojo4qBxXWVg _R6CK4IFfEeiojo4qBxXWVg _XhcX8IFiEeiojo4qBxXWVg" version="11.1.0.201608251200">
     <semanticResources>rules.ecore</semanticResources>
     <semanticResources>http://www.eclipse.org/emf/2002/Ecore</semanticResources>
     <semanticResources>platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore</semanticResources>
     <semanticResources>platform:/plugin/org.eclipse.uml2.uml/model/UML.ecore</semanticResources>
     <semanticResources>platform:/plugin/org.eclipse.uml2.types/model/Types.ecore</semanticResources>
+    <semanticResources>../Test.uml</semanticResources>
+    <semanticResources>../Test_java.xmi</semanticResources>
+    <semanticResources>output/pom.xml</semanticResources>
+    <semanticResources>output/src/main/js/style.css</semanticResources>
+    <semanticResources>../plugin.xml</semanticResources>
+    <semanticResources>ReferenceArchitecture.rules</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" xmi:id="_pmE50H_oEeiojo4qBxXWVg">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" xmi:id="_rbVLQH_oEeiojo4qBxXWVg" name="Rules class diagram" representation="_rbVyUH_oEeiojo4qBxXWVg">
@@ -21,6 +27,12 @@
     </ownedViews>
     <ownedViews xmi:type="viewpoint:DView" xmi:id="_pnHboH_oEeiojo4qBxXWVg">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Generation']"/>
+    </ownedViews>
+    <ownedViews xmi:type="viewpoint:DView" xmi:id="_R6CK4IFfEeiojo4qBxXWVg">
+      <viewpoint xmi:type="description:Viewpoint" href="../rules.odesign#//@ownedViewpoints[name='refactoring.rules']"/>
+    </ownedViews>
+    <ownedViews xmi:type="viewpoint:DView" xmi:id="_XhcX8IFiEeiojo4qBxXWVg">
+      <viewpoint xmi:type="description:Viewpoint" href="platform:/resource/my.project.design/description/project.odesign#//@ownedViewpoints[name='MyViewpoint']"/>
     </ownedViews>
   </viewpoint:DAnalysis>
   <diagram:DSemanticDiagram xmi:id="_rbVyUH_oEeiojo4qBxXWVg" name="Rules class diagram">
@@ -113,6 +125,10 @@
         <children xmi:type="notation:Node" xmi:id="_tUr5kH_oEeiojo4qBxXWVg" type="2003" element="_tSObcH_oEeiojo4qBxXWVg">
           <children xmi:type="notation:Node" xmi:id="_tUtHsH_oEeiojo4qBxXWVg" type="5007"/>
           <children xmi:type="notation:Node" xmi:id="_tUtuwH_oEeiojo4qBxXWVg" type="7004">
+            <children xmi:type="notation:Node" xmi:id="_Jihi0IFeEeiojo4qBxXWVg" type="3010" element="_JiJIUIFeEeiojo4qBxXWVg">
+              <styles xmi:type="notation:FontStyle" xmi:id="_Jihi0YFeEeiojo4qBxXWVg" fontName="Segoe UI" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_Jihi0oFeEeiojo4qBxXWVg"/>
+            </children>
             <styles xmi:type="notation:SortingStyle" xmi:id="_tUtuwX_oEeiojo4qBxXWVg"/>
             <styles xmi:type="notation:FilteringStyle" xmi:id="_tUtuwn_oEeiojo4qBxXWVg"/>
           </children>
@@ -300,6 +316,14 @@
         <description xmi:type="style:FlatContainerStyleDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@style"/>
       </ownedStyle>
       <actualMapping xmi:type="description_1:ContainerMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']"/>
+      <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_JiJIUIFeEeiojo4qBxXWVg" name=" umlModel : Model" tooltipText="">
+        <target xmi:type="ecore:EReference" href="rules.ecore#//ReferenceArchitecture/umlModel"/>
+        <semanticElements xmi:type="ecore:EReference" href="rules.ecore#//ReferenceArchitecture/umlModel"/>
+        <ownedStyle xmi:type="diagram:BundledImage" xmi:id="_JiLkkIFeEeiojo4qBxXWVg" labelAlignment="LEFT" color="114,159,207">
+          <description xmi:type="style:BundledImageDescription" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EReferenceNode']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@containerMappings[name='EC%20EClass']/@subNodeMappings[name='EC%20EReferenceNode']"/>
+      </ownedElements>
     </ownedDiagramElements>
     <ownedDiagramElements xmi:type="diagram:DNodeList" xmi:id="_tSSs4H_oEeiojo4qBxXWVg" name="ElementRef" tooltipText="" incomingEdges="_tT4BQH_oEeiojo4qBxXWVg _tT85wH_oEeiojo4qBxXWVg" width="12" height="10">
       <target xmi:type="ecore:EClass" href="rules.ecore#//ElementRef"/>
@@ -334,7 +358,7 @@
       </ownedStyle>
       <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Entities']/@defaultLayer/@edgeMappings[name='EC_EReference']"/>
     </ownedDiagramElements>
-    <ownedDiagramElements xmi:type="diagram:DEdge" xmi:id="_tT4BQH_oEeiojo4qBxXWVg" name="[1..1] structuralElement" sourceNode="_tRZVAH_oEeiojo4qBxXWVg" targetNode="_tSSs4H_oEeiojo4qBxXWVg">
+    <ownedDiagramElements xmi:type="diagram:DEdge" xmi:id="_tT4BQH_oEeiojo4qBxXWVg" name="[1..*] structuralElement" sourceNode="_tRZVAH_oEeiojo4qBxXWVg" targetNode="_tSSs4H_oEeiojo4qBxXWVg">
       <target xmi:type="ecore:EReference" href="rules.ecore#//Rule/structuralElement"/>
       <semanticElements xmi:type="ecore:EReference" href="rules.ecore#//Rule/structuralElement"/>
       <ownedStyle xmi:type="diagram:EdgeStyle" xmi:id="_tT5PY3_oEeiojo4qBxXWVg" description="_tT5PYH_oEeiojo4qBxXWVg" routingStyle="manhattan" strokeColor="0,0,0">
