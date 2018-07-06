@@ -17,72 +17,101 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 public class UMLWizardPage extends WizardPage implements Listener {
-	
-    private Text projectName;
-    private Composite container;
+
+	private Text projectName;
+	private Composite container;
 	private Button selectFileButton;
-
 	private java.net.URI locationURI;
-
 	private Text projectURI;
+	
+	private boolean hasName = false;
+	private boolean hasModel = false;
 
-    public UMLWizardPage() {
-        super("Import UML model");
-        setTitle("Import UML component diagram of architecture");
-        setDescription("Select UML file to import");
-    }
+	public UMLWizardPage() {
+		super("Import UML model");
+		setTitle("Import UML packagr diagram of architecture");
+		setDescription("Select UML file to import");
+	}
+	
+	private boolean isComplete() {
+		return hasName && hasModel;
+	}
 
-    @Override
-    public void createControl(Composite parent) {
-        container = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout();
-        container.setLayout(layout);
-        layout.numColumns = 2;
-        Label label1 = new Label(container, SWT.NONE);
-        label1.setText("Project name");
+	@Override
+	public void createControl(Composite parent) {
+		container = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		container.setLayout(layout);
+		layout.numColumns = 3;
+		Label labelName = new Label(container, SWT.NONE);
+		labelName.setText("Project name");
 
-        projectName = new Text(container, SWT.BORDER | SWT.SINGLE);
-        projectName.setText("");
-        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-        projectName.setLayoutData(gd);
-        projectName.addModifyListener(new ModifyListener() {
-			
+		projectName = new Text(container, SWT.BORDER | SWT.SINGLE);
+		projectName.setText("");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		projectName.setLayoutData(gd);
+		projectName.addModifyListener(new ModifyListener() {
+
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(!projectName.getText().isEmpty()) {
+				if (!projectName.getText().isEmpty()) {
 					setErrorMessage(null);
-					setPageComplete(true);
-				}
-				else
+					hasName = true;
+					setPageComplete(isComplete());
+				} else {
 					setErrorMessage("You must input a name for the project!");
+					hasName = false;
+					setPageComplete(false);
+				}
 			}
 		});
-        
-        projectURI = new Text(container, SWT.BORDER | SWT.SINGLE);
-        projectURI.setText("");
-        projectURI.setLayoutData(gd);
+		
+		new Label(container, SWT.NONE);
+		
+		Label labelModel = new Label(container, SWT.NONE);
+		labelModel.setText("Model location");
 
-        selectFileButton = new Button(container, SWT.PUSH);
-        selectFileButton.setText("Browse");
-        selectFileButton.addListener(SWT.Selection, this);
-        
-        // required to avoid an error in the system
-        setControl(container);
-        setPageComplete(false);
+		projectURI = new Text(container, SWT.BORDER | SWT.SINGLE);
+		projectURI.setText("");
+		projectURI.setLayoutData(gd);
+		projectURI.addModifyListener(new ModifyListener() {
 
-    }
+			@Override
+			public void modifyText(ModifyEvent e) {
+				File umlFile = new File(projectURI.getText());
+				if(!umlFile.exists()) {
+					setErrorMessage("Could not locate UML file. Try another path.");
+					hasModel = false;
+					setPageComplete(false);
+				} else {
+					setErrorMessage(null);
+					hasModel = true;
+					setPageComplete(isComplete());
+				}
+			}
+		});
 
-    public String getProjectName() {
-        return projectName.getText();
-    }
-    
-    public java.net.URI getLocationURI() {
-    	return locationURI;
-    }
+		selectFileButton = new Button(container, SWT.PUSH);
+		selectFileButton.setText("Browse");
+		selectFileButton.addListener(SWT.Selection, this);
+
+		// required to avoid an error in the system
+		setControl(container);
+		setPageComplete(false);
+
+	}
+
+	public String getProjectName() {
+		return projectName.getText();
+	}
+
+	public java.net.URI getLocationURI() {
+		return locationURI;
+	}
 
 	@Override
 	public void handleEvent(Event event) {
-		if(event.widget == selectFileButton) {
+		if (event.widget == selectFileButton) {
 			FileDialog dialog = new FileDialog(UMLWizardPage.this.container.getShell(), SWT.OPEN);
 			dialog.setText("Select Model File");
 			String[] extensions = { "*.uml" };
