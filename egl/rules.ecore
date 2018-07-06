@@ -12,7 +12,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="patterns" lowerBound="1"
         upperBound="-1" eType="#//Pattern" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structuralElement" lowerBound="1"
-        eType="#//ElementRef"/>
+        upperBound="-1" eType="#//ElementRef"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Pattern">
