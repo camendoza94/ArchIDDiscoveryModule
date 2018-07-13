@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rules:ReferenceArchitecture
+    xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:Rules="https://www.uniandes.edu.co/archtoring"
+    xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+  <rules title="TestRuleChangeTitles"
+      action="test_action"
+      debt="2"
+      severity="test_severity"
+      description="test_descripction"
+      nonCompliantExample="test_example"
+      compliantSolution="test_solution"
+      structuralElement="//@structuralElements.0 //@structuralElements.1"
+      id="1">
+    <patterns
+        eplFilePath="test"/>
+  </rules>
+  <structuralElements>
+    <umlElement
+        xsi:type="uml:Package"
+        href="../My.uml#_DBm4cIbNEeiDCP3RROpm9g"/>
+  </structuralElements>
+  <structuralElements>
+    <umlElement
+        xsi:type="uml:Package"
+        href="../My.uml#_DBm4cIbNEeiDCP3RROpm9g"/>
+  </structuralElements>
+</Rules:ReferenceArchitecture>
