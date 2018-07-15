@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Package xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_P-39gH_lEeiojo4qBxXWVg" name="parent">
   <packagedElement xmi:type="uml:Package" xmi:id="_RzadQH_lEeiojo4qBxXWVg" name="child" URI=""/>
+  <packagedElement xmi:type="uml:Class" xmi:id="_4fQUAIbMEeiDCP3RROpm9g" name="Test"/>
 </uml:Package>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Rules="https://www.uniandes.edu.co/archtoring">
+  <rules title="TestRule" action="test_action" debt="2" severity="test_severity" description="test_descripction" nonCompliantExample="test_example" compliantSolution="test_solution" id="1"/>
+</Rules:ReferenceArchitecture>

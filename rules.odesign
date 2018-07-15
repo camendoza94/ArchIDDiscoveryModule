@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/tree/description/1.0.0" name="rules" version="11.1.1.201610211630">
-  <ownedViewpoints name="refactoring.rules" modelFileExtension="rules">
-    <ownedRepresentations xsi:type="description_1:TreeDescription" name="tree" titleExpression="Rules Model" initialisation="true" domainClass="Rules.ReferenceArchitecture">
+<description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/tree/description/1.0.0" xmlns:tool="http://www.eclipse.org/sirius/description/tool/1.1.0" name="rules" version="11.1.1.201610211630">
+  <ownedViewpoints name="refactoring.rules">
+    <ownedRepresentations xsi:type="description_1:TreeDescription" name="tree" label="RuleModel" titleExpression="Rules Model" domainClass="Rules.ReferenceArchitecture">
       <metamodel href="egl/rules.ecore#/"/>
-      <subItemMappings name="elementRef" domainClass="ElementRef" semanticCandidatesExpression="feature:eAllContents">
-        <defaultStyle labelExpression="feature:umlElement">
+      <subItemMappings name="rule" label="Rule" domainClass="Rules.Rule" semanticCandidatesExpression="feature:eAllContents">
+        <defaultStyle labelExpression="feature:title">
           <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
           <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
         </defaultStyle>
+        <subItemMappings name="pattern" label="Pattern" domainClass="Rules.Pattern" semanticCandidatesExpression="feature:eAllContents">
+          <defaultStyle labelExpression="feature:eplFilePath">
+            <labelColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='black']"/>
+            <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
+          </defaultStyle>
+        </subItemMappings>
+        <create name="createRule" label="Create new Rule" forceRefresh="true" mapping="//@ownedViewpoints[name='refactoring.rules']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']">
+          <firstModelOperation xsi:type="tool:CreateInstance" typeName="Rules.Rule" referenceName="ReferenceArchitecture"/>
+          <variables name="root" documentation="The semantic element of the tree."/>
+          <variables name="element" documentation="The currently edited element."/>
+          <variables name="container" documentation="The semantic element corresponding to the view container."/>
+        </create>
+        <create name="createPattern" label="Create new Pattern" forceRefresh="true" mapping="//@ownedViewpoints[name='refactoring.rules']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']/@subItemMappings[name='pattern']">
+          <firstModelOperation xsi:type="tool:CreateInstance" typeName="Rules.Pattern" referenceName="Rule"/>
+          <variables name="root" documentation="The semantic element of the tree."/>
+          <variables name="element" documentation="The currently edited element."/>
+          <variables name="container" documentation="The semantic element corresponding to the view container."/>
+        </create>
+        <popupMenus name="newPattern" label="New Pattern"/>
+        <popupMenus name="newRule" label="new Rule"/>
       </subItemMappings>
     </ownedRepresentations>
   </ownedViewpoints>

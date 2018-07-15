@@ -12,19 +12,9 @@
       description="test_descripction"
       nonCompliantExample="test_example"
       compliantSolution="test_solution"
-      structuralElement="//@structuralElements.0 //@structuralElements.1"
+      structuralElement=""
       id="1">
     <patterns
         eplFilePath="test"/>
   </rules>
-  <structuralElements>
-    <umlElement
-        xsi:type="uml:Package"
-        href="../My.uml#_DBm4cIbNEeiDCP3RROpm9g"/>
-  </structuralElements>
-  <structuralElements>
-    <umlElement
-        xsi:type="uml:Package"
-        href="../My.uml#_DBm4cIbNEeiDCP3RROpm9g"/>
-  </structuralElements>
 </Rules:ReferenceArchitecture>

@@ -23,7 +23,7 @@
         eType="#//Rule" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="structuralElements" lowerBound="1"
         upperBound="-1" eType="#//ElementRef" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="umlModel" eType="ecore:EClass platform:/plugin/org.eclipse.uml2.uml/model/UML.ecore#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="umlModel" eType="ecore:EClass platform:/plugin/org.eclipse.uml2.uml/model/UML.ecore#//Element"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ElementRef">
     <eStructuralFeatures xsi:type="ecore:EReference" name="umlElement" lowerBound="1"
