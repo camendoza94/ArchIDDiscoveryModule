@@ -11,10 +11,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.gmt.modisco.java.ClassFile;
-import org.eclipse.gmt.modisco.java.Model;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.modisco.infra.discovery.core.exception.DiscoveryException;
@@ -44,11 +41,6 @@ public class ModelHandler extends AbstractHandler {
 						discoverer.setSerializeTarget(true);
 						discoverer.discoverElement(project, new NullProgressMonitor());
 						Resource resource = discoverer.getTargetModel();
-						Model javaModel = (Model) resource.getContents().get(0);
-						EList<ClassFile> classFiles = javaModel.getClassFiles();
-						for (ClassFile classFile : classFiles) {
-							classFile.setName("Prueba");
-						}
 						Map<String, Object> options = new HashMap<String, Object>();
 						options.put(XMLResource.OPTION_FLUSH_THRESHOLD, FLUSH_LIMIT);
 						options.put(XMLResource.OPTION_USE_FILE_BUFFER, Boolean.TRUE);
