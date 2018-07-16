@@ -8,9 +8,9 @@
              mnemonic="A"
              tooltip="Refactoring steps">
            <command
-	       		commandId="archtoring.commands.Rules"
-	            label="Import rules from CSV"
-	            mnemonic="R"
+	       		commandId="archtoring.commands.Plugin"
+	            label="Generate SonarQube Plugin"
+	            mnemonic="S"
 	            style="push">
            </command>
           <command
@@ -67,9 +67,9 @@
 			name="Transform">
 	  	</command>
 	  	<command
-			defaultHandler="archtoring.handlers.RulesHandler"
-			id="archtoring.commands.Rules"
-			name="Rules">
+			defaultHandler="archtoring.handlers.PluginHandler"
+			id="archtoring.commands.Plugin"
+			name="Plugin">
 	  	</command>
 	</extension>
    <extension
