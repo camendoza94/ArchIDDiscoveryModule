@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Rules="https://www.uniandes.edu.co/archtoring" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:description_2="http://www.eclipse.org/sirius/tree/description/1.0.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:tree="http://www.eclipse.org/sirius/tree/1.0.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://www.eclipse.org/sirius/tree/description/1.0.0 http://www.eclipse.org/sirius/tree/1.0.0#//description http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style">
-  <viewpoint:DAnalysis xmi:id="_pWaGIH_oEeiojo4qBxXWVg" selectedViews="_pmE50H_oEeiojo4qBxXWVg _pmqvsH_oEeiojo4qBxXWVg _pm0gsH_oEeiojo4qBxXWVg _pnHboH_oEeiojo4qBxXWVg _m5dpYIbJEeiDCP3RROpm9g _WakjIIk8Eei4qLC0Ujb-OQ" version="11.1.0.201608251200">
+  <viewpoint:DAnalysis xmi:id="_pWaGIH_oEeiojo4qBxXWVg" selectedViews="_pmE50H_oEeiojo4qBxXWVg _pmqvsH_oEeiojo4qBxXWVg _pm0gsH_oEeiojo4qBxXWVg _pnHboH_oEeiojo4qBxXWVg _cyKjEIlXEei4qLC0Ujb-OQ" version="11.1.0.201608251200">
     <semanticResources>rules.ecore</semanticResources>
     <semanticResources>http://www.eclipse.org/emf/2002/Ecore</semanticResources>
     <semanticResources>platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore</semanticResources>
@@ -16,6 +16,7 @@
     <semanticResources>../My.uml</semanticResources>
     <semanticResources>ReferenceArchitecture1.xmi</semanticResources>
     <semanticResources>ReferenceArchitecture2.xmi</semanticResources>
+    <semanticResources>ReferenceArchitecture.xmi</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" xmi:id="_pmE50H_oEeiojo4qBxXWVg">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/org.eclipse.emf.ecoretools.design/description/ecore.odesign#//@ownedViewpoints[name='Design']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" xmi:id="_rbVLQH_oEeiojo4qBxXWVg" name="Rules class diagram" representation="_rbVyUH_oEeiojo4qBxXWVg">
@@ -51,6 +52,13 @@
     </ownedViews>
     <ownedViews xmi:type="viewpoint:DView" xmi:id="_WakjIIk8Eei4qLC0Ujb-OQ">
       <viewpoint xmi:type="description:Viewpoint" href="../rules.odesign#//@ownedViewpoints[name='archtoring.rules']"/>
+    </ownedViews>
+    <ownedViews xmi:type="viewpoint:DView" xmi:id="_cyKjEIlXEei4qLC0Ujb-OQ">
+      <viewpoint xmi:type="description:Viewpoint" href="rules.odesign#//@ownedViewpoints[name='Archtoring']"/>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" xmi:id="_dey_kIlXEei4qLC0Ujb-OQ" name="Rules Model" representation="_dey_kYlXEei4qLC0Ujb-OQ">
+        <description xmi:type="description_2:TreeDescription" href="rules.odesign#//@ownedViewpoints[name='Archtoring']/@ownedRepresentations[name='tree']"/>
+        <target xmi:type="Rules:ReferenceArchitecture" href="ReferenceArchitecture.xmi#/"/>
+      </ownedRepresentationDescriptors>
     </ownedViews>
   </viewpoint:DAnalysis>
   <diagram:DSemanticDiagram xmi:id="_rbVyUH_oEeiojo4qBxXWVg" name="Rules class diagram">
@@ -475,5 +483,21 @@
       <actualMapping xmi:type="description_2:TreeItemMapping" href="../rules.odesign#//@ownedViewpoints[name='refactoring.rules']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']"/>
     </ownedTreeItems>
     <description xmi:type="description_2:TreeDescription" href="../rules.odesign#//@ownedViewpoints[name='refactoring.rules']/@ownedRepresentations[name='tree']"/>
+  </tree:DTree>
+  <tree:DTree xmi:id="_dey_kYlXEei4qLC0Ujb-OQ" name="Rules Model">
+    <target xmi:type="Rules:ReferenceArchitecture" href="ReferenceArchitecture.xmi#/"/>
+    <ownedTreeItems xmi:type="tree:DTreeItem" xmi:id="_eOfXIIlXEei4qLC0Ujb-OQ" name="New Rule">
+      <target xmi:type="Rules:Rule" href="ReferenceArchitecture.xmi#//@rules.0"/>
+      <semanticElements xmi:type="Rules:Rule" href="ReferenceArchitecture.xmi#//@rules.0"/>
+      <ownedStyle xmi:type="tree:TreeItemStyle" xmi:id="_eOfXIYlXEei4qLC0Ujb-OQ"/>
+      <actualMapping xmi:type="description_2:TreeItemMapping" href="rules.odesign#//@ownedViewpoints[name='Archtoring']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']"/>
+    </ownedTreeItems>
+    <ownedTreeItems xmi:type="tree:DTreeItem" xmi:id="_eaM34IlXEei4qLC0Ujb-OQ" name="New Rule">
+      <target xmi:type="Rules:Rule" href="ReferenceArchitecture.xmi#//@rules.1"/>
+      <semanticElements xmi:type="Rules:Rule" href="ReferenceArchitecture.xmi#//@rules.1"/>
+      <ownedStyle xmi:type="tree:TreeItemStyle" xmi:id="_eaM34YlXEei4qLC0Ujb-OQ"/>
+      <actualMapping xmi:type="description_2:TreeItemMapping" href="rules.odesign#//@ownedViewpoints[name='Archtoring']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']"/>
+    </ownedTreeItems>
+    <description xmi:type="description_2:TreeDescription" href="rules.odesign#//@ownedViewpoints[name='Archtoring']/@ownedRepresentations[name='tree']"/>
   </tree:DTree>
 </xmi:XMI>

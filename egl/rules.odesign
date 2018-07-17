@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description:Group xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/tree/description/1.0.0" xmlns:properties="http://www.eclipse.org/sirius/properties/1.0.0" xmlns:properties-ext-widgets-reference="http://www.eclipse.org/sirius/properties/1.0.0/ext/widgets/reference" xmlns:tool="http://www.eclipse.org/sirius/description/tool/1.1.0" name="rules" version="11.1.1.201610211630">
-  <ownedViewpoints name="archtoring.rules" label="Archtoring">
+  <ownedViewpoints name="Archtoring" label="Archtoring">
     <ownedRepresentations xsi:type="description_1:TreeDescription" name="tree" label="RuleModel" titleExpression="Rules Model" domainClass="Rules.ReferenceArchitecture">
       <metamodel href="rules.ecore#/"/>
       <subItemMappings name="rule" label="Rule" domainClass="Rules.Rule" semanticCandidatesExpression="feature:eAllContents">
@@ -14,7 +14,7 @@
             <backgroundColor xsi:type="description:SystemColor" href="environment:/viewpoint#//@systemColors/@entries[name='white']"/>
           </defaultStyle>
         </subItemMappings>
-        <create name="createRule" label="Create New Pattern" forceRefresh="true" mapping="//@ownedViewpoints[name='archtoring.rules']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']">
+        <create name="createRule" label="Create New Pattern" forceRefresh="true" mapping="//@ownedViewpoints[name='Archtoring']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']">
           <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="var:element">
             <subModelOperations xsi:type="tool:CreateInstance" typeName="Rules.Pattern" referenceName="patterns">
               <subModelOperations xsi:type="tool:SetValue" featureName="eplFilePath" valueExpression="PatternPath"/>
@@ -25,7 +25,7 @@
           <variables name="container" documentation="The semantic element corresponding to the view container."/>
         </create>
       </subItemMappings>
-      <createTreeItem name="createRule" label="Create New Rule" forceRefresh="true" mapping="//@ownedViewpoints[name='archtoring.rules']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']">
+      <createTreeItem name="createRule" label="Create New Rule" forceRefresh="true" mapping="//@ownedViewpoints[name='Archtoring']/@ownedRepresentations[name='tree']/@subItemMappings[name='rule']">
         <firstModelOperation xsi:type="tool:ChangeContext" browseExpression="var:container">
           <subModelOperations xsi:type="tool:CreateInstance" typeName="Rules.Rule" referenceName="rules">
             <subModelOperations xsi:type="tool:SetValue" featureName="title" valueExpression="New Rule"/>

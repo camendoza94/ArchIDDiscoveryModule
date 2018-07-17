@@ -98,8 +98,8 @@
    </extension>
    <extension point="org.eclipse.sirius.componentization">
     <component class="archtoring.sirius.Activator"
-               id="rules.refactoring.sirus"
-	       name="project">
+               id="co.edu.uniandes.archtoring"
+	       name="rules">
     </component>
   </extension>
 </plugin>
