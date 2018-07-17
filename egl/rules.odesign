@@ -54,7 +54,7 @@
         <initialOperation>
           <firstModelOperations xsi:type="tool:ChangeContext" browseExpression="var:self">
             <subModelOperations xsi:type="tool:SetValue" featureName="feature:eplFilePath" valueExpression="path"/>
-            <subModelOperations xsi:type="tool:ExternalJavaActionCall"/>
+            <subModelOperations xsi:type="tool:ExternalJavaAction" name="javaBrowse" id="archtoring.browse"/>
           </firstModelOperations>
         </initialOperation>
       </controls>

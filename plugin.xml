@@ -102,4 +102,11 @@
 	       name="rules">
     </component>
   </extension>
+   <extension
+         point="org.eclipse.sirius.externalJavaAction">
+      <javaActions
+            actionClass="archtoring.sirius.ExternalJavaAction"
+            id="archtoring.browse">
+      </javaActions>
+   </extension>
 </plugin>
