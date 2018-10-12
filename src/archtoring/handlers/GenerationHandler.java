@@ -45,21 +45,11 @@ public class GenerationHandler extends AbstractHandler {
 						DirectoryDialog dialog = new DirectoryDialog(shell);
 						dialog.setText("Select folder to save source");
 						if (dialog.open() != null) {
-							EolStandalone eol = new EolStandalone();
-							eol.setSource("epl/comments.eol");
-							List<IModel> models = new ArrayList<IModel>();
-							models.add(EpsilonStandalone.createEmfModelByURI("Model", file.getFullPath().toString(),
-									EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
-							eol.setModels(models);
-							eol.execute(true);
 							javaGenerator = new GenerateJavaExtended(URI.createFileURI(file.getFullPath().toString()),
 									new File(dialog.getFilterPath()), new ArrayList<Object>());
 							javaGenerator.doGenerate(null);
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (URISyntaxException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (Exception e) {
 						// TODO Auto-generated catch block

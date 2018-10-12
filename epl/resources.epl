@@ -79,9 +79,9 @@ pattern Exceptions
 	no statement: IfStatement 
 		from: method.body.statements -> select (s | s.isTypeOf(IfStatement) and ((s.thenStatement.isTypeOf(ThrowStatement)
 			and s.thenStatement.expression.type.type.name = "WebApplicationException")
-			or (s.thenStatement.isTypeOf(Block) and s.thenStatement.statements.at(0).isTypeOf(ThrowStatement)
+			or (s.thenStatement.isTypeOf(Block) and s.thenStatement.statements.size > 0 and s.thenStatement.statements.at(0).isTypeOf(ThrowStatement)
 			and s.thenStatement.statements.at(0).expression.type.type.name = "WebApplicationException"))
-			and s.expression.rightOperand.isTypeOf(NullLiteral)) {
+			and s.expression.isTypeOf(InfixExpression) and s.expression.rightOperand.isTypeOf(NullLiteral)) {
 	onmatch {
 		var message : String;
  		message = "Exceptions " + class.name + " " + method.name + " " + annotation.type.type.name;
@@ -128,7 +128,7 @@ pattern Exceptions
 }
 
 
-pattern LogicCallGET1
+/*pattern LogicCallGET1
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("Resource"),
 	method: MethodDeclaration
@@ -150,7 +150,7 @@ pattern LogicCallGET1
 		//comment.prefixOfParent = true;
 		//class.comments.add(comment);
 	}
-}
+}*/
 /*@cached
 operation String countUppercase() {
 	var start : String = 'c';

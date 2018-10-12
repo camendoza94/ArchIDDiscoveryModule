@@ -7,7 +7,7 @@
     "constantCost": "[%=rule.debt%]min"
   },
   "tags": [
-    "[%=rule.structuralElement.name%]"
+    "[%=rule.structuralElement.umlElement.name%]"
   ],
   "defaultSeverity": "[%=rule.severity%]"
 }

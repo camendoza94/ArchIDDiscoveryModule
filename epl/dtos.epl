@@ -5,13 +5,11 @@ pattern ImplementsSerializable
 		from: class.superInterfaces -> select (i | i.type.name = "Serializable") {	
 	onmatch {
 		var message : String;
- 		message = "ImplementsSerializable " + class.name;
+	 	message = "Implement Seriaizable " + class.name;
 		message.println();
 		var comment = new LineComment;
 		comment.content = "// TODO R1: Implement Serializable in this DTO.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);		
+		class.comments.add(comment);	
 	}
 }
 
@@ -34,19 +32,18 @@ pattern EmptyConstructor
 }
 
 pattern SerializableFields
-	class: ClassDeclaration
-		guard: class.proxy = false and class.name.endsWith("DTO"),
+	classDecl: ClassDeclaration
+		guard: classDecl.proxy = false and classDecl.name.endsWith("DTO"),
 	field: FieldDeclaration
-		from: class.bodyDeclarations -> select (c | c.type.type.isKindOf(PrimitiveType)) {	
+		from: classDecl.bodyDeclarations -> select (c | c.type.type.isKindOf(PrimitiveType)) {	
 	onmatch {
 		var message : String;
- 		message = "SerializableFields " + class.name + " " + field.getName();
+	 	message = "Non-seriaizable fields in " + classDecl.name;
 		message.println();
 		var comment = new LineComment;
 		comment.content = "// TODO R3: Remove or edit no-serializable field " + field.getName() + ".";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		classDecl.comments.add(comment);
+		
 	}
 }
 	
@@ -93,12 +90,11 @@ pattern CreateDTOFromEntity
 			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity") and c.body.statements.size > 0 
 			and c.body.statements.at(0).isTypeOf(IfStatement) and c.body.statements.at(0).expression.rightOperand.isTypeOf(NullLiteral)
 			and c.body.statements.at(0).expression.operator = InfixExpressionKind#NOT_EQUALS
-			and entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations.at(0) 
-			-> select (f | f.isTypeOf(FieldDeclaration) and not (f.type.type.name.endsWith("Entity") or f.type.type.name.endsWith(">"))).size == c.body.statements.at(0).thenStatement.statements.size -2) {	
+			and c.body.statements.at(0).thenStatement.isTypeOf(Block)
+			and entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations 
+			-> select (f | f.isTypeOf(FieldDeclaration) and not (f.type.type.name.endsWith("Entity") or f.type.type.name.endsWith(">"))).size <= c.body.statements.at(0).thenStatement.statements.size - 2) {	
 	onmatch {
-		if(refactoring.isDefined()){
 			var message : String;
-			if(refactoring.equals("todo")) {
 		 		message = "CreateDTOFromEntity " + class.name; 
 				message.println();
 				var comment = new LineComment;
@@ -106,33 +102,6 @@ pattern CreateDTOFromEntity
 				comment.enclosedByParent = false;
 				comment.prefixOfParent = true;
 				class.comments.add(comment);
-			} else if(refactoring.equals("fix")) {
-				var method : ConstructorDeclaration =  class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
-					and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity")).at(0);
-				if(method.isDefined()) {
-					if(not method.body.statements.at(0).isTypeOf(IfStatement)){
-						var s = new IfStatement;
-						var b = new Block;
-						var copy = method.body.statements.clone();
-						for (m in copy) {
-							b.statements.add(m);
-						}
-						s.thenStatement = b;
-						var i = new InfixExpression;
-						i.operator = InfixExpressionKind#NOT_EQUALS;
-						i.rightOperand = new NullLiteral;
-						var sva = new SingleVariableAccess;
-						sva.variable = method.parameters.at(0);
-						i.leftOperand = sva;
-						s.expression = 	i;
-						method.body.statements.clear();
-						method.body.statements.add(s);
-						message = "CreateDTOFromEntity " + class.name + " " + method.name.println();
-						message.println();
-					}
-				}
-			}
-		}
 	}
 }
 

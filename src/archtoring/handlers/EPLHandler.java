@@ -40,12 +40,12 @@ public class EPLHandler extends AbstractHandler {
 					try {
 						for (String eplFile : FILES) {
 							EplStandalone eol = new EplStandalone();
-							eol.setSource(project.getResource().getLocationURI() + "/" + eplFile);
+							eol.setSource(eplFile);
 							List<IModel> models = new ArrayList<IModel>();
 							models.add(EpsilonStandalone.createEmfModelByURI("Model",project.getResource().getFullPath() + "/" + project.getElementName() + "_java.xmi",
 									EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
 							eol.setModels(models);
-							eol.execute(false);
+							eol.execute(true);
 						}
 					} catch (EolModelLoadingException e) {
 						// TODO Auto-generated catch block
