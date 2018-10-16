@@ -31,6 +31,7 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
 import org.osgi.framework.Bundle;
+import org.eclipse.epsilon.eol.dt.ExtensionPointToolNativeTypeDelegate;
 
 public abstract class EpsilonStandalone {
 	public static final String MODISCO_JAVA_METAMODEL_URI = "http://www.eclipse.org/MoDisco/Java/0.2.incubation/java";
@@ -91,6 +92,8 @@ public abstract class EpsilonStandalone {
 		for (Variable parameter : parameters) {
 			module.getContext().getFrameStack().put(parameter);
 		}
+		
+		module.getContext().getNativeTypeDelegates().add(new ExtensionPointToolNativeTypeDelegate());
 
 		preProcess();
 		result = execute(module);

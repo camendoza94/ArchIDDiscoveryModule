@@ -109,4 +109,12 @@
             id="archtoring.browse">
       </javaActions>
    </extension>
+   
+   <extension
+         point="org.eclipse.epsilon.common.dt.tool">
+      <tool
+            class="archtoring.tools.IssuesTool"
+            defaultName="IssuesTool">
+      </tool>
+   </extension>
 </plugin>

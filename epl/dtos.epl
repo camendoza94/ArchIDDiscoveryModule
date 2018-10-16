@@ -5,8 +5,11 @@ pattern ImplementsSerializable
 		from: class.superInterfaces -> select (i | i.type.name = "Serializable") {	
 	onmatch {
 		var message : String;
-	 	message = "Implement Seriaizable " + class.name;
+	 	message = "Implement Serializable " + class.name;
 		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub("Implement Serializable in this DTO");
+		
 		var comment = new LineComment;
 		comment.content = "// TODO R1: Implement Serializable in this DTO.";
 		class.comments.add(comment);	
