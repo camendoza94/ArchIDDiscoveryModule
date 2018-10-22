@@ -32,4 +32,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: %providerName
 Export-Package: archtoring.tools
 Bundle-ClassPath: org.eclipse.egit.github.core-2.1.5.jar,
- gson-2.8.5.jar
+ gson-2.8.5.jar,
+ .

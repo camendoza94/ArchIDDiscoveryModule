@@ -9,10 +9,10 @@ pattern CorrectFields
  		message = "CorrectFields " + class.name + " field: " + field.name;
 		message.println();
 		var comment = new LineComment;
-		comment.content = "// TODO R7: Fields on DetailDTOs must be of type DTO or List.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -31,11 +31,10 @@ pattern CreateDTOFromEntity
 		var message : String;
  		message = "CreateDTOFromEntity " + class.name; 
 		message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R8: Check constructor from Entity implementation in DetailDTO.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -49,11 +48,10 @@ pattern toEntity
 	var message : String;
  		message = "toEntity " + class.name;
 		message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R9: Check toEntity implementation in DetailDTO.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 

@@ -1,3 +1,4 @@
+import './queries.eol';
 pattern ImplementsSerializable
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("DTO"),
@@ -7,12 +8,10 @@ pattern ImplementsSerializable
 		var message : String;
 	 	message = "Implement Serializable " + class.name;
 		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub("Implement Serializable in this DTO");
-		
-		var comment = new LineComment;
-		comment.content = "// TODO R1: Implement Serializable in this DTO.";
-		class.comments.add(comment);	
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -26,11 +25,10 @@ pattern EmptyConstructor
 		var message : String;
 	 		message = "EmptyConstructor " + class.name;
 			message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R2: Add empty constructor for serializing.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+			var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -41,12 +39,12 @@ pattern SerializableFields
 		from: classDecl.bodyDeclarations -> select (c | c.type.type.isKindOf(PrimitiveType)) {	
 	onmatch {
 		var message : String;
-	 	message = "Non-seriaizable fields in " + classDecl.name;
+	 	message = "Non-serializable fields in " + classDecl.name;
 		message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R3: Remove or edit no-serializable field " + field.getName() + ".";
-		classDecl.comments.add(comment);
-		
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 	
@@ -66,18 +64,10 @@ pattern GettersAndSetters
  		message = "GettersAndSetters " + class.name + " " + field.getName();
 		message.println();
 		var comment = new LineComment;
-		if (getter.isUndefined()) {
-			comment.content = "// TODO R4: Add missing getter for " + field.getName() + ".";	
-			comment.enclosedByParent = false;
-			comment.prefixOfParent = true;
-			class.comments.add(comment);
-		} 
-		if (setter.isUndefined()) {
-			comment.content = "// TODO R4: Add missing setter for " + field.getName() + ".";
-			comment.enclosedByParent = false;
-			comment.prefixOfParent = true;
-			class.comments.add(comment);
-		}
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -99,12 +89,10 @@ pattern CreateDTOFromEntity
 	onmatch {
 			var message : String;
 		 		message = "CreateDTOFromEntity " + class.name; 
-				message.println();
-				var comment = new LineComment;
-				comment.content = "// TODO R5: Check constructor from Entity implementation in DTO.";
-				comment.enclosedByParent = false;
-				comment.prefixOfParent = true;
-				class.comments.add(comment);
+				message.println();var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -118,11 +106,10 @@ pattern toEntity
 		var message : String;
  		message = "toEntity " + class.name;
 		message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R6: Check toEntity implementation in DTO.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 

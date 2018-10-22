@@ -7,11 +7,10 @@ pattern StatelessAnnotation
 		var message : String;
  		message = "StatelessAnnotation " + class.name;
 		message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R14: Add missing Stateless annotation on Logic.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(14);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
@@ -27,10 +26,9 @@ pattern PersistenceInjection
 		var message : String;
  		message = "PersistenceInjection " + class.name;
 		message.println();
-		var comment = new LineComment;
-		comment.content = "// TODO R15: Add missing persistence injection on Logic.";
-		comment.enclosedByParent = false;
-		comment.prefixOfParent = true;
-		class.comments.add(comment);
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(15);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }

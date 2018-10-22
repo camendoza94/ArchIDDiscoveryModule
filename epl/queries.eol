@@ -1,0 +1,3 @@
+operation rulesModel!ReferenceArchitecture findRule(id : Integer) : rulesModel!Rule{
+	return self.rules.selectOne(r | r.id = id);
+}

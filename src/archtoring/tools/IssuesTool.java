@@ -1,10 +1,12 @@
 package archtoring.tools;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.egit.github.core.Issue;
+import org.eclipse.egit.github.core.Label;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.service.IssueService;
 import org.eclipse.epsilon.eol.tools.AbstractTool;
@@ -45,28 +47,32 @@ public class IssuesTool extends AbstractTool{
 	    return "Hello " + name;
 	}
 	
-	public void addIssueOnGithub(String id, String module) {
-	        String userName;
-	        String repoName;
+	public void addIssueOnGithub(int id, String action, String className, String description, String nonCompliant, String solution, String element) {
 	        try {
 	            IssueService service = new IssueService();
+	            //TODO Change to webhook for whole application
 	            service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+	            //TODO Obtain repository info from git files
 	            RepositoryId repo = new RepositoryId("Archtoring-ISIS2603201802", "s2_Boletas");
 	            List<Issue> issues = service.getIssues(repo, null);
-	            /*String title = titles.get(id) + " - " + context.getFile().getParentFile().getName()
-	                    + "/" + context.getFile().getName();*/
-	            String title = id + " - " + module;
+	            //TODO Get version from pom.xml to tag issue release?
+	            String title = "[R1]" + action + " - " + className;
 	            for (Issue i : issues) {
 	                if (i.getTitle().equals(title))
 	                    return;
 	            }
 	            Issue issue = new Issue();
 	            issue.setTitle(title);
-	            /*URL resource = RefactoringRule.class.getResource(RESOURCE_BASE_PATH + "/" + "R" + this.Id
-	                    + "RefactoringRule" + "_java.html");*/
-	        
-	            issue.setBody("TEST");
-	           
+	            issue.setBody("<p>" + description + "</p>"
+	            		+ "<h2>Noncompliant Code Example</h2>"
+	            		+ "<pre>" + nonCompliant + "</pre>"
+	            		+ "<h2>Compliant Solution</h2>"
+	            		+ "<pre>" + solution + "</pre>");
+	            Label label = new Label();
+	            label.setName(element);
+	            List<Label> labels = new ArrayList<Label>();
+	            labels.add(label);
+	            issue.setLabels(labels);
 	            service.createIssue(repo, issue);
 	        } catch (IOException e) {
 	            e.printStackTrace();
