@@ -42,8 +42,10 @@ public class EPLHandler extends AbstractHandler {
 							EplStandalone eol = new EplStandalone();
 							eol.setSource(eplFile);
 							List<IModel> models = new ArrayList<IModel>();
-							models.add(EpsilonStandalone.createEmfModelByURI("Model",project.getResource().getFullPath() + "/" + project.getElementName() + "_java.xmi",
+							models.add(EpsilonStandalone.createEmfModelByURI("javaModel",project.getResource().getFullPath() + "/" + project.getElementName() + "_java.xmi",
 									EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
+							models.add(EpsilonStandalone.createEmfModelByURI("rulesModel",project.getResource().getFullPath() + "/ReferenceArchitecture.xmi",
+									EpsilonStandalone.RULES_METAMODEL_URI, true, true));
 							eol.setModels(models);
 							eol.execute(true);
 						}

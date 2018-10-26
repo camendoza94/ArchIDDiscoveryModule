@@ -1,3 +1,4 @@
+import './queries.eol';
 pattern StatelessAnnotation
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("Logic"),

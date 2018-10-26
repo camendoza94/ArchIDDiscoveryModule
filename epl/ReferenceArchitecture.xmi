@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Rules="https://www.uniandes.edu.co/archtoring" umlModel="desarrollo">
+  <rules title="DTOs must implement Serializable." action="Implement Serializable in this DTO" debt="30" severity="Minor" description="DTOS must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorDTO {" compliantSolution="public class AuthorDTO implements Serializable {" structuralElement="//@structuralElements.1" id="1"/>
+  <rules title="DTOs must have an empty constructor for serializing." action="Add empty constructor for serializing" severity="Minor" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.1" id="2"/>
+  <rules title="DTOS must have only serializable fields" action="Remove or edit no-serializable fields" structuralElement="//@structuralElements.1" id="3"/>
+  <rules title="All fields on DTOS must have getters and setters" action="Add missing getter or setter" structuralElement="//@structuralElements.1" id="4"/>
+  <rules title="DTOs must have a constructor with an Entity as parameter" action="Check constructor from Entity implementation in DTO." structuralElement="//@structuralElements.1" id="5"/>
+  <rules title="toEntity methods in DTOs must convert the object to an Entity" action="Check toEntity implementation in DTO" severity="" structuralElement="//@structuralElements.1" id="6"/>
+  <rules title="Fields on DetailDTOs must be of type DTO or List" action="Remove fields that are not of type DTO or List" structuralElement="//@structuralElements.1" id="7"/>
+  <rules title="DetailDTOs must have a constructor with an Entity as parameter" action="Check constructor from Entity implementation in DetailDTO" structuralElement="//@structuralElements.1" id="8"/>
+  <rules title="toEntity methods in DetailDTOs must convert the object to an Entity" action="Check toEntity implementation in DetailDTO" structuralElement="//@structuralElements.1" id="9"/>
+  <rules title="Resource classes must have a Path annotation" action="Add missing Path annotation on Resource" structuralElement="//@structuralElements.2" id="10"/>
+  <rules title="Resource classes must have a Consumes annotation" action="Add missing Consumes annotation on Resource" structuralElement="//@structuralElements.2" id="11"/>
+  <rules title="Resource classes must have a Produces annotation" action="Add missing Produces annotation on Resource" structuralElement="//@structuralElements.2" id="12"/>
+  <rules title="Resource classes must have a logic injection as field" action="Add missing logic injection on Resource" structuralElement="//@structuralElements.2" id="13"/>
+  <rules title="Logic layer classes must be annotated with Stataless" action="Add missing Stateless annotation on Logic" structuralElement="//@structuralElements.0" id="14"/>
+  <rules title="Logic classes must have a persistence injection as field" action="Add missing persistence injection on Logic" structuralElement="//@structuralElements.0" id="15"/>
+  <rules title="Resources must check for existence of entity and throws WebApplicationException if missing" action="Add missing check for nullity and WebApplicationException" compliantSolution="" structuralElement="//@structuralElements.2" id="16"/>
+</Rules:ReferenceArchitecture>

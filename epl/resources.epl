@@ -1,3 +1,4 @@
+import './queries.eol';
 pattern PathAnnotation
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("Resource"),
@@ -85,6 +86,6 @@ pattern Exceptions
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(16);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action + " in method " + method.name, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }

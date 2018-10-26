@@ -44,7 +44,7 @@ pattern SerializableFields
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action + " " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 	
@@ -52,6 +52,7 @@ pattern GettersAndSetters
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("DTO"),
 	field: FieldDeclaration
+		guard: field.modifier.static = false
 		from: class.bodyDeclarations,
 	no setter: MethodDeclaration
 		from:  class.bodyDeclarations -> select (m | m.name = "set" + field.getName())
@@ -67,7 +68,7 @@ pattern GettersAndSetters
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action + " for " + field.getName(), class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
 	}
 }
 
