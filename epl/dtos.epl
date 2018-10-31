@@ -11,7 +11,7 @@ pattern ImplementsSerializable
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
 	}
 }
 
@@ -28,7 +28,7 @@ pattern EmptyConstructor
 			var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
 	}
 }
 
@@ -44,7 +44,7 @@ pattern SerializableFields
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action + " " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
 	}
 }
 	
@@ -68,7 +68,7 @@ pattern GettersAndSetters
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " for " + field.getName(), class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action + " for " + field.getName(), class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
 	}
 }
 
@@ -85,7 +85,8 @@ pattern CreateDTOFromEntity
 			and c.body.statements.at(0).isTypeOf(IfStatement) and c.body.statements.at(0).expression.rightOperand.isTypeOf(NullLiteral)
 			and c.body.statements.at(0).expression.operator = InfixExpressionKind#NOT_EQUALS
 			and c.body.statements.at(0).thenStatement.isTypeOf(Block)
-			and entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations 
+			and entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).isDefined() and 
+			entityMap.get(class.name.substring(0, class.name.indexOf("DTO"))).bodyDeclarations 
 			-> select (f | f.isTypeOf(FieldDeclaration) and not (f.type.type.name.endsWith("Entity") or f.type.type.name.endsWith(">"))).size <= c.body.statements.at(0).thenStatement.statements.size - 2) {	
 	onmatch {
 			var message : String;
@@ -93,7 +94,7 @@ pattern CreateDTOFromEntity
 				message.println();var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
 	}
 }
 
@@ -110,7 +111,7 @@ pattern toEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
 	}
 }
 

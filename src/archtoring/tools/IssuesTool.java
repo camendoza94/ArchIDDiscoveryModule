@@ -47,31 +47,56 @@ public class IssuesTool extends AbstractTool{
 	    return "Hello " + name;
 	}
 	
-	public void addIssueOnGithub(int id, String action, String className, String description, String nonCompliant, String solution, String element) {
+	public void addIssueOnGithub(int id, String action, String className, String description, String nonCompliant, String solution, String element, String severity) {
 	        try {
 	            IssueService service = new IssueService();
-	            //TODO Change to webhook for whole application
+	            //TODO Change to auth for whole application
 	            service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
 	            //TODO Obtain repository info from git files
-	            RepositoryId repo = new RepositoryId("Archtoring-ISIS2603201802", "s2_Boletas");
+	            RepositoryId repo = new RepositoryId("Archtoring-ISIS2603201802", "s4_PartyServices");
 	            List<Issue> issues = service.getIssues(repo, null);
-	            //TODO Get version from pom.xml to tag issue release?
-	            String title = "[R1]" + action + " - " + className;
+	            String title = className + ".java - " + action ;
 	            for (Issue i : issues) {
-	                if (i.getTitle().equals(title))
-	                    return;
+	                if (i.getTitle().equals(title)) {
+	                	List<Label> previousLabels = i.getLabels();
+	                	Label newLabel = new Label();
+	                	newLabel.setName("C3");
+	                	newLabel.setColor("#4fa008");
+	                	previousLabels.add(newLabel);
+	                	i.setLabels(previousLabels);
+	                	service.editIssue(repo, i);
+	                	return;
+	                }
 	            }
 	            Issue issue = new Issue();
 	            issue.setTitle(title);
-	            issue.setBody("<p>" + description + "</p>"
-	            		+ "<h2>Noncompliant Code Example</h2>"
-	            		+ "<pre>" + nonCompliant + "</pre>"
-	            		+ "<h2>Compliant Solution</h2>"
-	            		+ "<pre>" + solution + "</pre>");
-	            Label label = new Label();
-	            label.setName(element);
+	            issue.setBody("<h2>Issue: " + action + "</h2>"
+	            		+ "<p>Found on file</p>"
+	            		+ "<p>Go to the <a href='archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
+	            
 	            List<Label> labels = new ArrayList<Label>();
-	            labels.add(label);
+	            
+	            Label elementLabel = new Label();
+	            elementLabel.setName(element);
+	            elementLabel.setColor("#333dcc");
+	            labels.add(elementLabel);
+
+	            //TODO Get version from pom.xml to tag issue release?
+	            Label releaseLabel = new Label();
+	            releaseLabel.setName("C3");
+	            releaseLabel.setColor("#4fa008");
+	            labels.add(releaseLabel);
+	            
+	            Label ruleLabel = new Label();
+	            ruleLabel.setName("R" + id);
+	            ruleLabel.setColor("#e04ac7");
+	            labels.add(ruleLabel);
+	            
+	            Label severityLabel = new Label();
+	            severityLabel.setName(severity);
+	            severityLabel.setColor("#e04ac7");
+	            labels.add(severityLabel);
+	            
 	            issue.setLabels(labels);
 	            service.createIssue(repo, issue);
 	        } catch (IOException e) {
