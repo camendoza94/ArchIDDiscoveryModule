@@ -1,7 +1,16 @@
 import './queries.eol';
+
+pre {
+	var isDeclaredInOtherResource : Map(String, Boolean);
+	for (class in ClassDeclaration.all.select(c | c.name.endsWith("Resource"))){
+		isDeclaredInOtherResource.put(class.name, ClassDeclaration.all.select(c | c.name.endsWith("Resource") and c.bodyDeclarations.select(m | m.isTypeOf(MethodDeclaration) and  m.returnType.type.isTypeOf(ParameterizedType) and m.returnType.type.typeArguments.at(0).type.name = class.name).size() > 0).size()>0);
+	}
+	isDeclaredInOtherResource.println();
+}
+
 pattern PathAnnotation
 	class: ClassDeclaration
-		guard: class.proxy = false and class.name.matches("^[A-Z][a-z]*Resource$"),
+		guard: class.proxy = false and class.name.endsWith("Resource") and not isDeclaredInOtherResource.get(class.name),
 	no annotation: Annotation
 		from: class.annotations -> select (a | a.type.type.name = "Path") {	
 	onmatch {
@@ -88,4 +97,24 @@ pattern Exceptions
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssueOnGithub(rule.id, rule.action + " in method " + method.name, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
+}
+
+pattern getReturnDetail
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Resource"),
+	method: MethodDeclaration
+		from: class.bodyDeclarations,
+	annotation: Annotation
+		from: method.annotations -> select(a| a.type.type.name = "GET"),
+	no returnType: TypeAccess
+		from: method.returnType.asSet()-> select(r | r.type.name.endsWith("DetailDTO") or (r.type.isTypeOf(ParameterizedType) and r.type.typeArguments.at(0).type.name.endsWith("DetailDTO")) ) {
+	onmatch {
+		var message : String;
+ 		message = "GET methods must return DetailDTOs or List of them  " + class.name + " " + method.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(17);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action + " in method " + method.name, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+	}		
 }
