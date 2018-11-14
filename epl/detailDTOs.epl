@@ -13,7 +13,7 @@ pattern CorrectFields
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " " + field.name, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action + " " + field.name, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 
@@ -23,11 +23,11 @@ pattern CreateDTOFromEntity
 	no constructor: ConstructorDeclaration
 		from: class.bodyDeclarations -> select (c | c.isTypeOf(ConstructorDeclaration) and c.proxy = false 
 			and c.parameters.size = 1 and c.parameters.at(0).type.type.name.endsWith("Entity") and c.body.statements.size > 1
-			and c.body.statements.at(0).isTypeOf(SuperConstructorInvocation) 
-			and c.body.statements.at(1).isTypeOf(IfStatement)
-			and c.body.statements.at(1).expression.isTypeOf(InfixExpression)
-			and c.body.statements.at(1).expression.rightOperand.isTypeOf(NullLiteral)
-			and c.body.statements.at(1).expression.operator = InfixExpressionKind#NOT_EQUALS) {	
+			and c.body.statements.at(0).isTypeOf(SuperConstructorInvocation)
+			and (c.body.statements.select(s |s.isTypeOf(IfStatement)
+			and s.expression.isTypeOf(InfixExpression)
+			and s.expression.rightOperand.isTypeOf(NullLiteral)
+			and s.expression.operator = InfixExpressionKind#NOT_EQUALS).size) > 0) {
 	onmatch {
 		var message : String;
  		message = "CreateDTOFromEntity " + class.name; 
@@ -35,7 +35,7 @@ pattern CreateDTOFromEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 
@@ -52,7 +52,7 @@ pattern toEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 

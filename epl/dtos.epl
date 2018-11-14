@@ -11,7 +11,7 @@ pattern ImplementsSerializable
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 
@@ -28,7 +28,7 @@ pattern EmptyConstructor
 			var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 
@@ -36,6 +36,7 @@ pattern SerializableFields
 	classDecl: ClassDeclaration
 		guard: classDecl.proxy = false and classDecl.name.endsWith("DTO"),
 	field: FieldDeclaration
+		guard: field.modifier.static = false
 		from: classDecl.bodyDeclarations -> select (c | c.type.type.isKindOf(PrimitiveType)) {	
 	onmatch {
 		var message : String;
@@ -44,7 +45,7 @@ pattern SerializableFields
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action + " " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.structuralElement.first.umlElement, rule.severity, classDecl.getPath());
 	}
 }
 	
@@ -68,7 +69,7 @@ pattern GettersAndSetters
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " for " + field.getName(), class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action + " for " + field.getName(), class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 
@@ -94,7 +95,7 @@ pattern CreateDTOFromEntity
 				message.println();var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 
@@ -111,7 +112,7 @@ pattern toEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.description, rule.nonCompliantExample, rule.compliantSolution, rule.structuralElement.first.umlElement, rule.severity);
+		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
 	}
 }
 

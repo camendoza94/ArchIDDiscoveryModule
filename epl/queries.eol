@@ -1,3 +1,15 @@
 operation rulesModel!ReferenceArchitecture findRule(id : Integer) : rulesModel!Rule{
 	return self.rules.selectOne(r | r.id = id);
 }
+
+operation javaModel!ClassDeclaration getPath(): String {
+	var current;
+	current = self;
+	var path: String;
+	path = self.name + ".java";
+	while(not current.eContainer().isTypeOf(javaModel!Model)) {
+		path = current.eContainer().name + "/" + path;
+		current = current.econtainer();
+	}
+	return path;
+}

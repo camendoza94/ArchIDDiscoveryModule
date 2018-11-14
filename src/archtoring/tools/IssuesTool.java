@@ -47,21 +47,28 @@ public class IssuesTool extends AbstractTool{
 	    return "Hello " + name;
 	}
 	
-	public void addIssueOnGithub(int id, String action, String className, String description, String nonCompliant, String solution, String element, String severity) {
+	public void addIssueOnGithub(int id, String action, String className, String element, String severity, String path) {
 	        try {
 	            IssueService service = new IssueService();
 	            //TODO Change to auth for whole application
 	            service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
 	            //TODO Obtain repository info from git files
-	            RepositoryId repo = new RepositoryId("Archtoring-ISIS2603201802", "s4_PartyServices");
+	            String org = "Uniandes-isis2603";
+	            String repoName = "s2_GaleriaArte";
+	            //TODO Get commit info from git files
+	            String commit = "1402894dfef729928ba42d6f4a23f8297e52439c";
+	            String backPath = "s2_galeriaarte-back/src/main/java";
+	            String frontPath = "s2_galeriaarte-api/src/main/java";
+	            String folder = id == 14 || id == 15 ? backPath : frontPath;
+	            RepositoryId repo = new RepositoryId(org, repoName);
 	            List<Issue> issues = service.getIssues(repo, null);
 	            String title = className + ".java - " + action ;
 	            for (Issue i : issues) {
 	                if (i.getTitle().equals(title)) {
 	                	List<Label> previousLabels = i.getLabels();
 	                	Label newLabel = new Label();
-	                	newLabel.setName("C3");
-	                	newLabel.setColor("#4fa008");
+	                	newLabel.setName("C1");
+	                	newLabel.setColor("4fa008");
 	                	previousLabels.add(newLabel);
 	                	i.setLabels(previousLabels);
 	                	service.editIssue(repo, i);
@@ -70,31 +77,33 @@ public class IssuesTool extends AbstractTool{
 	            }
 	            Issue issue = new Issue();
 	            issue.setTitle(title);
+	            //TODO Body link file of class
 	            issue.setBody("<h2>Issue: " + action + "</h2>"
-	            		+ "<p>Found on file</p>"
-	            		+ "<p>Go to the <a href='archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
+	            		+ "<p>Found on file: <a href='https://github.com/" + org + "/" + repoName + "/blob/" + commit + "/" +  folder + "/" + path + "'>" + className + ".java" + "</a></p>"
+	            		+ "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName + "/tree/" + commit + "'>" + commit + "</a></p>"
+	            		+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
 	            
 	            List<Label> labels = new ArrayList<Label>();
 	            
 	            Label elementLabel = new Label();
 	            elementLabel.setName(element);
-	            elementLabel.setColor("#333dcc");
+	            elementLabel.setColor("333dcc");
 	            labels.add(elementLabel);
 
 	            //TODO Get version from pom.xml to tag issue release?
 	            Label releaseLabel = new Label();
-	            releaseLabel.setName("C3");
-	            releaseLabel.setColor("#4fa008");
+	            releaseLabel.setName("C1");
+	            releaseLabel.setColor("4fa008");
 	            labels.add(releaseLabel);
 	            
 	            Label ruleLabel = new Label();
 	            ruleLabel.setName("R" + id);
-	            ruleLabel.setColor("#e04ac7");
+	            ruleLabel.setColor("e04ac7");
 	            labels.add(ruleLabel);
 	            
 	            Label severityLabel = new Label();
 	            severityLabel.setName(severity);
-	            severityLabel.setColor("#e04ac7");
+	            severityLabel.setColor("e04ac7");
 	            labels.add(severityLabel);
 	            
 	            issue.setLabels(labels);
