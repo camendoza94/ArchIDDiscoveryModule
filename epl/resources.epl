@@ -3,9 +3,11 @@ import './queries.eol';
 pre {
 	var isDeclaredInOtherResource : Map(String, Boolean);
 	for (class in ClassDeclaration.all.select(c | c.name.endsWith("Resource"))){
-		isDeclaredInOtherResource.put(class.name, ClassDeclaration.all.select(c | c.name.endsWith("Resource") and c.bodyDeclarations.select(m | m.isTypeOf(MethodDeclaration) and  m.returnType.type.isTypeOf(ParameterizedType) and m.returnType.type.typeArguments.at(0).type.name = class.name).size() > 0).size()>0);
+		isDeclaredInOtherResource.put(class.name, ClassDeclaration.all.select(c | c.name.endsWith("Resource")
+		 and c.bodyDeclarations.select(m | m.isTypeOf(MethodDeclaration) and  m.returnType.type.isTypeOf(ParameterizedType)
+		  and m.returnType.type.typeArguments.size()> 0 and m.returnType.type.typeArguments.at(0).type.name = class.name).size() > 0).size()>0);
 	}
-	isDeclaredInOtherResource.println();
+	var detailMap = ClassDeclaration.all -> select (c | c.name.endsWith("DetailDTO")).mapBy(c|c.name.substring(0, c.name.indexOf("DetailDTO")));
 }
 
 pattern PathAnnotation
@@ -107,10 +109,15 @@ pattern getReturnDetail
 	annotation: Annotation
 		from: method.annotations -> select(a| a.type.type.name = "GET"),
 	no returnType: TypeAccess
-		from: method.returnType.asSet()-> select(r | r.type.name.endsWith("DetailDTO") or (r.type.isTypeOf(ParameterizedType) and r.type.typeArguments.at(0).type.name.endsWith("DetailDTO")) ) {
+		from: method.returnType.asSet()-> select(r |  r.type.name.endsWith("DetailDTO") 
+		or (r.type.name.endsWith("DTO") and not detailMap.containsKey(r.type.name.substring(0, r.type.name.indexOf("DTO"))))
+		or (r.type.isTypeOf(ParameterizedType) and
+		(r.type.type.type.name ="Class" or 
+		(r.type.typeArguments.size()>0 and r.type.typeArguments.at(0).type.name.endsWith("DTO") and not detailMap.containsKey(r.type.typeArguments.at(0).type.name.substring(0, r.type.typeArguments.at(0).type.name.indexOf("DTO"))))
+		or (r.type.typeArguments.size()>0 and r.type.typeArguments.at(0).type.name.endsWith("DetailDTO")))) ) {
 	onmatch {
 		var message : String;
- 		message = "GET methods must return DetailDTOs or List of them  " + class.name + " " + method.name;
+ 		message = "GET methods must return DetailDTOs or List of them " + class.name + " " + method.name;
 		message.println();
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(17);
