@@ -1,120 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
- 	<extension point="org.eclipse.ui.menus">
-	   <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-       <menu
-             label="Archtoring"
-             mnemonic="A"
-             tooltip="Refactoring steps">
-           <command
-	       		commandId="archtoring.commands.Plugin"
-	            label="Generate SonarQube Plugin"
-	            mnemonic="S"
-	            style="push">
-           </command>
-          <command
-                commandId="archtoring.commands.Model"
-                label="Extract model"
-                mnemonic="M"
-                style="push">
-          </command>
-          <command
-                commandId="archtoring.commands.Patterns"
-                label="Run Search"
-                mnemonic="S"
-                style="push">
-
-          </command>
-          <command
-                commandId="archtoring.commands.Generation"
-                label="Convert to Source"
-                mnemonic="G"
-                style="push">
-             <visibleWhen>
-                <with
-                      variable="activeMenuSelection">
-                   <iterate
-                         ifEmpty="false">
-                      <adapt
-                            type="org.eclipse.core.resources.IResource">
-                         <test
-                               property="org.eclipse.core.resources.name"
-                               value="*.xmi">
-                         </test>
-                      </adapt>
-                   </iterate>
-                </with>
-             </visibleWhen>
-          </command>
-       </menu>
-	   </menuContribution>
-  	</extension>
-  	<extension point="org.eclipse.ui.commands">
-		<command
-			defaultHandler="archtoring.handlers.ModelHandler"
-			id="archtoring.commands.Model"
-			name="Model">
-	  	</command>
-	  	<command
-			defaultHandler="archtoring.handlers.EPLHandler"
-			id="archtoring.commands.Patterns"
-			name="Search">
-	  	</command>
-	  	<command
-			defaultHandler="archtoring.handlers.GenerationHandler"
-			id="archtoring.commands.Generation"
-			name="Transform">
-	  	</command>
-	  	<command
-			defaultHandler="archtoring.handlers.PluginHandler"
-			id="archtoring.commands.Plugin"
-			name="Plugin">
-	  	</command>
-	</extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <wizard
-            category="/Archtoring.categoryWizard"
-            class="archtoring.wizard.RulesWizard"
-            id="Archtoring.rulesWizard"
-            name="Generate new SonarQube Refactoring plugin project"
-            project="true">
-      </wizard>
-      <category
-            id="Archtoring.categoryWizard"
-            name="Archtoring">
-      </category>
-   </extension>
-   <extension
-         id="archtoring.sonarqubePlugin"
-         name="SonarQube Plugin"
-         point="org.eclipse.core.resources.natures">
-         <runtime>
-            <run
-                  class="archtoring.wizard.SonarQubeProjectNature">
-            </run>
-         </runtime>
-   </extension>
-   <extension point="org.eclipse.sirius.componentization">
-    <component class="archtoring.sirius.Activator"
-               id="co.edu.uniandes.archtoring"
-	       name="rules">
-    </component>
-  </extension>
-   <extension
-         point="org.eclipse.sirius.externalJavaAction">
-      <javaActions
-            actionClass="archtoring.sirius.ExternalJavaAction"
-            id="archtoring.browse">
-      </javaActions>
-   </extension>
-   
    <extension
          point="org.eclipse.epsilon.common.dt.tool">
       <tool
             class="archtoring.tools.IssuesTool"
             defaultName="IssuesTool">
       </tool>
+   </extension>
+   <extension
+         id="archtoring"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="archtoring.Application">
+         </run>
+      </application>
    </extension>
 </plugin>

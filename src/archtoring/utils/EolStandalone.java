@@ -1,7 +1,7 @@
 package archtoring.utils;
 
 import org.eclipse.epsilon.eol.EolModule;
-import org.eclipse.epsilon.eol.IEolExecutableModule;
+import org.eclipse.epsilon.eol.IEolModule;
 
 /**
  * This example demonstrates using the Epsilon Object Language, the core
@@ -12,7 +12,7 @@ import org.eclipse.epsilon.eol.IEolExecutableModule;
 public class EolStandalone extends EpsilonStandalone {
 
 	@Override
-	public IEolExecutableModule createModule() {
+	public IEolModule createModule() {
 		return new EolModule();
 	}
 }

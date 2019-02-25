@@ -18,8 +18,8 @@ public class IssuesTool extends AbstractTool{
 	            //TODO Change to auth for whole application
 	            service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
 	            //TODO Obtain repository info from git files
-	            String org = "Uniandes-isis2603";
-	            String repoName = "s4_RequirementManagementSystem_201910";
+	            String org = "camendoza94";
+	            String repoName = "LOCRest";
 	            //TODO Get commit info from git files
 	            String commit = "060fe6e67377a96f0036eefa0fb711d218bc2873";
 	            String backPath = "s4_requirement-back/src/main/java";
