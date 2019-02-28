@@ -11,7 +11,8 @@
    <extension
          id="archtoring"
          point="org.eclipse.core.runtime.applications">
-      <application>
+      <application
+            visible="true">
          <run
                class="archtoring.Application">
          </run>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Rules="https://www.uniandes.edu.co/archtoring" umlModel="desarrollo">
+<Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Rules="https://www.uniandes.edu.co/archtoring" xsi:schemaLocation="https://www.uniandes.edu.co/archtoring rules.ecore" umlModel="desarrollo">
   <rules title="DTOs must implement Serializable." action="Implement Serializable in this DTO" debt="30" severity="Minor" description="DTOS must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorDTO {" compliantSolution="public class AuthorDTO implements Serializable {" structuralElement="//@structuralElements.1" id="1"/>
   <rules title="DTOs must have an empty constructor for serializing." action="Add empty constructor for serializing" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.1" id="2"/>
   <rules title="DTOS must have only serializable fields" action="Remove or edit no-serializable fields" severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="3"/>

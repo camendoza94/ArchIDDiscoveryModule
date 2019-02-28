@@ -11,35 +11,24 @@ import archtoring.utils.EpsilonStandalone;
 
 public class EPLHandler {
 
-	private static final String[] FILES = { "detailDTOs.epl" };
+	private static final String[] FILES_BACK = { "epl/logic.epl" };
+	private static final String[] FILES_FRONT = { "epl/dtos.epl", "epl/detailDTOs.epl", "epl/resources.epl" };
 
 	public void execute(String[] names) {
-		for (String eplFile : FILES) {
+		for (String eplFile : FILES_BACK) {
 			EplStandalone eol = new EplStandalone();
-			//TODO Change EPLs and models reference
-			eol.setSource("C:/Users/Asistente/Documents/epl/" + eplFile);
+			eol.setSource(eplFile);
 			List<IModel> models = new ArrayList<IModel>();
 			try {
 				System.out.println("Running pattern on back.");
-				models.add(EpsilonStandalone.createEmfModelByURI("javaModel",
-						System.getProperty("user.dir") + "/" + names[0] + "/" + names[0] + "_java.xmi",
+				models.add(EpsilonStandalone.createEmfModelByURI(
+						"javaModel", "file://" + System.getProperty("user.dir").replace("\\", "/") + "/" + names[0]
+								+ "/" + names[0] + "_java.xmi",
 						EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
-				models.add(EpsilonStandalone.createEmfModel("rulesModel",
-						"C:/Users/Asistente/Documents/models/ReferenceArchitecture.xmi",
-						"C:/Users/Asistente/Documents/models/rules.ecore", true, true));
+				models.add(EpsilonStandalone.createEmfModel("rulesModel", "epl/ReferenceArchitecture.xmi",
+						"epl/rules.ecore", true, true));
 				eol.setModels(models);
-				eol.execute();
-
-				System.out.println("Running pattern on front.");
-				models.clear();
-				models.add(EpsilonStandalone.createEmfModelByURI("javaModel",
-						System.getProperty("user.dir") + "/" + names[1] + "/" + names[1] + "_java.xmi",
-						EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
-				models.add(EpsilonStandalone.createEmfModel("rulesModel",
-						"C:/Users/Asistente/Documents/models/ReferenceArchitecture.xmi",
-						"C:/Users/Asistente/Documents/models/rules.ecore", true, true));
-				eol.setModels(models);
-				eol.execute();
+				eol.execute(true);
 			} catch (EolModelLoadingException e) {
 				e.printStackTrace();
 			} catch (URISyntaxException e) {
@@ -47,7 +36,29 @@ public class EPLHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
 
+		for (String eplFile : FILES_FRONT) {
+			EplStandalone eol = new EplStandalone();
+			eol.setSource(eplFile);
+			List<IModel> models = new ArrayList<IModel>();
+			try {
+				System.out.println("Running pattern on front.");
+				models.add(EpsilonStandalone.createEmfModelByURI(
+						"javaModel", "file:///" + System.getProperty("user.dir").replace("\\", "/") + "/" + names[1]
+								+ "/" + names[1] + "_java.xmi",
+						EpsilonStandalone.MODISCO_JAVA_METAMODEL_URI, true, true));
+				models.add(EpsilonStandalone.createEmfModel("rulesModel", "epl/ReferenceArchitecture.xmi",
+						"epl/rules.ecore", true, true));
+				eol.setModels(models);
+				eol.execute(true);
+			} catch (EolModelLoadingException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
