@@ -37,6 +37,8 @@ public class GithubHandler {
 			String url = output[0];
 			String org = url.split("/")[3];
 			String repoName = url.split("/")[4];
+			if(repoName.endsWith(".git"))
+				repoName = repoName.substring(0, repoName.indexOf("."));
 			repo = new RepositoryId(org, repoName);
 			HashMap<String, String> options = new HashMap<String, String>();
 			options.put("state", "all");

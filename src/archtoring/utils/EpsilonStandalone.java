@@ -117,7 +117,7 @@ public abstract class EpsilonStandalone {
 		StringProperties properties = new StringProperties();
 		properties.put(EmfModel.PROPERTY_NAME, name);
 		properties.put(EmfModel.PROPERTY_METAMODEL_URI, metamodel);
-		properties.put(EmfModel.PROPERTY_MODEL_URI, URI.create(model));
+		properties.put(EmfModel.PROPERTY_MODEL_URI, URI.create(model.replaceAll(" ","%20")));
 		properties.put(EmfModel.PROPERTY_READONLOAD, readOnLoad + "");
 		properties.put(EmfModel.PROPERTY_STOREONDISPOSAL, storeOnDisposal + "");
 		emfModel.load(properties, (IRelativePathResolver) null);
