@@ -9,6 +9,7 @@ import org.eclipse.equinox.app.IApplicationContext;
 
 import archtoring.handlers.EPLHandler;
 import archtoring.handlers.GithubHandler;
+import archtoring.handlers.LOCHandler;
 import archtoring.handlers.ModelHandler;
 
 public class Application implements IApplication {
@@ -23,6 +24,8 @@ public class Application implements IApplication {
 		EPLHandler epl = new EPLHandler();
 		epl.execute(ModelHandler.getNames());
 		git.execute();
+		LOCHandler loc = new LOCHandler();
+		loc.execute();
 		return EXIT_OK;
 	}
 

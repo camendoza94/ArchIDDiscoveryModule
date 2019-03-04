@@ -35,6 +35,8 @@ public class ModelHandler {
 	public static String backName;
 	public static String frontName;
 	public static List<String> args;
+	public static String projectName;
+	public static String key;
 	
 	public ModelHandler(List<String> args) {
 		ModelHandler.args = args;
@@ -55,8 +57,11 @@ public class ModelHandler {
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse("./pom.xml");
-			String projectName = document.getElementsByTagName("artifactId").item(0).getTextContent();
-
+			projectName = document.getElementsByTagName("artifactId").item(0).getTextContent();
+			String groupId = document.getElementsByTagName("groupId").item(0).getTextContent();
+			
+			key = groupId + ":" + projectName;
+			
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
 			frontName = projectName + "-api";
@@ -76,7 +81,10 @@ public class ModelHandler {
 				projectBack.create(projectDescriptionBack, null);
 				projectFront.create(projectDescriptionFront, null);
 			} catch (CoreException e) {
-
+				projectBack.delete(false, true, null);
+				projectFront.delete(false, true, null);
+				projectBack.create(projectDescriptionBack, null);
+				projectFront.create(projectDescriptionFront, null);
 			}
 			projectBack.open(null);
 			projectFront.open(null);
