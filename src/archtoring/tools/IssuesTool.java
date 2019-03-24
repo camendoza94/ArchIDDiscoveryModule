@@ -22,6 +22,8 @@ public class IssuesTool extends AbstractTool {
 			String url = GithubHandler.output[0];
 			String org = url.split("/")[3];
 			String repoName = url.split("/")[4];
+			if(repoName.endsWith(".git"))
+				repoName = repoName.substring(0, repoName.indexOf("."));
 			String commit = GithubHandler.output[1];
 			String[] names = ModelHandler.getNames();
 			String backPath = names[0] + "/src/main/java";

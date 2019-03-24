@@ -104,6 +104,8 @@ public class ModelHandler {
 			Map<String, Object> options = new HashMap<String, Object>();
 			options.put(XMLResource.OPTION_FLUSH_THRESHOLD, FLUSH_LIMIT);
 			options.put(XMLResource.OPTION_USE_FILE_BUFFER, Boolean.TRUE);
+			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
+
 
 			DiscoverJavaModelFromJavaProject discovererBack = new DiscoverJavaModelFromJavaProject();
 			discovererBack.setSerializeTarget(true);
