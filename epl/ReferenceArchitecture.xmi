@@ -2,7 +2,7 @@
 <Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Rules="https://www.uniandes.edu.co/archtoring" xsi:schemaLocation="https://www.uniandes.edu.co/archtoring rules.ecore" umlModel="desarrollo">
   <rules title="DTOs must implement Serializable." action="Implement Serializable in this DTO" debt="30" severity="Minor" description="DTOS must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorDTO {" compliantSolution="public class AuthorDTO implements Serializable {" structuralElement="//@structuralElements.1" id="1"/>
   <rules title="DTOs must have an empty constructor for serializing." action="Add empty constructor for serializing" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.1" id="2"/>
-  <rules title="DTOS must have only serializable fields" action="Remove or edit no-serializable fields" severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="3"/>
+  <rules title="DTOS must have only serializable fields" action="Remove or edit non-serializable field" severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="3"/>
   <rules title="All fields on DTOS must have getters and setters" action="Add missing getter or setter" severity="Major" nonCompliantExample="Major" structuralElement="//@structuralElements.1" id="4"/>
   <rules title="DTOs must have a constructor with an Entity as parameter" action="Check constructor from Entity implementation in DTO." severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="5"/>
   <rules title="toEntity methods in DTOs must convert the object to an Entity" action="Check toEntity implementation in DTO" severity="Minor" structuralElement="//@structuralElements.1" id="6"/>
@@ -17,6 +17,7 @@
   <rules title="Logic classes must have a persistence injection as field" action="Add missing persistence injection on Logic" severity="Major" structuralElement="//@structuralElements.0" id="15"/>
   <rules title="Resources must check for existence of entity and throws WebApplicationException if missing" action="Add missing check for nullity and WebApplicationException" severity="Minor" compliantSolution="" structuralElement="//@structuralElements.2" id="16"/>
   <rules title="Resource GET methods must return DetailDTOs so their info is properly displayed" action="Make this resource GET method return a DetailDTO or list of them" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.2" id="17"/>
+  <rules title="Getters and Setters on DTOs must manage serializable types only" action="Edit non-serializable type on getter or setter" severity="Minor" structuralElement="//@structuralElements.1" id="18"/>
   <structuralElements umlElement="logic"/>
   <structuralElements umlElement="dtos"/>
   <structuralElements umlElement="services"/>

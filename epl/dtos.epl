@@ -116,6 +116,29 @@ pattern toEntity
 	}
 }
 
+pattern SerializableGettersAndSetters
+	classDecl: ClassDeclaration
+		guard: classDecl.proxy = false and classDecl.name.endsWith("DTO"),
+	field: FieldDeclaration
+		guard: field.modifier.static = false
+		from: classDecl.bodyDeclarations -> select (c | not c.type.type.isKindOf(PrimitiveType)),
+	getter: MethodDeclaration
+		from: classDecl.bodyDeclarations -> select (m | (m.name = "get" + field.getName() or m.name = "is" + field.getName()) and (m.returnType.asSet().select(r | r.type.isKindOf(PrimitiveType))).size() > 0)
+		optional: true,
+	setter: MethodDeclaration
+		from: classDecl.bodyDeclarations -> select (m | m.name = "set" + field.getName() and (m.parameters.asSet().select(p | p.type.type.isKindOf(PrimitiveType)).size() > 0))
+		optional: getter.isDefined() {
+	onmatch {
+		var message : String;
+	 	message = "Non-serializable getter or setter type for field " + field.getName() + " at " + classDecl.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(18);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssueOnGithub(rule.id, rule.action +  " for " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.structuralElement.first.umlElement, rule.severity, classDecl.getPath());
+	}
+}
+
 @cached
 operation FieldDeclaration getName() {
 	return self.fragments.at(0).name.firstToUpperCase();
