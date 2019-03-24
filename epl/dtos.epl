@@ -3,7 +3,9 @@ pattern ImplementsSerializable
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("DTO"),
 	no superInterfaces: TypeAccess
-		from: class.superInterfaces -> select (i | i.type.name = "Serializable") {	
+		from: class.superInterfaces -> select (i | i.type.name = "Serializable"),
+	no interfaceSuperClass: TypeAccess
+		from: class.superClass.asSet() -> select(c | c.type.superInterfaces.size()>0 and c.type.superInterfaces.select(i | i.type.name = "Serializable")) {	
 	onmatch {
 		var message : String;
 	 	message = "Implement Serializable " + class.name;

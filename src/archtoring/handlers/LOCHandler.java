@@ -49,7 +49,11 @@ public class LOCHandler {
 			int loc = Integer.parseInt(value.getAsString());
 			
 			// Post LOC to Archtoring DB
-			URL url2 = new URL("http://archtoringbd.herokuapp.com/locs/" + ModelHandler.projectName);
+			String link = GithubHandler.output[0];
+			String repoName = link.split("/")[4];
+			if(repoName.endsWith(".git"))
+				repoName = repoName.substring(0, repoName.indexOf("."));
+			URL url2 = new URL("http://archtoringbd.herokuapp.com/locs/" + repoName);
 			HttpURLConnection con2 = (HttpURLConnection) url2.openConnection();
 			con2.setRequestMethod("PUT");
 			con2.setDoOutput(true);
