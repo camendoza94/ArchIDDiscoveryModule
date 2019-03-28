@@ -36,6 +36,11 @@ public class IssuesTool extends AbstractTool {
 					newLabel.setName(releaseNumber);
 					newLabel.setColor("4fa008");
 					previousLabels.add(newLabel);
+					i.setBody("<h2>Issue: " + action + "</h2>" + "<p>Found on file: <a href='https://github.com/" + org
+							+ "/" + repoName + "/blob/" + commit + "/" + folder + "/" + path + "'>" + className + ".java"
+							+ "</a></p>" + "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName + "/tree/"
+							+ commit + "'>" + commit + "</a></p>"
+							+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
 					i.setLabels(previousLabels);
 					i.setState("open");
 					GithubHandler.service.editIssue(GithubHandler.repo, i);
@@ -49,7 +54,7 @@ public class IssuesTool extends AbstractTool {
 					+ "</a></p>" + "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName + "/tree/"
 					+ commit + "'>" + commit + "</a></p>"
 					+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
-
+			issue.setAssignee(GithubHandler.author);
 			List<Label> labels = new ArrayList<Label>();
 
 			Label elementLabel = new Label();

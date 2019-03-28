@@ -9,23 +9,26 @@ import java.util.List;
 import org.eclipse.egit.github.core.Issue;
 import org.eclipse.egit.github.core.Label;
 import org.eclipse.egit.github.core.RepositoryId;
+import org.eclipse.egit.github.core.User;
 import org.eclipse.egit.github.core.service.IssueService;
+import org.eclipse.egit.github.core.service.UserService;
 
 public class GithubHandler {
 	public static String[] output;
 	public static IssueService service;
 	public static List<Issue> issues;
 	public static RepositoryId repo;
+	public static User author;
 
 	public GithubHandler() {
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder();
-			processBuilder.command("cmd.exe", "/c", "git remote get-url origin && git rev-parse HEAD");
+			processBuilder.command("cmd.exe", "/c", "git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%an");
 
 			Process process = processBuilder.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
-			output = new String[2];
+			output = new String[3];
 			int index = 0;
 			while ((line = reader.readLine()) != null) {
 				output[index] = line;
@@ -34,6 +37,9 @@ public class GithubHandler {
 			process.waitFor();
 			service = new IssueService();
 			service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			UserService userService = new UserService();
+			System.out.println(output[2].trim());
+			author = userService.getUser(output[2].trim());
 			String url = output[0];
 			String org = url.split("/")[3];
 			String repoName = url.split("/")[4];
