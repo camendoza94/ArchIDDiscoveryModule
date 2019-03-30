@@ -31,5 +31,6 @@ Import-Package: org.eclipse.m2e.core,
  org.eclipse.m2e.core.project
 Bundle-ClassPath: org.eclipse.egit.github.core-2.1.5.jar,
  gson-2.8.5.jar,
+ github-api-1.95.jar,
  .,
  epl/

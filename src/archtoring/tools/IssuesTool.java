@@ -54,7 +54,8 @@ public class IssuesTool extends AbstractTool {
 					+ "</a></p>" + "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName + "/tree/"
 					+ commit + "'>" + commit + "</a></p>"
 					+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
-			issue.setAssignee(GithubHandler.author);
+			if(GithubHandler.author != null)
+				issue.setAssignee(GithubHandler.author);
 			List<Label> labels = new ArrayList<Label>();
 
 			Label elementLabel = new Label();

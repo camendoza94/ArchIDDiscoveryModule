@@ -12,6 +12,9 @@ import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.User;
 import org.eclipse.egit.github.core.service.IssueService;
 import org.eclipse.egit.github.core.service.UserService;
+import org.kohsuke.github.GHUser;
+import org.kohsuke.github.GHUserSearchBuilder;
+import org.kohsuke.github.GitHub;
 
 public class GithubHandler {
 	public static String[] output;
@@ -23,7 +26,7 @@ public class GithubHandler {
 	public GithubHandler() {
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder();
-			processBuilder.command("cmd.exe", "/c", "git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%an");
+			processBuilder.command("cmd.exe", "/c", "git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%ae");
 
 			Process process = processBuilder.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -38,8 +41,13 @@ public class GithubHandler {
 			service = new IssueService();
 			service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
 			UserService userService = new UserService();
-			System.out.println(output[2].trim());
-			author = userService.getUser(output[2].trim());
+			GitHub github = GitHub.connectUsingOAuth("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			GHUserSearchBuilder searchUser = github.searchUsers();
+			searchUser.q(output[2]);
+			searchUser.in("email");
+			List<GHUser> results = searchUser.list().asList();
+			if(!results.isEmpty())
+				author = userService.getUser(results.get(0).getLogin());
 			String url = output[0];
 			String org = url.split("/")[3];
 			String repoName = url.split("/")[4];
