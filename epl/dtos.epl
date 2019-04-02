@@ -5,7 +5,7 @@ pattern ImplementsSerializable
 	no superInterfaces: TypeAccess
 		from: class.superInterfaces -> select (i | i.type.name = "Serializable"),
 	no interfaceSuperClass: TypeAccess
-		from: class.superClass.asSet() -> select(c | c.type.superInterfaces.size()>0 and c.type.superInterfaces.select(i | i.type.name = "Serializable").size() > 0) {	
+		from: class.superClass.asSet() -> select(c | c.isDefined() and c.type.superInterfaces.size()>0 and c.type.superInterfaces.select(i | i.type.name = "Serializable").size() > 0) {	
 	onmatch {
 		var message : String;
 	 	message = "Implement Serializable " + class.name;
@@ -125,10 +125,10 @@ pattern SerializableGettersAndSetters
 		guard: field.modifier.static = false
 		from: classDecl.bodyDeclarations -> select (c | not c.type.type.isKindOf(PrimitiveType)),
 	getter: MethodDeclaration
-		from: classDecl.bodyDeclarations -> select (m | (m.name = "get" + field.getName() or m.name = "is" + field.getName()) and (m.returnType.asSet().select(r | r.type.isKindOf(PrimitiveType))).size() > 0)
+		from: classDecl.bodyDeclarations -> select (m | (m.name = "get" + field.getName() or m.name = "is" + field.getName()) and (m.returnType.asSet().select(r | r.isDefined() and r.type.isKindOf(PrimitiveType))).size() > 0)
 		optional: true,
 	setter: MethodDeclaration
-		from: classDecl.bodyDeclarations -> select (m | m.name = "set" + field.getName() and (m.parameters.asSet().select(p | p.type.type.isKindOf(PrimitiveType)).size() > 0))
+		from: classDecl.bodyDeclarations -> select (m | m.name = "set" + field.getName() and (m.parameters.asSet().select(p | p.isDefined() and p.type.type.isKindOf(PrimitiveType)).size() > 0))
 		optional: getter.isDefined() {
 	onmatch {
 		var message : String;

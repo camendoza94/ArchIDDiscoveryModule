@@ -26,12 +26,12 @@ public class GithubHandler {
 	public GithubHandler() {
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder();
-			processBuilder.command("cmd.exe", "/c", "git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%ae");
+			processBuilder.command("cmd.exe", "/c", "git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%ae%n%aI");
 
 			Process process = processBuilder.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
-			output = new String[3];
+			output = new String[4];
 			int index = 0;
 			while ((line = reader.readLine()) != null) {
 				output[index] = line;

@@ -72,6 +72,27 @@ public class LOCHandler {
 
 			status = con2.getResponseCode();
 			System.out.println(status);
+			
+			String date = GithubHandler.output[3];
+			URL url3 = new URL("http://archtoringbd.herokuapp.com/dates/" + repoName);
+			HttpURLConnection con3 = (HttpURLConnection) url3.openConnection();
+			con3.setRequestMethod("PUT");
+			con3.setDoOutput(true);
+			con3.setRequestProperty("Content-Type", "application/json");
+			HashMap<String, String> map2 = new HashMap<String, String>();
+			map2.put("dates", date);
+			String query2 = new Gson().toJson(map2);
+			con3.setRequestProperty("Content-Length", Integer.toString(query2.length()));
+			DataOutputStream out3 = new DataOutputStream(con3.getOutputStream());
+			out3.writeBytes(query2);
+			out3.flush();
+			out3.close();
+
+			con3.setConnectTimeout(5000);
+			con3.setReadTimeout(5000);
+
+			status = con3.getResponseCode();
+			System.out.println(status);
 
 		} catch (IOException e) {
 			e.printStackTrace();
