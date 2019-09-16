@@ -1,0 +1,51 @@
+import './queries.eol';
+pattern GetDependencies
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Logic"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Inject") {
+	onmatch {
+		var message : String;
+ 		message = "Injection " + field.type.type.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), field.type.type.getPath());
+	}
+}
+
+pattern GetDependencies2
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Logic"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "EJB") {
+	onmatch {
+		var message : String;
+ 		message = "EJB " + field.type.type.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), field.type.type.getPath());
+	}
+}
+
+pattern GetDependencies3
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Logic"),
+	unit: CompilationUnit
+		from: class.originalCompilationUnit.asSet(),
+	imp: ImportDeclaration
+		from: unit.imports,
+	importedClass: ClassDeclaration
+		guard: importedClass.proxy = false 
+		from: imp.importedElement.asSet() -> select(i | i.isTypeOf(ClassDeclaration)) {
+	onmatch {
+		var message : String;
+ 		message = "Import " + importedClass.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), importedClass.getPath());
+	}
+}

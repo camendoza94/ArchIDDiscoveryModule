@@ -2,7 +2,6 @@ package archtoring.handlers;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,17 +33,9 @@ public class ModelHandler {
 	private static final Integer FLUSH_LIMIT = Integer.valueOf(1 << FLUSH_LIMIT_SHIFT);
 	public static String backName;
 	public static String frontName;
-	public static List<String> args;
 	public static String projectName;
 	public static String key;
-	
-	public ModelHandler(List<String> args) {
-		ModelHandler.args = args;
-	}
-	
-	public static List<String> getArgs(){
-		return args;
-	}
+
 
 	public static String[] getNames() {
 		String[] names = { backName, frontName };
