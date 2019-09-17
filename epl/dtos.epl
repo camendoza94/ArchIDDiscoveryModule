@@ -141,6 +141,25 @@ pattern SerializableGettersAndSetters
 	}
 }
 
+pattern GetDependencies
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("DTO"),
+	unit: CompilationUnit
+		from: class.originalCompilationUnit.asSet(),
+	imp: ImportDeclaration
+		from: unit.imports,
+	importedClass: ClassDeclaration
+		guard: importedClass.proxy = false 
+		from: imp.importedElement.asSet() -> select(i | i.isTypeOf(ClassDeclaration)) {
+	onmatch {
+		var message : String;
+ 		message = "Import " + importedClass.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), importedClass.getPath());
+	}
+}
+
 @cached
 operation FieldDeclaration getName() {
 	return self.fragments.at(0).name.firstToUpperCase();

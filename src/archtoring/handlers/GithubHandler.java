@@ -18,12 +18,14 @@ public class GithubHandler {
 	public static int[] issuesCount;
 	public static HashMap<String, int[]> fileIssuesCount;
 	public static HashMap<String, List<String>> dependencies;
+	public static HashMap<String, List<String>> dependenciesIn;
 
 	public GithubHandler() {
 		try {
 			issuesCount = new int[18];
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
+			dependenciesIn = new HashMap<String, List<String>>();
 			ProcessBuilder processBuilder = new ProcessBuilder();
 			processBuilder.command("cmd.exe", "/c",
 					"git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%ae%n%aI");
@@ -77,13 +79,46 @@ public class GithubHandler {
 			System.out.println(status);
 			
 			ArrayList<HashMap<String, Object>> files = new ArrayList<HashMap<String, Object>>();
-			for(int i = 0; i < fileIssuesCount.size(); i++) {
+			for (int i = 0; i < fileIssuesCount.size(); i++) {
 				HashMap<String, Object> x = new HashMap<String, Object>();
 				x.put("name", fileIssuesCount.keySet().toArray()[i]);
 				x.put("issues", fileIssuesCount.values().toArray()[i]);
 				files.add(x);
 			}
+
+			for (Entry<String, List<String>> ee : dependencies.entrySet()) {
+				HashMap<String, Object> x = new HashMap<String, Object>();
+				String key = ee.getKey();
+				List<String> values = ee.getValue();
+				HashMap<String, Object> current = exists(files, key);
+				if (current == null) {
+					x.put("name", key);
+					x.put("dependenciesOut", values);
+					files.add(x);
+				} else {
+					files.remove(current);
+					current.put("dependenciesOut", values);
+					files.add(current);
+				}
+			}
 			
+			for (Entry<String, List<String>> ee : dependenciesIn.entrySet()) {
+				HashMap<String, Object> x = new HashMap<String, Object>();
+				String key = ee.getKey();
+				List<String> values = ee.getValue();
+				HashMap<String, Object> current = exists(files, key);
+				if (current == null) {
+					x.put("name", key);
+					x.put("dependenciesIn", values);
+					files.add(x);
+				} else {
+					files.remove(current);
+					current.put("dependenciesIn", values);
+					files.add(current);
+				}
+			}
+
+
 			URL url2 = new URL("http://archtoringbd.herokuapp.com/files/" + repoName);
 			HttpURLConnection con2 = (HttpURLConnection) url2.openConnection();
 			con2.setRequestMethod("PUT");
@@ -107,47 +142,21 @@ public class GithubHandler {
 
 			status = con2.getResponseCode();
 			System.out.println(status);
-			
-			
-			ArrayList<HashMap<String, Object>> files2 = new ArrayList<HashMap<String, Object>>();
-			for (Entry<String, List<String>> ee : dependencies.entrySet()) {
-				HashMap<String, Object> x = new HashMap<String, Object>();
-			    String key = ee.getKey();
-			    List<String> values = ee.getValue();
-			    x.put("name", key);
-				x.put("dependencies", values);
-				files2.add(x);
-			}
-			
-			URL url3 = new URL("http://archtoringbd.herokuapp.com/files/" + repoName + "Dependencies");
-			HttpURLConnection con3 = (HttpURLConnection) url3.openConnection();
-			con3.setRequestMethod("PUT");
-			con3.setDoOutput(true);
-			con3.setRequestProperty("Content-Type", "application/json");
-			HashMap<String, Object> map5 = new HashMap<String, Object>();
-			map5.put("commitId", GithubHandler.output[1]);
-			map5.put("date", GithubHandler.output[3]);
-			map5.put("files", files2);
-			HashMap<String, HashMap<String, Object>> map6 = new HashMap<String, HashMap<String, Object>>();
-			map6.put("data", map5);
-			String query3 = new Gson().toJson(map6);
-			con3.setRequestProperty("Content-Length", Integer.toString(query3.length()));
-			DataOutputStream out3 = new DataOutputStream(con3.getOutputStream());
-			out3.writeBytes(query3);
-			out3.flush();
-			out3.close();
 
-			con3.setConnectTimeout(5000);
-			con3.setReadTimeout(5000);
-
-			status = con3.getResponseCode();
-			System.out.println(status);
-			
-			
-			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
+
+	private HashMap<String, Object> exists(ArrayList<HashMap<String, Object>> list, String name) {
+		for (int i = 0; i < list.size(); i++) {
+			HashMap<String, Object> current = list.get(i);
+			if (current.containsValue(name))
+				return current;
+		}
+		return null;
+
+	}
+
 }

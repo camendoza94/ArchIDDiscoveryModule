@@ -32,5 +32,14 @@ public class IssuesTool extends AbstractTool {
 			dep.add(to);
 			GithubHandler.dependencies.put(from, dep);
 		}
+		
+		if (GithubHandler.dependenciesIn.containsKey(to)) {
+			List<String> old = GithubHandler.dependenciesIn.get(to);
+			old.add(from);
+		} else {
+			ArrayList<String> dep = new ArrayList<String>();
+			dep.add(from);
+			GithubHandler.dependenciesIn.put(to, dep);
+		}
 	}
 }
