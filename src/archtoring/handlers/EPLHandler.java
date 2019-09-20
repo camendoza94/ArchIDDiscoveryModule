@@ -11,7 +11,7 @@ import archtoring.utils.EpsilonStandalone;
 
 public class EPLHandler {
 
-	private static final String[] FILES_BACK = { "epl/logic.epl" };
+	private static final String[] FILES_BACK = { "epl/logic.epl", "epl/entities.epl" };
 	private static final String[] FILES_FRONT = { "epl/dtos.epl", "epl/detailDTOs.epl", "epl/resources.epl" };
 
 	public void execute(String[] names) {

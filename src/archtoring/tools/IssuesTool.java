@@ -17,7 +17,7 @@ public class IssuesTool extends AbstractTool {
 			old[id - 1] = ++old[id - 1];
 			GithubHandler.fileIssuesCount.put(path, old);
 		} else {
-			int[] array = new int[18];
+			int[] array = new int[22];
 			array[id - 1] = 1;
 			GithubHandler.fileIssuesCount.put(path, array);
 		}

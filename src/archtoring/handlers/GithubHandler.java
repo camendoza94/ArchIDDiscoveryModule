@@ -22,7 +22,7 @@ public class GithubHandler {
 
 	public GithubHandler() {
 		try {
-			issuesCount = new int[18];
+			issuesCount = new int[22];
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();
@@ -61,7 +61,6 @@ public class GithubHandler {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("commitId", GithubHandler.output[1]);
 			map.put("date", GithubHandler.output[3]);
-			// map.put("loc", locs);
 			map.put("issues", issuesCount);
 			HashMap<String, HashMap<String, Object>> map2 = new HashMap<String, HashMap<String, Object>>();
 			map2.put("data", map);

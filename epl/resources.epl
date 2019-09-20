@@ -129,18 +129,15 @@ pattern getReturnDetail
 pattern GetDependencies
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("Resource"),
-	unit: CompilationUnit
-		from: class.originalCompilationUnit.asSet(),
-	imp: ImportDeclaration
-		from: unit.imports,
-	importedClass: ClassDeclaration
-		guard: importedClass.proxy = false 
-		from: imp.importedElement.asSet() -> select(i | i.isTypeOf(ClassDeclaration)) {
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Inject") {
 	onmatch {
 		var message : String;
- 		message = "Import " + importedClass.getPath() + " in " + class.name;
+ 		message = "Injection " + field.type.type.getPath() + " in " + class.name;
 		message.println();
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addDependency(class.getPath(), importedClass.getPath());
+		issues.addDependency(class.getPath(), field.type.type.getPath());
 	}
 }
