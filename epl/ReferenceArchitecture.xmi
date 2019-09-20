@@ -3,7 +3,7 @@
   <rules title="DTOs must implement Serializable." action="Implement Serializable in this DTO" debt="30" severity="Minor" description="DTOS must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorDTO {" compliantSolution="public class AuthorDTO implements Serializable {" structuralElement="//@structuralElements.1" id="1"/>
   <rules title="DTOs must have an empty constructor for serializing." action="Add empty constructor for serializing" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.1" id="2"/>
   <rules title="DTOS must have only serializable fields" action="Remove or edit no-serializable field" severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="3"/>
-  <rules title="All fields on DTOS must have getters and setters" action="Add missing getter or setter" severity="Major" nonCompliantExample="Major" structuralElement="//@structuralElements.1" id="4"/>
+  <rules title="All fields on DTOS must have getters and setters" action="Add missing getter or setter" severity="Major" nonCompliantExample="" structuralElement="//@structuralElements.1" id="4"/>
   <rules title="DTOs must have a constructor with an Entity as parameter" action="Check constructor from Entity implementation in DTO." severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="5"/>
   <rules title="toEntity methods in DTOs must convert the object to an Entity" action="Check toEntity implementation in DTO" severity="Minor" structuralElement="//@structuralElements.1" id="6"/>
   <rules title="Fields on DetailDTOs must be of type DTO or List" action="Remove fields that are not of type DTO or List" severity="Minor" structuralElement="//@structuralElements.1" id="7"/>
@@ -18,7 +18,12 @@
   <rules title="Resources must check for existence of entity and throws WebApplicationException if missing" action="Add missing check for nullity and WebApplicationException" severity="Minor" compliantSolution="" structuralElement="//@structuralElements.2" id="16"/>
   <rules title="Resource GET methods must return DetailDTOs so their info is properly displayed" action="Make this resource GET method return a DetailDTO or list of them" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.2" id="17"/>
   <rules title="Getters and Setters on DTOs must manage serializable types only" action="Edit non-serializable type on getter or setter" severity="Minor" structuralElement="//@structuralElements.1" id="18"/>
+  <rules title="Entities must implement Serializable." action="Implement Serializable in this Entity" debt="30" severity="Minor" description="Entities must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorEntity {" compliantSolution="public class AuthorEntity implements Serializable {" structuralElement="//@structuralElements.3" id="19"/>
+  <rules title="Fields on Entities must be of type Entity, List or non-primitive" action="Remove fields that are primitive or not of type Entity or List." severity="Minor" structuralElement="//@structuralElements.3" id="20"/>
+  <rules title="All fields on Entities must have getters and setters" action="Add missing getter or setter" severity="Major" structuralElement="//@structuralElements.3" id="21"/>
+  <rules title="Getters and Setters on Entities must manage serializable types only" action="Edit non-serializable type on getter or setter" severity="Minor" structuralElement="//@structuralElements.3" id="22"/>
   <structuralElements umlElement="logic"/>
   <structuralElements umlElement="dtos"/>
   <structuralElements umlElement="services"/>
+  <structuralElements umlElement="entities"/>
 </Rules:ReferenceArchitecture>

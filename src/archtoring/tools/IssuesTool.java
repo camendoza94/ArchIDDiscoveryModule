@@ -28,7 +28,7 @@ public class IssuesTool extends AbstractTool {
 			String[] names = ModelHandler.getNames();
 			String backPath = names[0] + "/src/main/java";
 			String frontPath = names[1] + "/src/main/java";
-			String folder = id == 14 || id == 15 ? backPath : frontPath;
+			String folder = (id == 14 || id == 15 || id > 18) ? backPath : frontPath;
 			for (Issue i : GithubHandler.issues) {
 				List<Label> previousLabels = i.getLabels();
 				if (i.getTitle().equals(title)) {
