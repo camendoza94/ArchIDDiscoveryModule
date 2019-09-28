@@ -1,0 +1,36 @@
+import './queries.eol';
+
+pattern RepositoryAnnotation
+	interface: InterfaceDeclaration
+		guard: interface.proxy = false and interface.name.endsWith("Repository"),
+	no annotation: Annotation
+		from: interface.annotations -> select (a | a.type.type.name = "Repository") {	
+	onmatch {
+		var message : String;
+ 		message = "RepositoryAnnotation " + interface.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, interface.getPath());
+	}
+}
+
+pattern InheritannceJPARepository
+	interface: InterfaceDeclaration
+		guard: interface.proxy = false and interface.name.endsWith("Repository"),
+	no superInterface: TypeAccess
+		from: interface.superInterfaces -> select (a | a.type.isTypeOf(ParameterizedType) and a.type.typeArguments.size = 2
+		and a.type.typeArguments.at(0).type.name = interface.name.substring(0, interface.name.indexOf("Repository")) 
+		and a.type.typeArguments.at(1).type.name = "Integer"
+		and a.type.type.type.name = "JpaRepository") {	
+	onmatch {
+		var message : String;
+ 		message = "InheritannceJPARepository " + interface.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, interface.getPath());
+	}
+}

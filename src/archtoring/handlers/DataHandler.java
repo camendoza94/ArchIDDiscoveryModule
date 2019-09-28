@@ -13,16 +13,16 @@ import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 
-public class GithubHandler {
+public class DataHandler {
 	public static String[] output;
 	public static int[] issuesCount;
 	public static HashMap<String, int[]> fileIssuesCount;
 	public static HashMap<String, List<String>> dependencies;
 	public static HashMap<String, List<String>> dependenciesIn;
 
-	public GithubHandler() {
+	public DataHandler() {
 		try {
-			issuesCount = new int[22];
+			issuesCount = new int[2];
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();
@@ -49,7 +49,7 @@ public class GithubHandler {
 
 	public void execute() {
 		try {
-			String link = GithubHandler.output[0];
+			String link = DataHandler.output[0];
 			String repoName = link.split("/")[4];
 			if (repoName.endsWith(".git"))
 				repoName = repoName.substring(0, repoName.indexOf("."));
@@ -59,8 +59,8 @@ public class GithubHandler {
 			con.setDoOutput(true);
 			con.setRequestProperty("Content-Type", "application/json");
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("commitId", GithubHandler.output[1]);
-			map.put("date", GithubHandler.output[3]);
+			map.put("commitId", DataHandler.output[1]);
+			map.put("date", DataHandler.output[3]);
 			map.put("issues", issuesCount);
 			HashMap<String, HashMap<String, Object>> map2 = new HashMap<String, HashMap<String, Object>>();
 			map2.put("data", map);
@@ -124,8 +124,8 @@ public class GithubHandler {
 			con2.setDoOutput(true);
 			con2.setRequestProperty("Content-Type", "application/json");
 			HashMap<String, Object> map3 = new HashMap<String, Object>();
-			map3.put("commitId", GithubHandler.output[1]);
-			map3.put("date", GithubHandler.output[3]);
+			map3.put("commitId", DataHandler.output[1]);
+			map3.put("date", DataHandler.output[3]);
 			map3.put("files", files);
 			HashMap<String, HashMap<String, Object>> map4 = new HashMap<String, HashMap<String, Object>>();
 			map4.put("data", map3);

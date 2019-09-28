@@ -1,18 +1,13 @@
 package archtoring.handlers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.project.IProjectConfigurationManager;
-import org.eclipse.m2e.core.project.ResolverConfiguration;
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -21,74 +16,64 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 import org.eclipse.modisco.infra.discovery.core.exception.DiscoveryException;
 import org.eclipse.modisco.java.discoverer.DiscoverJavaModelFromJavaProject;
+import org.eclipse.modisco.java.discoverer.DiscoverJavaModelFromProject;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 
 public class ModelHandler {
 
 	private static final int FLUSH_LIMIT_SHIFT = 16;
 	private static final Integer FLUSH_LIMIT = Integer.valueOf(1 << FLUSH_LIMIT_SHIFT);
-	public static String backName;
-	public static String frontName;
-	public static String projectName;
-	public static String key;
-
-
-	public static String[] getNames() {
-		String[] names = { backName, frontName };
-		return names;
-	}
 
 	public void execute() {
 
 		try {
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-			Document document = documentBuilder.parse("./pom.xml");
-			projectName = document.getElementsByTagName("artifactId").item(0).getTextContent();
-			String groupId = document.getElementsByTagName("groupId").item(0).getTextContent();
-			
-			key = groupId + ":" + projectName;
-			
+
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-			frontName = projectName + "-api";
-			backName = projectName + "-back";
+			IProjectDescription projectDescription = workspace.newProjectDescription("cpe-seguridad-api");
 
-			IProjectDescription projectDescriptionBack = workspace.newProjectDescription(backName);
-			IProjectDescription projectDescriptionFront = workspace.newProjectDescription(frontName);
+			projectDescription.setLocation(new Path(System.getProperty("user.dir") + "/" + "cpe-seguridad-api"));
 
-			projectDescriptionBack.setLocation(new Path(System.getProperty("user.dir") + "/" + backName));
-			projectDescriptionFront.setLocation(new Path(System.getProperty("user.dir") + "/" + frontName));
+			String[] newNatures = new String[3];
+			newNatures[0] = "org.eclipse.jdt.core.javanature";
+			newNatures[1] = "org.eclipse.wst.common.project.facet.core.nature";
+			newNatures[2] = "org.eclipse.buildship.core.gradleprojectnature";
+			projectDescription.setNatureIds(newNatures);
 
-			IProject projectBack = workspace.getRoot().getProject(projectDescriptionBack.getName());
-			IProject projectFront = workspace.getRoot().getProject(projectDescriptionFront.getName());
+			ICommand[] buildSpec = projectDescription.getBuildSpec();
+			ICommand command1 = projectDescription.newCommand();
+			command1.setBuilderName("org.eclipse.jdt.core.javabuilder");
+			ICommand command2 = projectDescription.newCommand();
+			command2.setBuilderName("org.eclipse.wst.common.project.facet.core.builder");
+			ICommand command3 = projectDescription.newCommand();
+			command3.setBuilderName("org.eclipse.wst.validation.validationbuilder");
+			ICommand command4 = projectDescription.newCommand();
+			command4.setBuilderName("org.eclipse.buildship.core.gradleprojectbuilder");
+			Collection<ICommand> list = new ArrayList<>(Arrays.asList(buildSpec));
+			list.add(command1);
+			list.add(command2);
+			list.add(command3);
+			list.add(command4);
+			
+			projectDescription.setBuildSpec(list.toArray(new ICommand[list.size()]));
+
+			IProject project = workspace.getRoot().getProject(projectDescription.getName());
 
 			System.out.println("Importing projects");
 			try {
-				projectBack.create(projectDescriptionBack, null);
-				projectFront.create(projectDescriptionFront, null);
+				project.create(projectDescription, null);
 			} catch (CoreException e) {
-				projectBack.delete(false, true, null);
-				projectFront.delete(false, true, null);
-				projectBack.create(projectDescriptionBack, null);
-				projectFront.create(projectDescriptionFront, null);
+				project.delete(false, true, null);
+				project.create(projectDescription, null);
 			}
-			projectBack.open(null);
-			projectFront.open(null);
 
-			IProjectConfigurationManager configurationManager = MavenPlugin.getProjectConfigurationManager();
-			ResolverConfiguration configuration = new ResolverConfiguration();
-			configurationManager.enableMavenNature(projectBack, configuration, new NullProgressMonitor());
-			configurationManager.enableMavenNature(projectFront, configuration, new NullProgressMonitor());
-			configurationManager.updateProjectConfiguration(projectBack, new NullProgressMonitor());
-			configurationManager.updateProjectConfiguration(projectFront, new NullProgressMonitor());
-
-			IJavaProject backProject = JavaCore.create(projectBack);
-			IJavaProject frontProject = JavaCore.create(projectFront);
+			project.open(null);
+			
+			//IJavaProject iProject = JavaCore.create(project);
 
 			System.out.println("Discovering projects");
 
@@ -97,18 +82,11 @@ public class ModelHandler {
 			options.put(XMLResource.OPTION_USE_FILE_BUFFER, Boolean.TRUE);
 			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
 
-
-			DiscoverJavaModelFromJavaProject discovererBack = new DiscoverJavaModelFromJavaProject();
-			discovererBack.setSerializeTarget(true);
-			discovererBack.discoverElement(backProject, new NullProgressMonitor());
-			Resource resourceBack = discovererBack.getTargetModel();
-			resourceBack.save(options);
-
-			DiscoverJavaModelFromJavaProject discovererFront = new DiscoverJavaModelFromJavaProject();
-			discovererFront.setSerializeTarget(true);
-			discovererFront.discoverElement(frontProject, new NullProgressMonitor());
-			Resource resourceFront = discovererFront.getTargetModel();
-			resourceFront.save(options);
+			DiscoverJavaModelFromProject discoverer = new DiscoverJavaModelFromProject();
+			discoverer.setSerializeTarget(true);
+			discoverer.discoverElement(project, new NullProgressMonitor());
+			Resource resource = discoverer.getTargetModel();
+			resource.save(options);
 
 		} catch (DiscoveryException e) {
 			System.out.println("Discovery error.");
@@ -118,12 +96,6 @@ public class ModelHandler {
 			e1.printStackTrace();
 		} catch (IOException e) {
 			System.out.println("Editing error.");
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			System.out.println("POM parsing error.");
-			e.printStackTrace();
-		} catch (SAXException e) {
-			System.out.println("POM parsing error.");
 			e.printStackTrace();
 		}
 	}

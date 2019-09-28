@@ -1,0 +1,68 @@
+import './queries.eol';
+
+pattern ServiceAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Service") {	
+	onmatch {
+		var message : String;
+ 		message = "ServiceAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern ServiceImplementation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
+	no superInterface: TypeAccess
+		from: interface.superInterfaces -> select (a | a.type.name = class.name.substring(0, class.name.indexOf("Impl"))) {	
+	onmatch {
+		var message : String;
+ 		message = "ServiceImplementation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern OverrideMethods
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
+	method: MethodDeclaration
+		from:  class.bodyDeclarations,
+	no annotation: Annotation
+		from: method.annotations -> select(a| a.type.type.name = "Override") {	
+	onmatch {
+		var message : String;
+ 		message = "OverrideMethods " + class.name + " : " + method.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+
+pattern GetDependencies
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Autowired") {
+	onmatch {
+		var message : String;
+ 		message = "Injection " + field.type.type.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), field.type.type.getPath());
+	}
+}

@@ -4,7 +4,7 @@ import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
 import archtoring.handlers.EPLHandler;
-import archtoring.handlers.GithubHandler;
+import archtoring.handlers.DataHandler;
 import archtoring.handlers.ModelHandler;
 
 public class Application implements IApplication {
@@ -13,10 +13,10 @@ public class Application implements IApplication {
 	public Object start(IApplicationContext context) throws Exception {
 		ModelHandler model = new ModelHandler();
 		model.execute();
-		GithubHandler git = new GithubHandler();
+		DataHandler data = new DataHandler();
 		EPLHandler epl = new EPLHandler();
-		epl.execute(ModelHandler.getNames());
-		git.execute();
+		epl.execute();
+		data.execute();
 		return EXIT_OK;
 	}
 

@@ -1,0 +1,102 @@
+import './queries.eol';
+
+pattern EntityAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "model" and package.package.name = "api",
+	no modifier: Mofifier
+		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
+	no annotation: Annotation
+		from: class.annotation -> select (a | a.type.type.name = "Entity") {	
+	onmatch {
+		var message : String;
+ 		message = "EntityAnnotations " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern TableAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "model" and package.package.name = "api",
+	no modifier: Mofifier
+		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Table") {	
+	onmatch {
+		var message : String;
+ 		message = "TableAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern EqualsAndHashCodeAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "model" and package.package.name = "api",
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "EqualsAndHashCode") {	
+	onmatch {
+		var message : String;
+ 		message = "EqualsAndHashCodeAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern DataAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "model" and package.package.name = "api",
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Data") {	
+	onmatch {
+		var message : String;
+ 		message = "DataAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern MappedSuperclassAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "model" and package.package.name = "api",
+	modifier: Mofifier
+		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "MappedSuperclass") {	
+	onmatch {
+		var message : String;
+ 		message = "MappedSuperclassAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}

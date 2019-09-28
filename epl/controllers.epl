@@ -1,0 +1,112 @@
+import './queries.eol';
+
+pattern CrossOriginAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Controller"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "CrossOrigin") {	
+	onmatch {
+		var message : String;
+ 		message = "CrossOriginAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern RestControllerAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Controller"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "RestController") {	
+	onmatch {
+		var message : String;
+ 		message = "RestControllerAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern RequestMappingAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Controller"),
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "RequestMapping") {	
+	onmatch {
+		var message : String;
+ 		message = "RequestMappingAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern ServiceInjection
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Controller"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations
+		guard: field.type.type.name.endsWith("Service"),
+	no injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Autowired") {
+	onmatch {
+		var message : String;
+ 		message = "ServiceInjection " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+
+pattern ServiceInjection
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Controller"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations
+		guard: not field.type.type.name.endsWith("Service"),
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Autowired") {
+	onmatch {
+		var message : String;
+ 		message = "ServiceInjection " + class.name + " : " + field.getName();
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern GetDependencies
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("Controller"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Autowired") {
+	onmatch {
+		var message : String;
+ 		message = "Injection " + field.type.type.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), field.type.type.getPath());
+	}
+}
+
+//Métodos
+
+@cached
+operation FieldDeclaration getName() {
+	return self.fragments.at(0).name.firstToUpperCase();
+}
+

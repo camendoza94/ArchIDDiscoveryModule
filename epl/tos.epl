@@ -1,0 +1,37 @@
+pattern DataAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "to" and package.package.name = "api",
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "Data") {	
+	onmatch {
+		var message : String;
+ 		message = "DataAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(10);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
+
+pattern EqualsAndHashCodeAnnotation
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "to" and package.package.name = "api",
+	no annotation: Annotation
+		from: class.annotations -> select (a | a.type.type.name = "EqualsAndHashCode") {	
+	onmatch {
+		var message : String;
+ 		message = "EqualsAndHashCodeAnnotation " + class.name;
+		message.println();
+		var rule: rulesModel!Rule;
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(10);
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addIssue(rule.id, class.getPath());
+	}
+}
