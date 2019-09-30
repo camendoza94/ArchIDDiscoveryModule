@@ -1,5 +1,24 @@
 import './queries.eol';
 
+//TODO Autowired of repositories and services
+
+pattern GetDependencies
+	class: ClassDeclaration
+		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
+	field: FieldDeclaration
+		from: class.bodyDeclarations,
+	injection: Annotation
+		from: field.annotations -> select (f | f.type.type.name = "Autowired") {
+	onmatch {
+		var message : String;
+ 		message = "Injection " + field.type.type.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), field.type.type.getPath());
+	}
+}
+
+
 pattern ServiceAnnotation
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
@@ -20,7 +39,7 @@ pattern ServiceImplementation
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
 	no superInterface: TypeAccess
-		from: interface.superInterfaces -> select (a | a.type.name = class.name.substring(0, class.name.indexOf("Impl"))) {	
+		from: class.superInterfaces -> select (a | a.type.name = class.name.substring(0, class.name.indexOf("Impl"))) {	
 	onmatch {
 		var message : String;
  		message = "ServiceImplementation " + class.name;
@@ -31,6 +50,8 @@ pattern ServiceImplementation
 		issues.addIssue(rule.id, class.getPath());
 	}
 }
+
+//TODO Implementation for every interface
 
 pattern OverrideMethods
 	class: ClassDeclaration

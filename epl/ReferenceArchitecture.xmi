@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Rules="https://www.uniandes.edu.co/archtoring" xsi:schemaLocation="https://www.uniandes.edu.co/archtoring rules.ecore" umlModel="desarrollo">
-  <rules title="DTOs must implement Serializable." action="Implement Serializable in this DTO" debt="30" severity="Minor" description="DTOS must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorDTO {" compliantSolution="public class AuthorDTO implements Serializable {" structuralElement="//@structuralElements.1" id="1"/>
-  <rules title="DTOs must have an empty constructor for serializing." action="Add empty constructor for serializing" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.1" id="2"/>
-  <rules title="DTOS must have only serializable fields" action="Remove or edit no-serializable field" severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="3"/>
-  <rules title="All fields on DTOS must have getters and setters" action="Add missing getter or setter" severity="Major" nonCompliantExample="" structuralElement="//@structuralElements.1" id="4"/>
-  <rules title="DTOs must have a constructor with an Entity as parameter" action="Check constructor from Entity implementation in DTO." severity="Minor" nonCompliantExample="Minor" structuralElement="//@structuralElements.1" id="5"/>
-  <rules title="toEntity methods in DTOs must convert the object to an Entity" action="Check toEntity implementation in DTO" severity="Minor" structuralElement="//@structuralElements.1" id="6"/>
-  <rules title="Fields on DetailDTOs must be of type DTO or List" action="Remove fields that are not of type DTO or List" severity="Minor" structuralElement="//@structuralElements.1" id="7"/>
-  <rules title="DetailDTOs must have a constructor with an Entity as parameter" action="Check constructor from Entity implementation in DetailDTO" severity="Minor" structuralElement="//@structuralElements.1" id="8"/>
-  <rules title="toEntity methods in DetailDTOs must convert the object to an Entity" action="Check toEntity implementation in DetailDTO" severity="Minor" structuralElement="//@structuralElements.1" id="9"/>
-  <rules title="Resource classes must have a Path annotation" action="Add missing Path annotation on Resource" severity="Minor" structuralElement="//@structuralElements.2" id="10"/>
-  <rules title="Resource classes must have a Consumes annotation" action="Add missing Consumes annotation on Resource" severity="Minor" structuralElement="//@structuralElements.2" id="11"/>
-  <rules title="Resource classes must have a Produces annotation" action="Add missing Produces annotation on Resource" severity="Minor" structuralElement="//@structuralElements.2" id="12"/>
-  <rules title="Resource classes must have a logic injection as field" action="Add missing logic injection on Resource" severity="Major" structuralElement="//@structuralElements.2" id="13"/>
-  <rules title="Logic layer classes must be annotated with Stataless" action="Add missing Stateless annotation on Logic" severity="Major" structuralElement="//@structuralElements.0" id="14"/>
-  <rules title="Logic classes must have a persistence injection as field" action="Add missing persistence injection on Logic" severity="Major" structuralElement="//@structuralElements.0" id="15"/>
-  <rules title="Resources must check for existence of entity and throws WebApplicationException if missing" action="Add missing check for nullity and WebApplicationException" severity="Minor" compliantSolution="" structuralElement="//@structuralElements.2" id="16"/>
-  <rules title="Resource GET methods must return DetailDTOs so their info is properly displayed" action="Make this resource GET method return a DetailDTO or list of them" severity="Major" nonCompliantExample="" compliantSolution="" structuralElement="//@structuralElements.2" id="17"/>
-  <rules title="Getters and Setters on DTOs must manage serializable types only" action="Edit non-serializable type on getter or setter" severity="Minor" structuralElement="//@structuralElements.1" id="18"/>
-  <rules title="Entities must implement Serializable." action="Implement Serializable in this Entity" debt="30" severity="Minor" description="Entities must implement Serializable interface to provide serializable features." nonCompliantExample="public class AuthorEntity {" compliantSolution="public class AuthorEntity implements Serializable {" structuralElement="//@structuralElements.3" id="19"/>
-  <rules title="Fields on Entities must be of type Entity, List or non-primitive" action="Remove fields that are primitive or not of type Entity or List." severity="Minor" structuralElement="//@structuralElements.3" id="20"/>
-  <rules title="All fields on Entities must have getters and setters" action="Add missing getter or setter" severity="Major" structuralElement="//@structuralElements.3" id="21"/>
-  <rules title="Getters and Setters on Entities must manage serializable types only" action="Edit non-serializable type on getter or setter" severity="Minor" structuralElement="//@structuralElements.3" id="22"/>
-  <structuralElements umlElement="logic"/>
+  <structuralElements umlElement="controllers"/>
   <structuralElements umlElement="dtos"/>
   <structuralElements umlElement="services"/>
   <structuralElements umlElement="entities"/>
+  <structuralElements umlElement="repositories"/>
+  <decisions title="Dependency injection" associatedQA="//@attributes.0">
+    <rules title="Controller must have an injection of the corresponding service interface" action="Inject service interfaces in controllers." severity="Major" structuralElement="//@structuralElements.0" id="2" category="Architectural"/>
+    <rules title="Service implementation must inject the corresponding services and repositories" severity="Major" structuralElement="//@structuralElements.2" id="11" category="Architectural"/>
+  </decisions>
+  <decisions title="Layered architecture" associatedQA="//@attributes.1">
+    <rules title="Controllers must be annotated with RestController, CrossOrigin and RequestMapping annotations" action="" severity="Major" structuralElement="//@structuralElements.0" id="1" category="Bug"/>
+    <rules title="Repositories must be annotated with Repository annotation" severity="Major" structuralElement="//@structuralElements.4" id="3" category="Architectural"/>
+    <rules title="Repositories must extend JpaRepository class" severity="Minor" structuralElement="//@structuralElements.4" id="4" category="Architectural"/>
+    <rules title="Services must be annotated with Service annotation" severity="Major" structuralElement="//@structuralElements.2" id="5" category="Architectural"/>
+  </decisions>
+  <decisions title="Interfaces" associatedQA="//@attributes.0">
+    <rules title="Services must implement its interface." severity="Minor" nonCompliantExample="" structuralElement="//@structuralElements.2" id="6" category="Bug"/>
+    <rules title="All service methods must override methods in its interface" severity="Minor" structuralElement="//@structuralElements.2" id="7" category="Bug"/>
+  </decisions>
+  <decisions title="Models usage" associatedQA="//@attributes.0">
+    <rules title="Entities must be annotated with Entity, Table, EqualsAndHashCode and Data annotations" severity="Major" structuralElement="//@structuralElements.3" id="8" category="Bug"/>
+    <rules title="Abstract entities must be annotated with MappedSuperclass annotation" severity="Minor" structuralElement="//@structuralElements.3" id="9" category="Bug"/>
+  </decisions>
+  <decisions title="TO usage" associatedQA="//@attributes.0">
+    <rules title="TOs must be annotated with Data and EqualAndHashCode annotations" severity="Major" structuralElement="//@structuralElements.1" id="10" category="Bug"/>
+  </decisions>
+  <attributes name="mantainability"/>
+  <attributes name="modularity"/>
 </Rules:ReferenceArchitecture>

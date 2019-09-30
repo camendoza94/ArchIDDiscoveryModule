@@ -22,7 +22,7 @@ public class DataHandler {
 
 	public DataHandler() {
 		try {
-			issuesCount = new int[2];
+			issuesCount = new int[11];
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();

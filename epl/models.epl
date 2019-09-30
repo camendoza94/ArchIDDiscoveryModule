@@ -6,10 +6,10 @@ pattern EntityAnnotation
 	package: Package
 		from: class.package.asSet()
 		guard: package.name = "model" and package.package.name = "api",
-	no modifier: Mofifier
+	no modifier: Modifier
 		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
 	no annotation: Annotation
-		from: class.annotation -> select (a | a.type.type.name = "Entity") {	
+		from: class.annotations -> select (a | a.type.type.name = "Entity") {	
 	onmatch {
 		var message : String;
  		message = "EntityAnnotations " + class.name;
@@ -27,7 +27,7 @@ pattern TableAnnotation
 	package: Package
 		from: class.package.asSet()
 		guard: package.name = "model" and package.package.name = "api",
-	no modifier: Mofifier
+	no modifier: Modifier
 		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
 	no annotation: Annotation
 		from: class.annotations -> select (a | a.type.type.name = "Table") {	
@@ -86,7 +86,7 @@ pattern MappedSuperclassAnnotation
 	package: Package
 		from: class.package.asSet()
 		guard: package.name = "model" and package.package.name = "api",
-	modifier: Mofifier
+	modifier: Modifier
 		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
 	no annotation: Annotation
 		from: class.annotations -> select (a | a.type.type.name = "MappedSuperclass") {	

@@ -11,7 +11,7 @@ import archtoring.utils.EpsilonStandalone;
 
 public class EPLHandler {
 
-	private static final String[] FILES = { "epl/controllers.epl" };
+	private static final String[] FILES = { "epl/controllers.epl", "epl/models.epl", "epl/repositories.epl", "epl/services.epl", "epl/tos.epl" };
 	public void execute() {
 		for (String eplFile : FILES) {
 			EplStandalone eol = new EplStandalone();
