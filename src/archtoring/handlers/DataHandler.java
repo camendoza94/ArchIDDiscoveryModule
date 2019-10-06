@@ -13,12 +13,16 @@ import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 
+import archtoring.utils.Decision;
+import archtoring.utils.Rule;
+
 public class DataHandler {
 	public static String[] output;
 	public static int[] issuesCount;
 	public static HashMap<String, int[]> fileIssuesCount;
 	public static HashMap<String, List<String>> dependencies;
 	public static HashMap<String, List<String>> dependenciesIn;
+	public static HashMap<Decision, List<Rule>> decisions;
 
 	public DataHandler() {
 		try {
@@ -26,6 +30,7 @@ public class DataHandler {
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();
+			decisions = new HashMap<Decision, List<Rule>>();
 			ProcessBuilder processBuilder = new ProcessBuilder();
 			processBuilder.command("cmd.exe", "/c",
 					"git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%ae%n%aI");
@@ -76,7 +81,7 @@ public class DataHandler {
 
 			int status = con.getResponseCode();
 			System.out.println(status);
-			
+
 			ArrayList<HashMap<String, Object>> files = new ArrayList<HashMap<String, Object>>();
 			for (int i = 0; i < fileIssuesCount.size(); i++) {
 				HashMap<String, Object> x = new HashMap<String, Object>();
@@ -100,7 +105,7 @@ public class DataHandler {
 					files.add(current);
 				}
 			}
-			
+
 			for (Entry<String, List<String>> ee : dependenciesIn.entrySet()) {
 				HashMap<String, Object> x = new HashMap<String, Object>();
 				String key = ee.getKey();
@@ -116,7 +121,6 @@ public class DataHandler {
 					files.add(current);
 				}
 			}
-
 
 			URL url2 = new URL("http://archtoringbd.herokuapp.com/files/" + repoName);
 			HttpURLConnection con2 = (HttpURLConnection) url2.openConnection();
@@ -142,6 +146,32 @@ public class DataHandler {
 			status = con2.getResponseCode();
 			System.out.println(status);
 
+			ArrayList<HashMap<String, Object>> cat = new ArrayList<HashMap<String, Object>>();
+			for (int i = 0; i < decisions.size(); i++) {
+				HashMap<String, Object> x = new HashMap<String, Object>();
+				x.put("title", ((Decision) decisions.keySet().toArray()[i]).getTitle());
+				x.put("qa", ((Decision) decisions.keySet().toArray()[i]).getQa());
+				x.put("rules", decisions.values().toArray()[i]);
+				cat.add(x);
+			}
+
+			URL uc = new URL("http://archtoringbd.herokuapp.com/categorization/" + repoName);
+			HttpURLConnection cc = (HttpURLConnection) uc.openConnection();
+			cc.setRequestMethod("PUT");
+			cc.setDoOutput(true);
+			cc.setRequestProperty("Content-Type", "application/json");
+			String queryc = new Gson().toJson(cat);
+			cc.setRequestProperty("Content-Length", Integer.toString(queryc.length()));
+			DataOutputStream outc = new DataOutputStream(cc.getOutputStream());
+			outc.writeBytes(queryc);
+			outc.flush();
+			outc.close();
+
+			cc.setConnectTimeout(5000);
+			cc.setReadTimeout(5000);
+
+			status = cc.getResponseCode();
+			System.out.println(status);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -1,0 +1,14 @@
+Categorization().println();
+
+operation Categorization():String {
+	for(d in rulesModel!DesignDecision.allInstances) {
+		for(r in d.rules) {
+			var message : String;
+ 			message = "AddingDecision " + d.title;
+ 			message.println();
+			var issues = new Native("archtoring.tools.IssuesTool");
+			issues.addCategory(d.title, d.associatedQA.name, r.title, r.severity, r.category, r.id);
+		}
+	}
+	return "Finished";
+}

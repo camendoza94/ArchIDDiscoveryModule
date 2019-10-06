@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.models.IModel;
+
+import archtoring.utils.EolStandalone;
 import archtoring.utils.EplStandalone;
 import archtoring.utils.EpsilonStandalone;
 
@@ -34,6 +36,23 @@ public class EPLHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		EolStandalone eol = new EolStandalone();
+		eol.setSource("epl/categorization.eol");
+		List<IModel> models = new ArrayList<IModel>();
+		try {
+			System.out.println("Getting categorization.");
+			models.add(EpsilonStandalone.createEmfModel("rulesModel", "epl/ReferenceArchitecture.xmi",
+					"epl/rules.ecore", true, true));
+			eol.setModels(models);
+			eol.execute(true);
+		} catch (EolModelLoadingException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }
