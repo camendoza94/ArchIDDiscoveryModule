@@ -6,25 +6,31 @@
   <structuralElements umlElement="entities"/>
   <structuralElements umlElement="repositories"/>
   <decisions title="Dependency injection" associatedQA="//@attributes.0">
-    <rules title="Controller must have an injection of the corresponding service interface" action="Inject service interfaces in controllers." severity="Major" structuralElement="//@structuralElements.0" id="2" category="Architectural"/>
-    <rules title="Service implementation must inject the corresponding services and repositories" severity="Major" structuralElement="//@structuralElements.2" id="11" category="Architectural"/>
+    <rules title="Controller must have an injection of the corresponding service interface" action="Inject service interfaces in controllers." severity="Major" structuralElement="//@structuralElements.0" id="4" category="Architectural"/>
+    <rules title="Service implementation must inject the corresponding services and repositories" severity="Major" structuralElement="//@structuralElements.2" id="17" category="Architectural"/>
   </decisions>
   <decisions title="Layered architecture" associatedQA="//@attributes.1">
-    <rules title="Controllers must be annotated with RestController, CrossOrigin and RequestMapping annotations" action="" severity="Major" structuralElement="//@structuralElements.0" id="1" category="Bug"/>
-    <rules title="Repositories must be annotated with Repository annotation" severity="Major" structuralElement="//@structuralElements.4" id="3" category="Architectural"/>
-    <rules title="Repositories must extend JpaRepository class" severity="Minor" structuralElement="//@structuralElements.4" id="4" category="Architectural"/>
-    <rules title="Services must be annotated with Service annotation" severity="Major" structuralElement="//@structuralElements.2" id="5" category="Architectural"/>
+    <rules title="Controllers must be annotated with RestController annotation" action="" severity="Major" structuralElement="//@structuralElements.0" id="2" category="Bug"/>
+    <rules title="Repositories must be annotated with Repository annotation" severity="Major" structuralElement="//@structuralElements.4" id="5" category="Architectural"/>
+    <rules title="Repositories must extend JpaRepository class" severity="Minor" structuralElement="//@structuralElements.4" id="6" category="Architectural"/>
+    <rules title="Services must be annotated with Service annotation" severity="Major" structuralElement="//@structuralElements.2" id="7" category="Architectural"/>
+    <rules title="Controllers must be annotated with CrossOrigin annotation" action="" severity="Major" structuralElement="//@structuralElements.0" id="1" category="Bug"/>
+    <rules title="Controllers must be annotated with RequestMapping annotation" action="" severity="Major" structuralElement="//@structuralElements.0" id="3" category="Bug"/>
   </decisions>
   <decisions title="Interfaces" associatedQA="//@attributes.0">
-    <rules title="Services must implement its interface." severity="Minor" nonCompliantExample="" structuralElement="//@structuralElements.2" id="6" category="Bug"/>
-    <rules title="All service methods must override methods in its interface" severity="Minor" structuralElement="//@structuralElements.2" id="7" category="Bug"/>
+    <rules title="Services must implement its interface." severity="Minor" nonCompliantExample="" structuralElement="//@structuralElements.2" id="8" category="Bug"/>
+    <rules title="All service methods must override methods in its interface" severity="Minor" structuralElement="//@structuralElements.2" id="9" category="Bug"/>
   </decisions>
   <decisions title="Models usage" associatedQA="//@attributes.0">
-    <rules title="Entities must be annotated with Entity, Table, EqualsAndHashCode and Data annotations" severity="Major" structuralElement="//@structuralElements.3" id="8" category="Bug"/>
-    <rules title="Abstract entities must be annotated with MappedSuperclass annotation" severity="Minor" structuralElement="//@structuralElements.3" id="9" category="Bug"/>
+    <rules title="Entities must be annotated with Entity annotation" severity="Major" structuralElement="//@structuralElements.3" id="10" category="Bug"/>
+    <rules title="Abstract entities must be annotated with MappedSuperclass annotation" severity="Minor" structuralElement="//@structuralElements.3" id="14" category="Bug"/>
+    <rules title="Entities must be annotated with Table annotation" severity="Major" structuralElement="//@structuralElements.3" id="11" category="Bug"/>
+    <rules title="Entities must be annotated with EqualsAndHashCode annotation" severity="Major" structuralElement="//@structuralElements.3" id="12" category="Bug"/>
+    <rules title="Entities must be annotated with Data annotation" severity="Major" structuralElement="//@structuralElements.3" id="13" category="Bug"/>
   </decisions>
   <decisions title="TO usage" associatedQA="//@attributes.0">
-    <rules title="TOs must be annotated with Data and EqualAndHashCode annotations" severity="Major" structuralElement="//@structuralElements.1" id="10" category="Bug"/>
+    <rules title="TOs must be annotated with Data annotation" severity="Major" structuralElement="//@structuralElements.1" id="15" category="Bug"/>
+    <rules title="TOs must be annotated with EqualAndHashCode annotation" severity="Major" structuralElement="//@structuralElements.1" id="16" category="Bug"/>
   </decisions>
   <attributes name="mantainability"/>
   <attributes name="modularity"/>

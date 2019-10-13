@@ -28,7 +28,7 @@ public class DataHandler {
 
 	public DataHandler() {
 		try {
-			issuesCount = new int[11];
+			issuesCount = new int[16];
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();
@@ -68,6 +68,7 @@ public class DataHandler {
 			con.setRequestProperty("Content-Type", "application/json");
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("commitId", DataHandler.output[1]);
+			map.put("repo", link);
 			map.put("date", DataHandler.output[3]);
 			map.put("issues", issuesCount);
 			HashMap<String, HashMap<String, Object>> map2 = new HashMap<String, HashMap<String, Object>>();
@@ -150,6 +151,7 @@ public class DataHandler {
 			map3.put("commitId", DataHandler.output[1]);
 			map3.put("date", DataHandler.output[3]);
 			map3.put("files", files);
+			map3.put("repo", link);
 			HashMap<String, HashMap<String, Object>> map4 = new HashMap<String, HashMap<String, Object>>();
 			map4.put("data", map3);
 			String query2 = new Gson().toJson(map4);

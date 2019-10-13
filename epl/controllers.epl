@@ -26,7 +26,7 @@ pattern RestControllerAnnotation
  		message = "RestControllerAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -42,7 +42,7 @@ pattern RequestMappingAnnotation
  		message = "RequestMappingAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -61,7 +61,7 @@ pattern ServiceInjection
  		message = "ServiceInjection " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}
@@ -81,7 +81,7 @@ pattern ServiceInjection
  		message = "ServiceInjection " + class.name + " : " + field.getName();
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}

@@ -19,7 +19,7 @@ public class IssuesTool extends AbstractTool {
 			old[id - 1] = ++old[id - 1];
 			DataHandler.fileIssuesCount.put(path, old);
 		} else {
-			int[] array = new int[11];
+			int[] array = new int[16];
 			array[id - 1] = 1;
 			DataHandler.fileIssuesCount.put(path, array);
 		}

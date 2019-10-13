@@ -12,7 +12,7 @@ pattern ServiceAnnotation
  		message = "ServiceAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -28,7 +28,7 @@ pattern ServiceImplementation
  		message = "ServiceImplementation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -48,7 +48,7 @@ pattern OverrideMethods
  		message = "OverrideMethods " + class.name + " : " + method.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), method.name);
 	}

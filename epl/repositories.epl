@@ -10,7 +10,7 @@ pattern RepositoryAnnotation
  		message = "RepositoryAnnotation " + interface.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, interface.getPath(), "Class");
 	}
@@ -29,7 +29,7 @@ pattern InheritannceJPARepository
  		message = "InheritannceJPARepository " + interface.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, interface.getPath(), "Class");
 	}

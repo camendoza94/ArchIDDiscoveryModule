@@ -15,7 +15,7 @@ pattern EntityAnnotation
  		message = "EntityAnnotations " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(10);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -36,7 +36,7 @@ pattern TableAnnotation
  		message = "TableAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(11);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -55,7 +55,7 @@ pattern EqualsAndHashCodeAnnotation
  		message = "EqualsAndHashCodeAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(12);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -74,7 +74,7 @@ pattern DataAnnotation
  		message = "DataAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(13);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
@@ -95,7 +95,7 @@ pattern MappedSuperclassAnnotation
  		message = "MappedSuperclassAnnotation " + class.name;
 		message.println();
 		var rule: rulesModel!Rule;
-		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
+		rule = rulesModel!ReferenceArchitecture.all.first.findRule(14);
 		var issues = new Native("archtoring.tools.IssuesTool");
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
