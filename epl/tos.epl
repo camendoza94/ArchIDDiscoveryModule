@@ -15,7 +15,7 @@ pattern DataAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(10);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -34,6 +34,6 @@ pattern EqualsAndHashCodeAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(10);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }

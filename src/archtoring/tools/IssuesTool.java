@@ -2,15 +2,17 @@ package archtoring.tools;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.epsilon.eol.tools.AbstractTool;
 
 import archtoring.handlers.DataHandler;
 import archtoring.utils.Decision;
+import archtoring.utils.Issue;
 import archtoring.utils.Rule;
 
 public class IssuesTool extends AbstractTool {
 
-	public void addIssue(int id, String path) {
+	public void addIssue(int id, String path, String description) {
 		DataHandler.issuesCount[id - 1] = ++DataHandler.issuesCount[id - 1];
 		if (DataHandler.fileIssuesCount.containsKey(path)) {
 			int[] old = DataHandler.fileIssuesCount.get(path);
@@ -20,6 +22,15 @@ public class IssuesTool extends AbstractTool {
 			int[] array = new int[11];
 			array[id - 1] = 1;
 			DataHandler.fileIssuesCount.put(path, array);
+		}
+		Issue i = new Issue(id, description);
+		if (DataHandler.issues.containsKey(path)) {
+			List<Issue> old = DataHandler.issues.get(path);
+			old.add(i);
+		} else {
+			ArrayList<Issue> issues = new ArrayList<Issue>();
+			issues.add(i);
+			DataHandler.issues.put(path, issues);
 		}
 	}
 

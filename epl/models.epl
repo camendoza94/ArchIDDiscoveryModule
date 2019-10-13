@@ -17,7 +17,7 @@ pattern EntityAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -38,7 +38,7 @@ pattern TableAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -57,7 +57,7 @@ pattern EqualsAndHashCodeAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -76,7 +76,7 @@ pattern DataAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -97,6 +97,6 @@ pattern MappedSuperclassAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }

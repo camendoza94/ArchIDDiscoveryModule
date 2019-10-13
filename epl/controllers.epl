@@ -12,7 +12,7 @@ pattern CrossOriginAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -28,7 +28,7 @@ pattern RestControllerAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -44,7 +44,7 @@ pattern RequestMappingAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -63,7 +63,7 @@ pattern ServiceInjection
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}
 }
 
@@ -83,7 +83,7 @@ pattern ServiceInjection
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}
 }
 

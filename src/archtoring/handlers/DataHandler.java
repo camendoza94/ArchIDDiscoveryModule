@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 import com.google.gson.Gson;
 
 import archtoring.utils.Decision;
+import archtoring.utils.Issue;
 import archtoring.utils.Rule;
 
 public class DataHandler {
@@ -23,6 +24,7 @@ public class DataHandler {
 	public static HashMap<String, List<String>> dependencies;
 	public static HashMap<String, List<String>> dependenciesIn;
 	public static HashMap<Decision, List<Rule>> decisions;
+	public static HashMap<String, List<Issue>> issues;
 
 	public DataHandler() {
 		try {
@@ -31,6 +33,7 @@ public class DataHandler {
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();
 			decisions = new HashMap<Decision, List<Rule>>();
+			issues = new HashMap<String, List<Issue>>();
 			ProcessBuilder processBuilder = new ProcessBuilder();
 			processBuilder.command("cmd.exe", "/c",
 					"git remote get-url origin && git rev-parse HEAD && git log -1 --pretty=format:%ae%n%aI");
@@ -118,6 +121,22 @@ public class DataHandler {
 				} else {
 					files.remove(current);
 					current.put("dependenciesIn", values);
+					files.add(current);
+				}
+			}
+			
+			for (Entry<String, List<Issue>> ee : issues.entrySet()) {
+				HashMap<String, Object> x = new HashMap<String, Object>();
+				String key = ee.getKey();
+				List<Issue> values = ee.getValue();
+				HashMap<String, Object> current = exists(files, key);
+				if (current == null) {
+					x.put("name", key);
+					x.put("issuesDetail", values);
+					files.add(x);
+				} else {
+					files.remove(current);
+					current.put("issuesDetail", values);
 					files.add(current);
 				}
 			}

@@ -2,23 +2,6 @@ import './queries.eol';
 
 //TODO Autowired of repositories and services
 
-pattern GetDependencies
-	class: ClassDeclaration
-		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
-	field: FieldDeclaration
-		from: class.bodyDeclarations,
-	injection: Annotation
-		from: field.annotations -> select (f | f.type.type.name = "Autowired") {
-	onmatch {
-		var message : String;
- 		message = "Injection " + field.type.type.getPath() + " in " + class.name;
-		message.println();
-		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addDependency(class.getPath(), field.type.type.getPath());
-	}
-}
-
-
 pattern ServiceAnnotation
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
@@ -31,7 +14,7 @@ pattern ServiceAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -47,7 +30,7 @@ pattern ServiceImplementation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -57,7 +40,7 @@ pattern OverrideMethods
 	class: ClassDeclaration
 		guard: class.proxy = false and class.name.endsWith("ServiceImpl"),
 	method: MethodDeclaration
-		from:  class.bodyDeclarations,
+		from: class.bodyDeclarations -> select(m | m.isTypeOf(MethodDeclaration) and m.modifier.isDefined() and m.modifier.visibility = VisibilityKind#public),
 	no annotation: Annotation
 		from: method.annotations -> select(a| a.type.type.name = "Override") {	
 	onmatch {
@@ -67,7 +50,7 @@ pattern OverrideMethods
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssue(rule.id, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), method.name);
 	}
 }
 
