@@ -28,7 +28,7 @@ public class DataHandler {
 
 	public DataHandler() {
 		try {
-			issuesCount = new int[16];
+			issuesCount = new int[17];
 			fileIssuesCount = new HashMap<String, int[]>();
 			dependencies = new HashMap<String, List<String>>();
 			dependenciesIn = new HashMap<String, List<String>>();
