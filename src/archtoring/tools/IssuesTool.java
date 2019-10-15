@@ -1,7 +1,9 @@
 package archtoring.tools;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.epsilon.eol.tools.AbstractTool;
 
@@ -36,19 +38,19 @@ public class IssuesTool extends AbstractTool {
 
 	public void addDependency(String from, String to) {
 		if (DataHandler.dependencies.containsKey(from)) {
-			List<String> old = DataHandler.dependencies.get(from);
+			Set<String> old = DataHandler.dependencies.get(from);
 			old.add(to);
 		} else {
-			ArrayList<String> dep = new ArrayList<String>();
+			Set<String> dep = new HashSet<String>();
 			dep.add(to);
 			DataHandler.dependencies.put(from, dep);
 		}
 
 		if (DataHandler.dependenciesIn.containsKey(to)) {
-			List<String> old = DataHandler.dependenciesIn.get(to);
+			Set<String> old = DataHandler.dependenciesIn.get(to);
 			old.add(from);
 		} else {
-			ArrayList<String> dep = new ArrayList<String>();
+			Set<String> dep = new HashSet<String>();
 			dep.add(from);
 			DataHandler.dependenciesIn.put(to, dep);
 		}

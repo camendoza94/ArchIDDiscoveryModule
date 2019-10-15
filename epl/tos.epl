@@ -37,3 +37,25 @@ pattern EqualsAndHashCodeAnnotation
 		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
+
+pattern GetDependencies
+	class: ClassDeclaration
+		guard: class.proxy = false,
+	package: Package
+		from: class.package.asSet()
+		guard: package.name = "to" and package.package.name = "api",
+	unit: CompilationUnit
+		from: class.originalCompilationUnit.asSet(),
+	imp: ImportDeclaration
+		from: unit.imports,
+	importedClass: ClassDeclaration
+		guard: importedClass.proxy = false 
+		from: imp.importedElement.asSet() -> select(i | i.isTypeOf(ClassDeclaration)) {
+	onmatch {
+		var message : String;
+ 		message = "Import " + importedClass.getPath() + " in " + class.name;
+		message.println();
+		var issues = new Native("archtoring.tools.IssuesTool");
+		issues.addDependency(class.getPath(), importedClass.getPath());
+	}
+}

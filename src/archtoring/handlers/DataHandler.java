@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.gson.Gson;
 
@@ -21,8 +22,8 @@ public class DataHandler {
 	public static String[] output;
 	public static int[] issuesCount;
 	public static HashMap<String, int[]> fileIssuesCount;
-	public static HashMap<String, List<String>> dependencies;
-	public static HashMap<String, List<String>> dependenciesIn;
+	public static HashMap<String, Set<String>> dependencies;
+	public static HashMap<String, Set<String>> dependenciesIn;
 	public static HashMap<Decision, List<Rule>> decisions;
 	public static HashMap<String, List<Issue>> issues;
 
@@ -30,8 +31,8 @@ public class DataHandler {
 		try {
 			issuesCount = new int[17];
 			fileIssuesCount = new HashMap<String, int[]>();
-			dependencies = new HashMap<String, List<String>>();
-			dependenciesIn = new HashMap<String, List<String>>();
+			dependencies = new HashMap<String, Set<String>>();
+			dependenciesIn = new HashMap<String, Set<String>>();
 			decisions = new HashMap<Decision, List<Rule>>();
 			issues = new HashMap<String, List<Issue>>();
 			ProcessBuilder processBuilder = new ProcessBuilder();
@@ -94,34 +95,34 @@ public class DataHandler {
 				files.add(x);
 			}
 
-			for (Entry<String, List<String>> ee : dependencies.entrySet()) {
+			for (Entry<String, Set<String>> ee : dependencies.entrySet()) {
 				HashMap<String, Object> x = new HashMap<String, Object>();
 				String key = ee.getKey();
-				List<String> values = ee.getValue();
+				Set<String> values = ee.getValue();
 				HashMap<String, Object> current = exists(files, key);
 				if (current == null) {
 					x.put("name", key);
-					x.put("dependenciesOut", values);
+					x.put("dependenciesOut", values.toArray());
 					files.add(x);
 				} else {
 					files.remove(current);
-					current.put("dependenciesOut", values);
+					current.put("dependenciesOut", values.toArray());
 					files.add(current);
 				}
 			}
 
-			for (Entry<String, List<String>> ee : dependenciesIn.entrySet()) {
+			for (Entry<String, Set<String>> ee : dependenciesIn.entrySet()) {
 				HashMap<String, Object> x = new HashMap<String, Object>();
 				String key = ee.getKey();
-				List<String> values = ee.getValue();
+				Set<String> values = ee.getValue();
 				HashMap<String, Object> current = exists(files, key);
 				if (current == null) {
 					x.put("name", key);
-					x.put("dependenciesIn", values);
+					x.put("dependenciesIn", values.toArray());
 					files.add(x);
 				} else {
 					files.remove(current);
-					current.put("dependenciesIn", values);
+					current.put("dependenciesIn", values.toArray());
 					files.add(current);
 				}
 			}
