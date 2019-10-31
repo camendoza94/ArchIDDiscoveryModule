@@ -7,7 +7,7 @@ pattern EntityAnnotation
 		from: class.package.asSet()
 		guard: package.name = "model" and package.package.name = "api",
 	no modifier: Modifier
-		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
+		from: class.modifier.asSet() -> select (m | m.inheritance = InheritanceKind#abstract),
 	no annotation: Annotation
 		from: class.annotations -> select (a | a.type.type.name = "Entity") {	
 	onmatch {
@@ -28,7 +28,7 @@ pattern TableAnnotation
 		from: class.package.asSet()
 		guard: package.name = "model" and package.package.name = "api",
 	no modifier: Modifier
-		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
+		from: class.modifier.asSet() -> select (m | m.inheritance = InheritanceKind#abstract),
 	no annotation: Annotation
 		from: class.annotations -> select (a | a.type.type.name = "Table") {	
 	onmatch {
@@ -87,7 +87,7 @@ pattern MappedSuperclassAnnotation
 		from: class.package.asSet()
 		guard: package.name = "model" and package.package.name = "api",
 	modifier: Modifier
-		from: class.modifier.asSet() -> select (m | m.inheritance = "abstract"),
+		from: class.modifier.asSet() -> select (m | m.inheritance = InheritanceKind#abstract),
 	no annotation: Annotation
 		from: class.annotations -> select (a | a.type.type.name = "MappedSuperclass") {	
 	onmatch {

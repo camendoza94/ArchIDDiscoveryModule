@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Rules="https://www.uniandes.edu.co/archtoring" umlModel="desarrollo">
+<Rules:ReferenceArchitecture xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:Rules="https://www.uniandes.edu.co/archtoring" umlModel="intergrupo">
   <structuralElements umlElement="controllers"/>
   <structuralElements umlElement="dtos"/>
   <structuralElements umlElement="services"/>
