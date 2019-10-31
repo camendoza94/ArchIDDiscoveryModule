@@ -10,6 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import org.eclipse.egit.github.core.RepositoryId;
+import org.eclipse.egit.github.core.User;
+import org.eclipse.egit.github.core.service.IssueService;
+import org.eclipse.egit.github.core.service.UserService;
+import org.kohsuke.github.GHUser;
+import org.kohsuke.github.GHUserSearchBuilder;
+import org.kohsuke.github.GitHub;
+
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -26,6 +35,12 @@ public class GithubHandler {
 	public static HashMap<String, Set<String>> dependenciesIn;
 	public static HashMap<Decision, List<Rule>> decisions;
 	public static HashMap<String, List<Issue>> issues;
+
+
+	public static RepositoryId repo;
+	public static User author;
+	public static IssueService service;
+	public static List<org.eclipse.egit.github.core.Issue> issuesGithub;
 
 	public GithubHandler() {
 		try {
@@ -49,6 +64,26 @@ public class GithubHandler {
 				index++;
 			}
 			process.waitFor();
+			
+			service = new IssueService();
+			service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			UserService userService = new UserService();
+			GitHub github = GitHub.connectUsingOAuth("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			GHUserSearchBuilder searchUser = github.searchUsers();
+			searchUser.q(output[2]);
+			searchUser.in("email");
+			List<GHUser> results = searchUser.list().asList();
+			if(!results.isEmpty())
+				author = userService.getUser(results.get(0).getLogin());
+			String url = output[0];
+			String org = url.split("/")[3];
+			String repoName = url.split("/")[4];
+			if(repoName.endsWith(".git"))
+				repoName = repoName.substring(0, repoName.indexOf("."));
+			repo = new RepositoryId(org, repoName);
+			HashMap<String, String> options = new HashMap<String, String>();
+			options.put("state", "all");
+			issuesGithub = service.getIssues(repo, options);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
