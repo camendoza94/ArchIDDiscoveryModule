@@ -7,5 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="org.eclipse.egit.github.core-2.1.5.jar"/>
+	<classpathentry kind="lib" path="github-api-1.95.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

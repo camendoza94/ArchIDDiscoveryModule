@@ -13,7 +13,7 @@ pattern ImplementsSerializable
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(1);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -30,7 +30,7 @@ pattern EmptyConstructor
 			var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(2);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -47,7 +47,7 @@ pattern SerializableFields
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(3);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.structuralElement.first.umlElement, rule.severity, classDecl.getPath());
+		issues.addIssue(rule.id, classDecl.getPath(), field.getName());
 	}
 }
 	
@@ -71,7 +71,7 @@ pattern GettersAndSetters
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(4);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " for " + field.getName(), class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}
 }
 
@@ -97,7 +97,7 @@ pattern CreateDTOFromEntity
 				message.println();var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(5);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -114,7 +114,7 @@ pattern toEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(6);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -137,7 +137,7 @@ pattern SerializableGettersAndSetters
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(18);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action +  " for " + field.getName(), classDecl.eContainer().name + "/" + classDecl.name, rule.structuralElement.first.umlElement, rule.severity, classDecl.getPath());
+		issues.addIssue(rule.id, classDecl.getPath(), field.getName());
 	}
 }
 

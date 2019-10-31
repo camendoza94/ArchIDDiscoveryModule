@@ -7,13 +7,13 @@ pattern CorrectFields
 		or (f.type.type.isTypeOf(ParameterizedType) and not (f.type.type.type.type.name.endsWith("List") or f.type.type.typeArguments.type.name.endsWith("DTO")))) {
 	onmatch {
 		var message : String;
- 		message = "CorrectFields " + class.name + " field: " + field.name;
+ 		message = "CorrectFields " + class.name + " field: " + field.getName();
 		message.println();
 		var comment = new LineComment;
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(7);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " " + field.name, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}
 }
 
@@ -35,7 +35,7 @@ pattern CreateDTOFromEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(8);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -52,7 +52,7 @@ pattern toEntity
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(9);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 

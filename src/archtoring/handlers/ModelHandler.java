@@ -34,8 +34,6 @@ public class ModelHandler {
 	public static String backName;
 	public static String frontName;
 	public static String projectName;
-	public static String key;
-
 
 	public static String[] getNames() {
 		String[] names = { backName, frontName };
@@ -49,9 +47,6 @@ public class ModelHandler {
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse("./pom.xml");
 			projectName = document.getElementsByTagName("artifactId").item(0).getTextContent();
-			String groupId = document.getElementsByTagName("groupId").item(0).getTextContent();
-			
-			key = groupId + ":" + projectName;
 			
 			final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 

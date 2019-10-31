@@ -22,7 +22,7 @@ pattern PathAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(10);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -38,7 +38,7 @@ pattern ConsumesAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(11);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -54,7 +54,7 @@ pattern ProducesAnnotation
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(12);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), "Class");
 	}
 }
 
@@ -73,7 +73,7 @@ pattern LogicInjection
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(13);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), field.getName());
 	}
 }
 
@@ -97,7 +97,7 @@ pattern Exceptions
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(16);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " in method " + method.name, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), method.name);
 	}
 }
 
@@ -122,7 +122,7 @@ pattern getReturnDetail
 		var rule: rulesModel!Rule;
 		rule = rulesModel!ReferenceArchitecture.all.first.findRule(17);
 		var issues = new Native("archtoring.tools.IssuesTool");
-		issues.addIssueOnGithub(rule.id, rule.action + " in method " + method.name, class.eContainer().name + "/" + class.name, rule.structuralElement.first.umlElement, rule.severity, class.getPath());
+		issues.addIssue(rule.id, class.getPath(), method.name);
 	}		
 }
 
