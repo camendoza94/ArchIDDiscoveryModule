@@ -7,7 +7,7 @@ operation Categorization():String {
  			message = "AddingDecision " + d.title;
  			message.println();
 			var issues = new Native("archtoring.tools.IssuesTool");
-			issues.addCategory(d.title, d.associatedQA.name, r.title, r.severity, r.category, r.id, r.debt, r.description, r.compliantSolution, r.nonCompliantExample);
+			issues.addCategory(d.title, d.associatedQA.name, r.title, r.severity, r.category, r.id, r.debt, r.description, r.compliantSolution, r.nonCompliantExample, r.structuralElement.at(0).umlElement);
 		}
 	}
 	return "Finished";

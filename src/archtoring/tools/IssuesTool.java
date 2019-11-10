@@ -120,9 +120,9 @@ public class IssuesTool extends AbstractTool {
 	}
 
 	public void addCategory(String title, String qa, String rule, String severity, String category, int id, int debt,
-			String description, String solution, String example) {
+			String description, String solution, String example, String element) {
 		Decision d = new Decision(title, qa);
-		Rule r = new Rule(rule, severity, category, debt, solution, example, description, id);
+		Rule r = new Rule(rule, severity, category, debt, solution, example, description, id, element);
 		Decision d2 = exists(d);
 		if (d2 != null) {
 			List<Rule> old = GithubHandler.decisions.get(d2);

@@ -9,9 +9,10 @@ public class Rule {
 	private String nonCompliantExample;
 	private String description;
 	private Integer id;
+	private String element;
 
 	public Rule(String title, String severity, String category, Integer debt, String compliantSolution,
-			String nonCompliantExample, String description, Integer id) {
+			String nonCompliantExample, String description, Integer id, String element) {
 		super();
 		this.title = title;
 		this.severity = severity;
@@ -21,6 +22,7 @@ public class Rule {
 		this.nonCompliantExample = nonCompliantExample;
 		this.description = description;
 		this.id = id;
+		this.element = element;
 	}
 
 	public String getTitle() {
@@ -85,6 +87,14 @@ public class Rule {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getElement() {
+		return element;
+	}
+
+	public void setElement(String element) {
+		this.element = element;
 	}
 
 }
