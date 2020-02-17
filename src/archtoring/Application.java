@@ -1,5 +1,9 @@
 package archtoring;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
@@ -11,10 +15,12 @@ public class Application implements IApplication {
 
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
+		Map<String, String[]> mm = context.getArguments();
+		final List<String> args = Arrays.asList(mm.get(IApplicationContext.APPLICATION_ARGS));
 		ModelHandler model = new ModelHandler();
 		model.execute();
 		GithubHandler git = new GithubHandler();
-		EPLHandler epl = new EPLHandler();
+		EPLHandler epl = new EPLHandler(args);
 		epl.execute(ModelHandler.getNames());
 		git.execute();
 		return EXIT_OK;

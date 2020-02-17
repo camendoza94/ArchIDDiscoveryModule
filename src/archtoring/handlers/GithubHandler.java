@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.eclipse.egit.github.core.Label;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.User;
 import org.eclipse.egit.github.core.service.IssueService;
@@ -35,7 +36,6 @@ public class GithubHandler {
 	public static HashMap<String, Set<String>> dependenciesIn;
 	public static HashMap<Decision, List<Rule>> decisions;
 	public static HashMap<String, List<Issue>> issues;
-
 
 	public static RepositoryId repo;
 	public static User author;
@@ -64,21 +64,21 @@ public class GithubHandler {
 				index++;
 			}
 			process.waitFor();
-			
+
 			service = new IssueService();
-			service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			service.getClient().setOAuth2Token(System.getenv("ARCHID_TOKEN"));
 			UserService userService = new UserService();
-			GitHub github = GitHub.connectUsingOAuth("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			GitHub github = GitHub.connectUsingOAuth(System.getenv("ARCHID_TOKEN"));
 			GHUserSearchBuilder searchUser = github.searchUsers();
 			searchUser.q(output[2]);
 			searchUser.in("email");
 			List<GHUser> results = searchUser.list().asList();
-			if(!results.isEmpty())
+			if (!results.isEmpty())
 				author = userService.getUser(results.get(0).getLogin());
 			String url = output[0];
 			String org = url.split("/")[3];
 			String repoName = url.split("/")[4];
-			if(repoName.endsWith(".git"))
+			if (repoName.endsWith(".git"))
 				repoName = repoName.substring(0, repoName.indexOf("."));
 			repo = new RepositoryId(org, repoName);
 			HashMap<String, String> options = new HashMap<String, String>();
@@ -92,145 +92,168 @@ public class GithubHandler {
 	}
 
 	public void execute() {
-		try {
-			String link = GithubHandler.output[0];
-			String repoName = link.split("/")[4];
-			if (repoName.endsWith(".git"))
-				repoName = repoName.substring(0, repoName.indexOf("."));
-			URL url = new URL("http://archtoringbd.herokuapp.com/history/" + repoName);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setRequestMethod("PUT");
-			con.setDoOutput(true);
-			con.setRequestProperty("Content-Type", "application/json");
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("commitId", GithubHandler.output[1]);
-			map.put("date", GithubHandler.output[3]);
-			map.put("repo", link);
-			map.put("issues", issuesCount);
-			HashMap<String, HashMap<String, Object>> map2 = new HashMap<String, HashMap<String, Object>>();
-			map2.put("data", map);
-			String query = new Gson().toJson(map2);
-			con.setRequestProperty("Content-Length", Integer.toString(query.length()));
-			DataOutputStream out = new DataOutputStream(con.getOutputStream());
-			out.writeBytes(query);
-			out.flush();
-			out.close();
-
-			con.setConnectTimeout(5000);
-			con.setReadTimeout(5000);
-
-			int status = con.getResponseCode();
-			System.out.println(status);
-			
-			ArrayList<HashMap<String, Object>> files = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < fileIssuesCount.size(); i++) {
-				HashMap<String, Object> x = new HashMap<String, Object>();
-				x.put("name", fileIssuesCount.keySet().toArray()[i]);
-				x.put("issues", fileIssuesCount.values().toArray()[i]);
-				files.add(x);
-			}
-
-			for (Entry<String, Set<String>> ee : dependencies.entrySet()) {
-				HashMap<String, Object> x = new HashMap<String, Object>();
-				String key = ee.getKey();
-				Set<String> values = ee.getValue();
-				HashMap<String, Object> current = exists(files, key);
-				if (current == null) {
-					x.put("name", key);
-					x.put("dependenciesOut", values.toArray());
-					files.add(x);
-				} else {
-					files.remove(current);
-					current.put("dependenciesOut", values.toArray());
-					files.add(current);
+		if (EPLHandler.args.get(0).equals("--gh") || EPLHandler.args.get(0).equals("--full")) {
+			String commit = output[1];
+			for (org.eclipse.egit.github.core.Issue i : issuesGithub) {
+				if (i.getState().equals("open")) {
+					List<Label> previousLabels = i.getLabels();
+					boolean found = false;
+					for (int j = 0; j < previousLabels.size() && !found; j++) {
+						if (previousLabels.get(j).getName().equals(commit.substring(0, 7)))
+							found = true;
+					}
+					if (!found) {
+						i.setState("closed");
+						try {
+							service.editIssue(repo, i);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
 			}
-			
-			for (Entry<String, Set<String>> ee : dependenciesIn.entrySet()) {
-				HashMap<String, Object> x = new HashMap<String, Object>();
-				String key = ee.getKey();
-				Set<String> values = ee.getValue();
-				HashMap<String, Object> current = exists(files, key);
-				if (current == null) {
-					x.put("name", key);
-					x.put("dependenciesIn", values.toArray());
+		}
+		if (EPLHandler.args.get(0).equals("--db") || EPLHandler.args.get(0).equals("--full")) {
+			try {
+				String link = GithubHandler.output[0];
+				String repoName = link.split("/")[4];
+				if (repoName.endsWith(".git"))
+					repoName = repoName.substring(0, repoName.indexOf("."));
+				URL url = new URL("http://archtoringbd.herokuapp.com/history/" + repoName);
+				HttpURLConnection con = (HttpURLConnection) url.openConnection();
+				con.setRequestMethod("PUT");
+				con.setDoOutput(true);
+				con.setRequestProperty("Content-Type", "application/json");
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("commitId", GithubHandler.output[1]);
+				map.put("date", GithubHandler.output[3]);
+				map.put("repo", link);
+				map.put("issues", issuesCount);
+				HashMap<String, HashMap<String, Object>> map2 = new HashMap<String, HashMap<String, Object>>();
+				map2.put("data", map);
+				String query = new Gson().toJson(map2);
+				con.setRequestProperty("Content-Length", Integer.toString(query.length()));
+				DataOutputStream out = new DataOutputStream(con.getOutputStream());
+				out.writeBytes(query);
+				out.flush();
+				out.close();
+
+				con.setConnectTimeout(5000);
+				con.setReadTimeout(5000);
+
+				int status = con.getResponseCode();
+				System.out.println(status);
+
+				ArrayList<HashMap<String, Object>> files = new ArrayList<HashMap<String, Object>>();
+				for (int i = 0; i < fileIssuesCount.size(); i++) {
+					HashMap<String, Object> x = new HashMap<String, Object>();
+					x.put("name", fileIssuesCount.keySet().toArray()[i]);
+					x.put("issues", fileIssuesCount.values().toArray()[i]);
 					files.add(x);
-				} else {
-					files.remove(current);
-					current.put("dependenciesIn", values.toArray());
-					files.add(current);
 				}
-			}
-			
-			for (Entry<String, List<Issue>> ee : issues.entrySet()) {
-				HashMap<String, Object> x = new HashMap<String, Object>();
-				String key = ee.getKey();
-				List<Issue> values = ee.getValue();
-				HashMap<String, Object> current = exists(files, key);
-				if (current == null) {
-					x.put("name", key);
-					x.put("issuesDetail", values);
-					files.add(x);
-				} else {
-					files.remove(current);
-					current.put("issuesDetail", values);
-					files.add(current);
+
+				for (Entry<String, Set<String>> ee : dependencies.entrySet()) {
+					HashMap<String, Object> x = new HashMap<String, Object>();
+					String key = ee.getKey();
+					Set<String> values = ee.getValue();
+					HashMap<String, Object> current = exists(files, key);
+					if (current == null) {
+						x.put("name", key);
+						x.put("dependenciesOut", values.toArray());
+						files.add(x);
+					} else {
+						files.remove(current);
+						current.put("dependenciesOut", values.toArray());
+						files.add(current);
+					}
 				}
+
+				for (Entry<String, Set<String>> ee : dependenciesIn.entrySet()) {
+					HashMap<String, Object> x = new HashMap<String, Object>();
+					String key = ee.getKey();
+					Set<String> values = ee.getValue();
+					HashMap<String, Object> current = exists(files, key);
+					if (current == null) {
+						x.put("name", key);
+						x.put("dependenciesIn", values.toArray());
+						files.add(x);
+					} else {
+						files.remove(current);
+						current.put("dependenciesIn", values.toArray());
+						files.add(current);
+					}
+				}
+
+				for (Entry<String, List<Issue>> ee : issues.entrySet()) {
+					HashMap<String, Object> x = new HashMap<String, Object>();
+					String key = ee.getKey();
+					List<Issue> values = ee.getValue();
+					HashMap<String, Object> current = exists(files, key);
+					if (current == null) {
+						x.put("name", key);
+						x.put("issuesDetail", values);
+						files.add(x);
+					} else {
+						files.remove(current);
+						current.put("issuesDetail", values);
+						files.add(current);
+					}
+				}
+
+				URL url2 = new URL("http://archtoringbd.herokuapp.com/files/" + repoName);
+				HttpURLConnection con2 = (HttpURLConnection) url2.openConnection();
+				con2.setRequestMethod("PUT");
+				con2.setDoOutput(true);
+				con2.setRequestProperty("Content-Type", "application/json");
+				HashMap<String, Object> map3 = new HashMap<String, Object>();
+				map3.put("commitId", GithubHandler.output[1]);
+				map3.put("date", GithubHandler.output[3]);
+				map3.put("repo", link);
+				map3.put("files", files);
+				HashMap<String, HashMap<String, Object>> map4 = new HashMap<String, HashMap<String, Object>>();
+				map4.put("data", map3);
+				String query2 = new Gson().toJson(map4);
+				con2.setRequestProperty("Content-Length", Integer.toString(query2.length()));
+				DataOutputStream out2 = new DataOutputStream(con2.getOutputStream());
+				out2.writeBytes(query2);
+				out2.flush();
+				out2.close();
+
+				con2.setConnectTimeout(5000);
+				con2.setReadTimeout(5000);
+
+				status = con2.getResponseCode();
+				System.out.println(status);
+
+				ArrayList<HashMap<String, Object>> cat = new ArrayList<HashMap<String, Object>>();
+				for (int i = 0; i < decisions.size(); i++) {
+					HashMap<String, Object> x = new HashMap<String, Object>();
+					x.put("title", ((Decision) decisions.keySet().toArray()[i]).getTitle());
+					x.put("qa", ((Decision) decisions.keySet().toArray()[i]).getQa());
+					x.put("rules", decisions.values().toArray()[i]);
+					cat.add(x);
+				}
+
+				URL uc = new URL("http://archtoringbd.herokuapp.com/categorization/" + repoName);
+				HttpURLConnection cc = (HttpURLConnection) uc.openConnection();
+				cc.setRequestMethod("PUT");
+				cc.setDoOutput(true);
+				cc.setRequestProperty("Content-Type", "application/json");
+				String queryc = new Gson().toJson(cat);
+				cc.setRequestProperty("Content-Length", Integer.toString(queryc.length()));
+				DataOutputStream outc = new DataOutputStream(cc.getOutputStream());
+				outc.writeBytes(queryc);
+				outc.flush();
+				outc.close();
+
+				cc.setConnectTimeout(5000);
+				cc.setReadTimeout(5000);
+
+				status = cc.getResponseCode();
+				System.out.println(status);
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
-			URL url2 = new URL("http://archtoringbd.herokuapp.com/files/" + repoName);
-			HttpURLConnection con2 = (HttpURLConnection) url2.openConnection();
-			con2.setRequestMethod("PUT");
-			con2.setDoOutput(true);
-			con2.setRequestProperty("Content-Type", "application/json");
-			HashMap<String, Object> map3 = new HashMap<String, Object>();
-			map3.put("commitId", GithubHandler.output[1]);
-			map3.put("date", GithubHandler.output[3]);
-			map3.put("repo", link);
-			map3.put("files", files);
-			HashMap<String, HashMap<String, Object>> map4 = new HashMap<String, HashMap<String, Object>>();
-			map4.put("data", map3);
-			String query2 = new Gson().toJson(map4);
-			con2.setRequestProperty("Content-Length", Integer.toString(query2.length()));
-			DataOutputStream out2 = new DataOutputStream(con2.getOutputStream());
-			out2.writeBytes(query2);
-			out2.flush();
-			out2.close();
-
-			con2.setConnectTimeout(5000);
-			con2.setReadTimeout(5000);
-
-			status = con2.getResponseCode();
-			System.out.println(status);
-			
-			ArrayList<HashMap<String, Object>> cat = new ArrayList<HashMap<String, Object>>();
-			for (int i = 0; i < decisions.size(); i++) {
-				HashMap<String, Object> x = new HashMap<String, Object>();
-				x.put("title", ((Decision) decisions.keySet().toArray()[i]).getTitle());
-				x.put("qa", ((Decision) decisions.keySet().toArray()[i]).getQa());
-				x.put("rules", decisions.values().toArray()[i]);
-				cat.add(x);
-			}
-
-			URL uc = new URL("http://archtoringbd.herokuapp.com/categorization/" + repoName);
-			HttpURLConnection cc = (HttpURLConnection) uc.openConnection();
-			cc.setRequestMethod("PUT");
-			cc.setDoOutput(true);
-			cc.setRequestProperty("Content-Type", "application/json");
-			String queryc = new Gson().toJson(cat);
-			cc.setRequestProperty("Content-Length", Integer.toString(queryc.length()));
-			DataOutputStream outc = new DataOutputStream(cc.getOutputStream());
-			outc.writeBytes(queryc);
-			outc.flush();
-			outc.close();
-
-			cc.setConnectTimeout(5000);
-			cc.setReadTimeout(5000);
-
-			status = cc.getResponseCode();
-			System.out.println(status);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 	}

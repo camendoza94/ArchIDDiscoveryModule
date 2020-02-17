@@ -9,6 +9,7 @@ import java.util.Set;
 import org.eclipse.egit.github.core.Label;
 import org.eclipse.epsilon.eol.tools.AbstractTool;
 
+import archtoring.handlers.EPLHandler;
 import archtoring.handlers.GithubHandler;
 import archtoring.handlers.ModelHandler;
 import archtoring.utils.Decision;
@@ -18,84 +19,99 @@ import archtoring.utils.Rule;
 public class IssuesTool extends AbstractTool {
 
 	public void addIssue(int id, String path, String description) {
-		GithubHandler.issuesCount[id - 1] = ++GithubHandler.issuesCount[id - 1];
-		if (GithubHandler.fileIssuesCount.containsKey(path)) {
-			int[] old = GithubHandler.fileIssuesCount.get(path);
-			old[id - 1] = ++old[id - 1];
-			GithubHandler.fileIssuesCount.put(path, old);
-		} else {
-			int[] array = new int[22];
-			array[id - 1] = 1;
-			GithubHandler.fileIssuesCount.put(path, array);
-		}
-		Issue i = new Issue(id, description);
-		if (GithubHandler.issues.containsKey(path)) {
-			List<Issue> old = GithubHandler.issues.get(path);
-			old.add(i);
-		} else {
-			ArrayList<Issue> issues = new ArrayList<Issue>();
-			issues.add(i);
-			GithubHandler.issues.put(path, issues);
-		}
-		Rule r = getRule(id);
-		try {
-			String className = path.split("/")[path.split("/").length - 1];
-			String title = className + " - " + r.getTitle();
-			String url = GithubHandler.output[0];
-			String org = url.split("/")[3];
-			String repoName = url.split("/")[4];
-			if (repoName.endsWith(".git"))
-				repoName = repoName.substring(0, repoName.indexOf("."));
-			String commit = GithubHandler.output[1];
-			String[] names = ModelHandler.getNames();
-			String backPath = names[0] + "/src/main/java";
-			String frontPath = names[1] + "/src/main/java";
-			String folder = (id == 14 || id == 15 || id > 18) ? backPath : frontPath;
-			for (org.eclipse.egit.github.core.Issue i1 : GithubHandler.issuesGithub) {
-				List<Label> previousLabels = i1.getLabels();
-				if (i1.getTitle().equals(title)) {
-					i1.setBody("<h2>Issue: " + r.getTitle() + "</h2>" + "<p>Found on file: <a href='https://github.com/"
-							+ org + "/" + repoName + "/blob/" + commit + "/" + folder + "/" + path + "'>" + className
-							+ ".java" + "</a></p>" + "<p>On commit:  <a href='https://github.com/" + org + "/"
-							+ repoName + "/tree/" + commit + "'>" + commit + "</a></p>"
-							+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
-					i1.setLabels(previousLabels);
-					i1.setState("open");
-					GithubHandler.service.editIssue(GithubHandler.repo, i1);
-					return;
-				}
+		if (EPLHandler.args.get(0).equals("--db") || EPLHandler.args.get(0).equals("--full")) {
+			GithubHandler.issuesCount[id - 1] = ++GithubHandler.issuesCount[id - 1];
+			if (GithubHandler.fileIssuesCount.containsKey(path)) {
+				int[] old = GithubHandler.fileIssuesCount.get(path);
+				old[id - 1] = ++old[id - 1];
+				GithubHandler.fileIssuesCount.put(path, old);
+			} else {
+				int[] array = new int[22];
+				array[id - 1] = 1;
+				GithubHandler.fileIssuesCount.put(path, array);
 			}
-			org.eclipse.egit.github.core.Issue issue = new org.eclipse.egit.github.core.Issue();
-			issue.setTitle(title);
-			issue.setBody("<h2>Issue: " + r.getTitle() + "</h2>" + "<p>Found on file: <a href='https://github.com/"
-					+ org + "/" + repoName + "/blob/" + commit + "/" + folder + "/" + path + "'>" + className + ".java"
-					+ "</a></p>" + "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName + "/tree/"
-					+ commit + "'>" + commit + "</a></p>"
-					+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
+			Issue i = new Issue(id, description);
+			if (GithubHandler.issues.containsKey(path)) {
+				List<Issue> old = GithubHandler.issues.get(path);
+				old.add(i);
+			} else {
+				ArrayList<Issue> issues = new ArrayList<Issue>();
+				issues.add(i);
+				GithubHandler.issues.put(path, issues);
+			}
+		}
 
-			if (GithubHandler.author != null)
-				issue.setAssignee(GithubHandler.author);
+		if (EPLHandler.args.get(0).equals("--gh") || EPLHandler.args.get(0).equals("--full")) {
+			Rule r = getRule(id);
+			try {
+				String className = path.split("/")[path.split("/").length - 1];
+				String title = className + " - " + r.getTitle();
+				String url = GithubHandler.output[0];
+				String org = url.split("/")[3];
+				String repoName = url.split("/")[4];
+				if (repoName.endsWith(".git"))
+					repoName = repoName.substring(0, repoName.indexOf("."));
+				String commit = GithubHandler.output[1];
+				String[] names = ModelHandler.getNames();
+				String backPath = names[0] + "/src/main/java";
+				String frontPath = names[1] + "/src/main/java";
+				String folder = (id == 14 || id == 15 || id > 18) ? backPath : frontPath;
+				for (org.eclipse.egit.github.core.Issue i1 : GithubHandler.issuesGithub) {
+					List<Label> previousLabels = i1.getLabels();
+					if (i1.getTitle().equals(title)) {
+						Label releaseLabel = new Label();
+						releaseLabel.setName(commit.substring(0, 7));
+						releaseLabel.setColor("4fa008");
+						previousLabels.add(releaseLabel);
+						i1.setBody("<h2>Issue: " + r.getTitle() + "</h2>"
+								+ "<p>Found on file: <a href='https://github.com/" + org + "/" + repoName + "/blob/"
+								+ commit + "/" + folder + "/" + path + "'>" + className + ".java" + "</a></p>"
+								+ "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName + "/tree/"
+								+ commit + "'>" + commit + "</a></p>"
+								+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
+						i1.setLabels(previousLabels);
+						i1.setState("open");
+						GithubHandler.service.editIssue(GithubHandler.repo, i1);
+						return;
+					}
+				}
+				org.eclipse.egit.github.core.Issue issue = new org.eclipse.egit.github.core.Issue();
+				issue.setTitle(title);
+				issue.setBody("<h2>Issue: " + r.getTitle() + "</h2>" + "<p>Found on file: <a href='https://github.com/"
+						+ org + "/" + repoName + "/blob/" + commit + "/" + folder + "/" + path + "'>" + className
+						+ ".java" + "</a></p>" + "<p>On commit:  <a href='https://github.com/" + org + "/" + repoName
+						+ "/tree/" + commit + "'>" + commit + "</a></p>"
+						+ "<p>Go to the <a href='https://archtoringkb.herokuapp.com'>Knowledge Base</a> to find more info about this violation");
 
-			List<Label> labels = new ArrayList<Label>();
+				if (GithubHandler.author != null)
+					issue.setAssignee(GithubHandler.author);
 
-			Label categoryLabel = new Label();
-			categoryLabel.setName(r.getCategory());
-			categoryLabel.setColor("4fa008");
-			labels.add(categoryLabel);
+				List<Label> labels = new ArrayList<Label>();
 
-			Label ruleLabel = new Label();
-			ruleLabel.setName("R" + id);
-			ruleLabel.setColor("e04ac7");
-			labels.add(ruleLabel);
+				Label categoryLabel = new Label();
+				categoryLabel.setName(r.getCategory());
+				categoryLabel.setColor("4fa008");
+				labels.add(categoryLabel);
 
-			Label severityLabel = new Label();
-			severityLabel.setName(r.getSeverity());
-			severityLabel.setColor("e04ac7");
-			labels.add(severityLabel);
-			issue.setLabels(labels);
-			GithubHandler.service.createIssue(GithubHandler.repo, issue);
-		} catch (IOException e) {
-			e.printStackTrace();
+				Label releaseLabel = new Label();
+				releaseLabel.setName(commit.substring(0, 7));
+				releaseLabel.setColor("4fa008");
+				labels.add(releaseLabel);
+
+				Label ruleLabel = new Label();
+				ruleLabel.setName("R" + id);
+				ruleLabel.setColor("e04ac7");
+				labels.add(ruleLabel);
+
+				Label severityLabel = new Label();
+				severityLabel.setName(r.getSeverity());
+				severityLabel.setColor("e04ac7");
+				labels.add(severityLabel);
+				issue.setLabels(labels);
+				GithubHandler.service.createIssue(GithubHandler.repo, issue);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -15,6 +15,17 @@ public class EPLHandler {
 
 	private static final String[] FILES_BACK = { "epl/logic.epl", "epl/entities.epl" };
 	private static final String[] FILES_FRONT = { "epl/dtos.epl", "epl/detailDTOs.epl", "epl/resources.epl" };
+	public static List<String> args;
+
+	
+	public EPLHandler(List<String> args) {
+		EPLHandler.args = args;
+	}
+	
+	public static List<String> getArgs(){
+		return args;
+	}
+
 
 	public void execute(String[] names) {
 		EolStandalone eol = new EolStandalone();
