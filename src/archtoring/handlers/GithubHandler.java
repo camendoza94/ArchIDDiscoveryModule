@@ -39,9 +39,9 @@ public class GithubHandler {
 			}
 			process.waitFor();
 			service = new IssueService();
-			service.getClient().setOAuth2Token("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			service.getClient().setOAuth2Token(System.getenv("ARCHID_TOKEN"));
 			UserService userService = new UserService();
-			GitHub github = GitHub.connectUsingOAuth("cc0547bb556cb27747ad7876b8401f81c787b2cb");
+			GitHub github = GitHub.connectUsingOAuth(System.getenv("ARCHID_TOKEN"));
 			GHUserSearchBuilder searchUser = github.searchUsers();
 			searchUser.q(output[2]);
 			searchUser.in("email");
